@@ -102,6 +102,15 @@ void autonomous() {
     * over moveDistance and turnAngle because they use absolute positioning
     * instead of relative position, resulting in greater accuracy.
     */
+
+    //sets current motor position as 0
+    motor1::tarePosition();
+
+    //move 10 deg clockwise at 200 rpm
+    motor1::moveRelative(10, 200);
+
+    //move to 10 deg (absolute) at 200 rpm
+    motor1::moveAbsolute(10, 200);
 }
 
 /**
