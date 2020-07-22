@@ -43,7 +43,13 @@ std::shared_ptr<OdomChassisController> drive = ChassisControllerBuilder()
  * All other competition modes are blocked by initialize; it is recommended
  * to keep execution time for this mode under a few seconds.
  */
-void initialize() {}
+void initialize() {
+
+    //set position to (0,0)
+    //set orientation to 0
+    drive->setState({0_in, 0_in, 0_deg});
+
+}
 
 /**
  * Runs while the robot is in the disabled state of Field Management System or
@@ -75,10 +81,6 @@ void competition_initialize() {}
  * from where it left off.
  */
 void autonomous() {
-
-	//set position to (0,0)
-	//set orientation to 0
-	drive->setState({0_in, 0_in, 0_deg});
 
     //turn towards point (12_in, 12_in), then drive to point
     //don't drive backwards
