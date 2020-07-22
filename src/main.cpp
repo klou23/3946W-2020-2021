@@ -136,6 +136,6 @@ void opcontrol() {
         * moveVelocity uses PID to ensure consistent speed
         */
 
-		pros::delay(20);  //wait to save resources(prevent brain from frying)
+		pros::delay(10);  //wait to save resources(prevent brain from frying)
 	}
 }
