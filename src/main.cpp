@@ -1,31 +1,63 @@
 #include "main.h"
 
-//declare controller and buttons used
+//motor ports
+const int frontLeftDrivePort = 1;
+const int frontRightDrivePort = -2;
+const int backLeftDrivePort = -3;
+const int backRightDrivePort = 4;
+const int leftIntakePort = 5;
+const int rightIntakePort = 6;
+const int lowerManipulatorPort = 7;
+const int upperManipulatorPort = 8;
+
+//declare controller and buttons
 Controller controller;
-ControllerButton aButton(ControllerDigital::A);
-ControllerButton bButton(ControllerDigital::A);
+ControllerButton btnL1(ControllerDigital::L1);
+ControllerButton btnL2(ControllerDigital::L2);
+ControllerButton btnR1(ControllerDigital::R1);
+ControllerButton btnR2(ControllerDigital::R2);
+ControllerButton btnUp(ControllerDigital::up);
+ControllerButton btnDown(ControllerDigital::down);
+ControllerButton btnLeft(ControllerDigital::left);
+ControllerButton btnRight(ControllerDigital::right);
+ControllerButton btnX(ControllerDigital::X);
+ControllerButton btnB(ControllerDigital::B);
+ControllerButton btnY(ControllerDigital::Y);
+ControllerButton btnA(ControllerDigital::A);
 
-//declare motor
-Motor motor1(-8);   //motor in port 8 and direction reversed
+//declare motors
+Motor frontLeftDrive(frontLeftDrivePort);
+Motor frontRightDrive(frontRightDrivePort);
+Motor backLeftDrive(backLeftDrivePort);
+Motor backRightDrive(backRightDrivePort);
+Motor leftIntake(leftIntakePort);
+Motor rightIntake(rightIntakePort);
+Motor lowerManipulator(lowerManipulatorPort);
+Motor upperManipulator(upperManipulatorPort);
 
+//declare chassis controller
 std::shared_ptr<OdomChassisController> drive = ChassisControllerBuilder()
     .withMotors(
-		{-1, -2},	//left motors are 1 & 2 (both reversed)
-		{3, 4}		//right motors are 3 & 4
-	)
-    .withDimensions(
-		AbstractMotor::gearset::green,	//green gear cartridge
-		{{4_in,							//4 inch wheel diameter
-		11.5_in},						//11.5 inch wheelbase
-		imev5GreenTPR * (1.0 / 1.0)}	//1:1 external gear ratio
-	)
+		    1,        //Front left
+            -2,       //Front right (reversed)
+            -3,       //Back right (reversed)
+            4         //Back left
+    )
+    .withGains(
+      {0.001, 0, 0.0001},     //distance controller gains (kp, ki, kd)
+      {0.001, 0, 0.0001}      //turn controller gains (kp, ki, kd);
+    )
     .withSensors(
         ADIEncoder{'A', 'B'}, 		// left encoder in ADI ports A & B
         ADIEncoder{'C', 'D', true}, // right encoder in ADI ports C & D (reversed)
         ADIEncoder{'E', 'F'}  		// middle encoder in ADI ports E & F
     )
-    // specify the tracking wheels diameter (2.75 in), track (7 in), and TPR (360)
-    // specify the middle encoder distance (1 in) and diameter (2.75 in)
+    .withDimensions(
+        AbstractMotor::gearset::green,	//green gear cartridge
+		{{4_in,							//4 inch tracking wheel diameter
+		11.5_in},						//11.5 inch wheelbase
+		imev5GreenTPR * (1.0 / 1.0)}	//1:1 external gear ratio
+	)
     .withOdometry(
 		{{2.75_in,		//tracking wheels diameter is 2.75 in
 		7_in,			//tracking wheel base is 7 in
@@ -35,8 +67,6 @@ std::shared_ptr<OdomChassisController> drive = ChassisControllerBuilder()
 	)
     .buildOdometry();
 
-
-
 /**
  * Runs initialization code. This occurs as soon as the program is started.
  *
@@ -45,8 +75,7 @@ std::shared_ptr<OdomChassisController> drive = ChassisControllerBuilder()
  */
 void initialize() {
 
-    //set position to (0,0)
-    //set orientation to 0
+    //set position to (0,0) and orientation to 0
     drive->setState({0_in, 0_in, 0_deg});
 
 }
@@ -106,13 +135,13 @@ void autonomous() {
     */
 
     //sets current motor position as 0
-    motor1::tarePosition();
+    lowerManipulator.tarePosition();
 
     //move 10 deg clockwise at 200 rpm
-    motor1::moveRelative(10, 200);
+    lowerManipulator.moveRelative(10, 200);
 
     //move to 10 deg (absolute) at 200 rpm
-    motor1::moveAbsolute(10, 200);
+    lowerManipulator.moveAbsolute(10, 200);
 }
 
 /**
@@ -129,24 +158,62 @@ void autonomous() {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
+
+    //motor speeds
+    const int driveSpeed = 200;
+    const int intakeSpeed = 600;
+    const int manipulatorSpeed = 100;
+
+    //set motor brake modes
+    frontLeftDrive.setBrakeMode(AbstractMotor::brakeMode::coast);
+    frontRightDrive.setBrakeMode(AbstractMotor::brakeMode::coast);
+    backLeftDrive.setBrakeMode(AbstractMotor::brakeMode::coast);
+    backRightDrive.setBrakeMode(AbstractMotor::brakeMode::coast);
+    leftIntake.setBrakeMode(AbstractMotor::brakeMode::brake);
+    rightIntake.setBrakeMode(AbstractMotor::brakeMode::brake);
+    lowerManipulator.setBrakeMode(AbstractMotor::brakeMode::hold);
+    upperManipulator.setBrakeMode(AbstractMotor::brakeMode::hold);
+
 	while (true) {
-        //standard tank drive
-        drive->getModel()->tank(controller.getAnalog(ControllerAnalog::leftY),
-                                controller.getAnalog(ControllerAnalog::rightY));
+        //get controller values
+        double leftX = controller.getAnalog(ControllerAnalog::leftX);   //left right
+        double leftY = controller.getAnalog(ControllerAnalog::leftY);   //forward back
+        double rightX = controller.getAnalog(ControllerAnalog::rightX); //turning
+        double rightY = controller.getAnalog(ControllerAnalog::rightY); //useless?
 
-        if(aButton.isPressed()){
-            motor1.moveVelocity(200);
-        }else if(bButton.isPressed()){
-            motor1.moveVelocity(-200);
-        }else{
-            motor1.moveVelocity(0);
+        /**********Drive**********/
+        double vels[] = {0,0,0,0}; // fl, fr, bl, br
+        // forward and back
+        for(int i = 0; i < sizeof(vels); i++) vels[i] += leftY;
+
+        //strafing
+        vels[0] += leftX;
+        vels[3] += leftX;
+        vels[1] -= leftX;
+        vels[2] -= leftX;
+
+        //turning
+        vels[0] += rightX;
+        vels[2] += rightX;
+        vels[1] -= rightX;
+        vels[3] -= rightX;
+
+        //cap all vels at 1 and convert percentages to rpm
+        for(int i = 0; i < sizeof(vels); i++){
+            if(vels[i] > 1) vels[i] = 1;
+            if(vels[i] < -1) vels[i] = -1;
+            vels[i] *= driveSpeed;
         }
-        /**
-        * Motor velocity is in rpm (100, 200, or 600 depending on motor
-        * cartridge). moveVelocity is preferred over moveVoltage because
-        * moveVelocity uses PID to ensure consistent speed
-        */
 
-		pros::delay(10);  //wait to save resources(prevent brain from frying)
+        //run motors
+        frontLeftDrive.moveVelocity(vels[0]);
+        frontRightDrive.moveVelocity(vels[1]);
+        backLeftDrive.moveVelocity(vels[2]);
+        backRightDrive.moveVelocity(vels[3]);
+
+        /**********Intake and manipulator**********/
+
+
+		pros::delay(10);  //wait to save resources (prevent brain from frying)
 	}
 }
