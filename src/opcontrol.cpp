@@ -1,4 +1,5 @@
 #include "main.h"
+#include "globals.hpp"
 
 /**
  * Runs the operator control code. This function will be started in its own task
