@@ -73,6 +73,7 @@ extern ControllerButton btnA;
 extern Motor frontLeftDrive;
 extern Motor frontRightDrive;
 extern Motor backLeftDrive;
+extern Motor backRightDrive;
 extern Motor leftIntake;
 extern Motor rightIntake;
 extern Motor lowerManipulator;
