@@ -1,31 +1,32 @@
 #include "main.h"
 #include "globals.hpp"
 
-/**
- * Runs initialization code. This occurs as soon as the program is started.
- *
- * All other competition modes are blocked by initialize; it is recommended
- * to keep execution time for this mode under a few seconds.
- */
+/********** Variables **********/
+lv_obj_t * tabview;
+
+/********** Tournament Template Functions **********/
 void initialize() {
     //set position to (0,0) and orientation to 0
     drive->setState({0_in, 0_in, 0_deg});
+
+    tabview = lv_tabview_create(lv_scr_act(), NULL);
+
+
 }
 
-/**
- * Runs while the robot is in the disabled state of Field Management System or
- * the VEX Competition Switch, following either autonomous or opcontrol. When
- * the robot is enabled, this task will exit.
- */
 void disabled() {}
 
-/**
- * Runs after initialize(), and before autonomous when connected to the Field
- * Management System or the VEX Competition Switch. This is intended for
- * competition-specific initialization routines, such as an autonomous selector
- * on the LCD.
- *
- * This task will exit when the robot is enabled and autonomous or opcontrol
- * starts.
- */
 void competition_initialize() {}
+
+/********** UI Functions **********/
+void createAutonSelectorTab(lv_obj_t * parent){
+    //TODO: implement tab creator
+}
+
+void createMotorTempTab(lv_obj_t * parent){
+    //TODO: implement tab creator
+}
+
+void createPIDAdjustedTb(lv_obj_t * parent){
+    //TODO: implement tab creator
+}
