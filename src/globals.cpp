@@ -1,4 +1,5 @@
 #include "main.h"
+#include "globals.hpp"
 
 //motor ports
 const int frontLeftDrivePort = 1;
@@ -35,7 +36,12 @@ Motor rightIntake(rightIntakePort);
 Motor lowerManipulator(lowerManipulatorPort);
 Motor upperManipulator(upperManipulatorPort);
 
-int auton = 0;
+//auton variables
+const int RED = 0;
+const int BLUE = 1;
+int autonNum = 1;
+int autonColor = 0;
+
 
 //declare chassis controller
 std::shared_ptr<OdomChassisController> drive = ChassisControllerBuilder()
