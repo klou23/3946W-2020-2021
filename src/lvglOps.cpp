@@ -15,7 +15,7 @@ lv_obj_t * createButton(lv_obj_t * parent, lv_coord_t x, lv_coord_t y, lv_coord_
 }
 
 //create button no label with style
-lv_obj_t * createButtonWithStyle(lv_obj_t * parent, lv_coord_t x, lv_coord_t y, lv_coord_t width, lv_coord_t height, lv_style_t releasedStyle, lv_style_t pressedStyle){
+lv_obj_t * createButtonWithStyle(lv_obj_t * parent, lv_coord_t x, lv_coord_t y, lv_coord_t width, lv_coord_t height, lv_style_t *releasedStyle, lv_style_t *pressedStyle){
     //create button
     lv_obj_t * button = lv_btn_create(parent, NULL);
     lv_obj_set_x(button, x);
@@ -24,8 +24,8 @@ lv_obj_t * createButtonWithStyle(lv_obj_t * parent, lv_coord_t x, lv_coord_t y, 
     lv_btn_set_toggle(button, false);
 
     //set style of button
-    lv_btn_set_style(button, LV_BTN_STYLE_PR, &pressedStyle);
-    lv_btn_set_style(button, LV_BTN_STYLE_REL, &releasedStyle);
+    lv_btn_set_style(button, LV_BTN_STYLE_PR, pressedStyle);
+    lv_btn_set_style(button, LV_BTN_STYLE_REL, releasedStyle);
 
     //return pointer
     return button;
@@ -50,7 +50,7 @@ lv_obj_t * createButton(lv_obj_t * parent, lv_coord_t x, lv_coord_t y, lv_coord_
 }
 
 //create button with label with style
-lv_obj_t * createButtonWithStyle(lv_obj_t * parent, lv_coord_t x, lv_coord_t y, lv_coord_t width, lv_coord_t height, lv_style_t releasedStyle, lv_style_t pressedStyle, const char * labelText){
+lv_obj_t * createButtonWithStyle(lv_obj_t * parent, lv_coord_t x, lv_coord_t y, lv_coord_t width, lv_coord_t height, lv_style_t *releasedStyle, lv_style_t *pressedStyle, const char * labelText){
     //create button
     lv_obj_t * button = lv_btn_create(parent, NULL);
     lv_obj_set_x(button, x);
@@ -59,8 +59,8 @@ lv_obj_t * createButtonWithStyle(lv_obj_t * parent, lv_coord_t x, lv_coord_t y, 
     lv_btn_set_toggle(button, false);
 
     //set style of button
-    lv_btn_set_style(button, LV_BTN_STYLE_PR, &pressedStyle);
-    lv_btn_set_style(button, LV_BTN_STYLE_REL, &pressedStyle);
+    lv_btn_set_style(button, LV_BTN_STYLE_PR, pressedStyle);
+    lv_btn_set_style(button, LV_BTN_STYLE_REL, pressedStyle);
 
     //add label as subcomponent
     lv_obj_t * label = lv_label_create(button, NULL);
@@ -85,7 +85,7 @@ lv_obj_t * createToggleButton(lv_obj_t * parent, lv_coord_t x, lv_coord_t y, lv_
 }
 
 //create toggle button no label with style
-lv_obj_t * createToggleButtonWithStyle(lv_obj_t * parent, lv_coord_t x, lv_coord_t y, lv_coord_t width, lv_coord_t height, lv_style_t pressedStyle, lv_style_t releasedStyle, lv_style_t togglePressedStyle, lv_style_t toggleReleasedStyle){
+lv_obj_t * createToggleButtonWithStyle(lv_obj_t * parent, lv_coord_t x, lv_coord_t y, lv_coord_t width, lv_coord_t height, lv_style_t *pressedStyle, lv_style_t *releasedStyle, lv_style_t *togglePressedStyle, lv_style_t *toggleReleasedStyle){
     //create button
     lv_obj_t * button = lv_btn_create(parent, NULL);
     lv_obj_set_x(button, x);
@@ -94,10 +94,10 @@ lv_obj_t * createToggleButtonWithStyle(lv_obj_t * parent, lv_coord_t x, lv_coord
     lv_btn_set_toggle(button, true);
 
     //set style of button
-    lv_btn_set_style(button, LV_BTN_STYLE_PR, &pressedStyle);
-    lv_btn_set_style(button, LV_BTN_STYLE_REL, &releasedStyle);
-    lv_btn_set_style(button, LV_BTN_STYLE_TGL_PR, &togglePressedStyle);
-    lv_btn_set_style(button, LV_BTN_STYLE_TGL_REL, &toggleReleasedStyle);
+    lv_btn_set_style(button, LV_BTN_STYLE_PR, pressedStyle);
+    lv_btn_set_style(button, LV_BTN_STYLE_REL, releasedStyle);
+    lv_btn_set_style(button, LV_BTN_STYLE_TGL_PR, togglePressedStyle);
+    lv_btn_set_style(button, LV_BTN_STYLE_TGL_REL, toggleReleasedStyle);
 
     //return pointer
     return button;
@@ -121,7 +121,8 @@ lv_obj_t * createToggleButton(lv_obj_t * parent, lv_coord_t x, lv_coord_t y, lv_
     return button;
 }
 
-lv_obj_t * createToggleButtonWithStyle(lv_obj_t * parent, lv_coord_t x, lv_coord_t y, lv_coord_t width, lv_coord_t height, lv_style_t pressedStyle, lv_style_t releasedStyle, lv_style_t togglePressedStyle, lv_style_t toggleReleasedStyle, const char * labelText){
+//create toggle button with style with label
+lv_obj_t * createToggleButtonWithStyle(lv_obj_t * parent, lv_coord_t x, lv_coord_t y, lv_coord_t width, lv_coord_t height, lv_style_t *pressedStyle, lv_style_t *releasedStyle, lv_style_t *togglePressedStyle, lv_style_t *toggleReleasedStyle, const char * labelText){
     //create button
     lv_obj_t * button = lv_btn_create(parent, NULL);
     lv_obj_set_x(button, x);
@@ -130,10 +131,10 @@ lv_obj_t * createToggleButtonWithStyle(lv_obj_t * parent, lv_coord_t x, lv_coord
     lv_btn_set_toggle(button, true);
 
     //set style of button
-    lv_btn_set_style(button, LV_BTN_STYLE_PR, &pressedStyle);
-    lv_btn_set_style(button, LV_BTN_STYLE_REL, &releasedStyle);
-    lv_btn_set_style(button, LV_BTN_STYLE_TGL_PR, &togglePressedStyle);
-    lv_btn_set_style(button, LV_BTN_STYLE_TGL_REL, &toggleReleasedStyle);
+    lv_btn_set_style(button, LV_BTN_STYLE_PR, pressedStyle);
+    lv_btn_set_style(button, LV_BTN_STYLE_REL, releasedStyle);
+    lv_btn_set_style(button, LV_BTN_STYLE_TGL_PR, togglePressedStyle);
+    lv_btn_set_style(button, LV_BTN_STYLE_TGL_REL, toggleReleasedStyle);
 
     //add label as subcomponent
     lv_obj_t * label = lv_label_create(button, NULL);
@@ -155,14 +156,12 @@ lv_obj_t * createLabel(lv_obj_t * parent, lv_coord_t x, lv_coord_t y, const char
 }
 
 //create button style
-lv_style_t createButtonStyle(uint8_t bodyR, uint8_t bodyG, uint8_t bodyB, uint8_t borderR, uint8_t borderG, uint8_t borderB, int radius, int borderWeight, uint8_t textR, uint8_t textG, uint8_t textB){
-    lv_style_t style;
-    lv_style_copy(&style, &lv_style_plain);
-    style.body.main_color = LV_COLOR_MAKE(bodyR, bodyG, bodyB);
-    style.body.grad_color = LV_COLOR_MAKE(bodyR, bodyG, bodyB);
-    style.line.color = LV_COLOR_MAKE(borderR, borderG, borderB);
-    style.line.width = borderWeight;
-    style.body.radius = radius;
-    style.text.color = LV_COLOR_MAKE(textR, textG, textB);
-    return style;
+void createButtonStyle(lv_style_t * style, uint8_t bodyR, uint8_t bodyG, uint8_t bodyB, uint8_t borderR, uint8_t borderG, uint8_t borderB, int radius, int borderWeight, uint8_t textR, uint8_t textG, uint8_t textB){
+    lv_style_copy(style, &lv_style_plain);
+    style->body.main_color = LV_COLOR_MAKE(bodyR, bodyG, bodyB);
+    style->body.grad_color = LV_COLOR_MAKE(bodyR, bodyG, bodyB);
+    style->body.border.color = LV_COLOR_MAKE(borderR, borderG, borderB);
+    style->body.border.width = borderWeight;
+    style->body.radius = radius;
+    style->text.color = LV_COLOR_MAKE(textR, textG, textB);
 }

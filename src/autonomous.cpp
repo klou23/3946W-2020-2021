@@ -46,3 +46,7 @@ void autonomous() {
     //move to 10 deg (absolute) at 200 rpm
     lowerManipulator.moveAbsolute(10, 200);
 }
+
+void onePoint(){
+
+}
