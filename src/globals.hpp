@@ -70,6 +70,10 @@ extern lv_obj_t *createToggleButton(lv_obj_t *parent, lv_coord_t x, lv_coord_t y
 extern lv_obj_t *createToggleButtonWithStyle(lv_obj_t *parent, lv_coord_t x, lv_coord_t y, lv_coord_t width, lv_coord_t height, lv_style_t *pressedStyle, lv_style_t *releasedStyle, lv_style_t *togglePressedStyle, lv_style_t *toggleReleasedStyle, const char * labelText);
 extern lv_obj_t *createLabel(lv_obj_t *parent, lv_coord_t x, lv_coord_t y, const char * text);
 extern void createButtonStyle(lv_style_t *style, uint8_t bodyR, uint8_t bodyG, uint8_t bodyB, uint8_t borderR, uint8_t borderG, uint8_t borderB, int radius, int borderWeight, uint8_t textR, uint8_t textG, uint8_t textB);
+extern void createBarOutsideStyle(lv_style_t *style, int radius, uint8_t r, uint8_t g, uint8_t b);
+extern void createBarInsideStyle(lv_style_t *style, int radius, uint8_t r, uint8_t g, uint8_t b, int padding);
+extern lv_obj_t *createBar(lv_obj_t *parent, lv_coord_t x, lv_coord_t y, lv_coord_t width, lv_coord_t height, int16_t min, int16_t max);
+extern lv_obj_t *createBarWithStyle(lv_obj_t *parent, lv_coord_t x, lv_coord_t y, lv_coord_t width, lv_coord_t height, int16_t min, int16_t max, lv_style_t *innerStyle, lv_style_t *outerStyle);
 
 //extern lvgl funcs
 extern lv_res_t setAutonRed(lv_obj_t *button);

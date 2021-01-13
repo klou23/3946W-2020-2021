@@ -15,7 +15,6 @@
 void autonomous() {
 
     //turn towards point (12_in, 12_in), then drive to point
-    //don't drive backwards
     //stop 0 in away from the point
 	drive->driveToPoint({12_in, 12_in}, false, 0_in);
 

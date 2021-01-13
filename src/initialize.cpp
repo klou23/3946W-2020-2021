@@ -4,6 +4,7 @@
 
 /********** Variables **********/
 lv_obj_t *tabview;
+//auton selector
 lv_obj_t *btnAutonRed;
 lv_obj_t *btnAutonBlue;
 lv_obj_t *btnAuton1;
@@ -11,6 +12,29 @@ lv_obj_t *btnAuton2;
 lv_obj_t *btnAuton3;
 lv_obj_t *btnAuton4;
 lv_obj_t *autonDescription;
+//motor temp bars
+lv_obj_t *frontLeftDriveTempBar;
+lv_obj_t *frontRightDriveTempBar;
+lv_obj_t *backLeftDriveTempBar;
+lv_obj_t *backRightDriveTempBar;
+lv_obj_t *lowerManipulatorTempBar;
+lv_obj_t *upperManipulatorTempBar;
+lv_obj_t *leftIntakeTempBar;
+lv_obj_t *rightIntakeTempBar;
+//motor temp labels
+lv_obj_t *frontLeftDriveTempLabel;
+lv_obj_t *frontRightDriveTempLabel;
+lv_obj_t *backLeftDriveTempLabel;
+lv_obj_t *backRightDriveTempLabel;
+lv_obj_t *lowerManipulatorTempLabel;
+lv_obj_t *upperManipulatorTempLabel;
+lv_obj_t *leftIntakeTempLabel;
+lv_obj_t *rightIntakeTempLabel;
+//motor temp styles
+lv_style_t *greenInnerStyle;
+lv_style_t *orangeInnerStyle;
+lv_style_t *yellowInnerStyle;
+lv_style_t *redInnerStyle;
 
 /********** UI Functions **********/
 
@@ -67,14 +91,52 @@ void createAutonSelectorTab(lv_obj_t *parent){
 
     //create description label
     autonDescription = createLabel(parent, 10, 130, "No Auton Currently Selected");
-    lv_obj_align(autonDescription, NULL, LV_ALIGN_CENTER, 0, 30);
+    lv_obj_align(autonDescription, NULL, LV_ALIGN_CENTER, 0, 50);
 }
 
 void createMotorTempTab(lv_obj_t *parent){
-    //TODO: implement tab creator
+    lv_style_t *outerStyle = (lv_style_t *)(malloc(sizeof(lv_style_t)));
+    createBarOutsideStyle(outerStyle, 40, 72, 72, 72);
+
+    greenInnerStyle = (lv_style_t *)(malloc(sizeof(lv_style_t)));
+    yellowInnerStyle = (lv_style_t *)(malloc(sizeof(lv_style_t)));
+    orangeInnerStyle = (lv_style_t *)(malloc(sizeof(lv_style_t)));
+    redInnerStyle = (lv_style_t *)(malloc(sizeof(lv_style_t)));
+    createBarInsideStyle(greenInnerStyle, 40, 51, 255, 51, 0);
+    createBarInsideStyle(yellowInnerStyle, 40, 255, 255, 51, 0);
+    createBarInsideStyle(orangeInnerStyle, 40, 255, 128, 0, 0);
+    createBarInsideStyle(redInnerStyle, 40, 255, 0, 0, 0);
+
+    frontLeftDriveTempBar = createBarWithStyle(parent, 10, 6, 225, 40, 15, 70, greenInnerStyle, outerStyle);
+    frontRightDriveTempBar = createBarWithStyle(parent, 10, 51, 225, 40, 15, 70, greenInnerStyle, outerStyle);
+    backLeftDriveTempBar = createBarWithStyle(parent, 10, 96, 225, 40, 15, 70, greenInnerStyle, outerStyle);
+    backRightDriveTempBar = createBarWithStyle(parent, 10, 141, 225, 40, 15, 70, greenInnerStyle, outerStyle);
+    lowerManipulatorTempBar = createBarWithStyle(parent, 245, 6, 225, 40, 15, 70, greenInnerStyle, outerStyle);
+    upperManipulatorTempBar = createBarWithStyle(parent, 245, 51, 225, 40, 15, 70, greenInnerStyle, outerStyle);
+    leftIntakeTempBar = createBarWithStyle(parent, 245, 96, 225, 40, 15, 70, greenInnerStyle, outerStyle);
+    rightIntakeTempBar = createBarWithStyle(parent, 245, 141, 225, 40, 15, 70, greenInnerStyle, outerStyle);
+
+    lv_bar_set_value(frontLeftDriveTempBar, 40);
+    lv_bar_set_value(frontRightDriveTempBar, 40);
+    lv_bar_set_value(backLeftDriveTempBar, 40);
+    lv_bar_set_value(backRightDriveTempBar, 40);
+    lv_bar_set_value(lowerManipulatorTempBar, 40);
+    lv_bar_set_value(upperManipulatorTempBar, 40);
+    lv_bar_set_value(leftIntakeTempBar, 40);
+    lv_bar_set_value(rightIntakeTempBar, 40);
+
+    frontLeftDriveTempLabel = createLabel(parent, 20, 16, "#000000 Front Left Drive");
+    frontRightDriveTempLabel = createLabel(parent, 20, 61, "#000000 Front Right Drive");
+    backLeftDriveTempLabel = createLabel(parent, 20, 106, "#000000 Back Left Drive");
+    backRightDriveTempLabel = createLabel(parent, 20, 151, "#000000 Back Right Drive");
+    lowerManipulatorTempLabel = createLabel(parent, 255, 16, "#000000 Lower Manipulator");
+    upperManipulatorTempLabel = createLabel(parent, 255, 61, "#000000 Upper Manipulator");
+    leftIntakeTempLabel = createLabel(parent, 255, 106, "#000000 Left Intake");
+    rightIntakeTempLabel = createLabel(parent, 255, 151, "#000000 Right Intake");
+
 }
 
-void createPIDAdjustedTab(lv_obj_t *parent){
+void createPIDAdjusterTab(lv_obj_t *parent){
     //TODO: implement tab creator
 }
 
@@ -83,6 +145,9 @@ void initialize() {
     //set position to (0,0) and orientation to 0
     drive->setState({0_in, 0_in, 0_deg});
 
+    //create fonts
+
+
     //set UI theme
     lv_theme_t *theme = lv_theme_alien_init(200, NULL);
     lv_theme_set_current(theme);
@@ -90,7 +155,7 @@ void initialize() {
     //create tabview with tabs
     tabview = lv_tabview_create(lv_scr_act(), NULL);
     createAutonSelectorTab(lv_tabview_add_tab(tabview, "Auton Selector"));
-    lv_tabview_add_tab(tabview, "Motor Temps");
+    createMotorTempTab(lv_tabview_add_tab(tabview, "Motor Temps"));
     lv_tabview_add_tab(tabview, "PID Tuner");
 }
 

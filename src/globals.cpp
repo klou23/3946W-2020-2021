@@ -1,6 +1,8 @@
 #include "main.h"
 #include "globals.hpp"
 
+//lv_font_t lv_font_dejavu_30;
+
 //motor ports
 const int frontLeftDrivePort = 1;
 const int frontRightDrivePort = -2;
