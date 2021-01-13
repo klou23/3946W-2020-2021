@@ -96,7 +96,7 @@ void createAutonSelectorTab(lv_obj_t *parent){
 
 void createMotorTempTab(lv_obj_t *parent){
     lv_style_t *outerStyle = (lv_style_t *)(malloc(sizeof(lv_style_t)));
-    createBarOutsideStyle(outerStyle, 40, 72, 72, 72);
+    createBarOutsideStyle(outerStyle, 40, 90, 90, 90);
 
     greenInnerStyle = (lv_style_t *)(malloc(sizeof(lv_style_t)));
     yellowInnerStyle = (lv_style_t *)(malloc(sizeof(lv_style_t)));
