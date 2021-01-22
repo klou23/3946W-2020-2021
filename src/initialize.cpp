@@ -108,16 +108,16 @@ void createMotorTempTab(lv_obj_t *parent){
     createBarInsideStyle(orangeInnerStyle, 40, 255, 128, 0, 0);
     createBarInsideStyle(redInnerStyle, 40, 255, 0, 0, 0);
 
-    frontLeftDriveTempBar = createBarWithStyle(parent, 10, 6, 225, 40, 15, 70, greenInnerStyle, outerStyle);
-    frontRightDriveTempBar = createBarWithStyle(parent, 10, 51, 225, 40, 15, 70, greenInnerStyle, outerStyle);
-    backLeftDriveTempBar = createBarWithStyle(parent, 10, 96, 225, 40, 15, 70, greenInnerStyle, outerStyle);
-    backRightDriveTempBar = createBarWithStyle(parent, 10, 141, 225, 40, 15, 70, greenInnerStyle, outerStyle);
-    lowerManipulatorTempBar = createBarWithStyle(parent, 245, 6, 225, 40, 15, 70, greenInnerStyle, outerStyle);
-    upperManipulatorTempBar = createBarWithStyle(parent, 245, 51, 225, 40, 15, 70, greenInnerStyle, outerStyle);
-    leftIntakeTempBar = createBarWithStyle(parent, 245, 96, 225, 40, 15, 70, greenInnerStyle, outerStyle);
-    rightIntakeTempBar = createBarWithStyle(parent, 245, 141, 225, 40, 15, 70, greenInnerStyle, outerStyle);
+    frontLeftDriveTempBar = createBarWithStyle(parent, 10, 0, 225, 40, 15, 70, greenInnerStyle, outerStyle);
+    frontRightDriveTempBar = createBarWithStyle(parent, 10, 45, 225, 40, 15, 70, greenInnerStyle, outerStyle);
+    backLeftDriveTempBar = createBarWithStyle(parent, 10, 87, 225, 40, 15, 70, greenInnerStyle, outerStyle);
+    backRightDriveTempBar = createBarWithStyle(parent, 10, 129, 225, 40, 15, 70, greenInnerStyle, outerStyle);
+    lowerManipulatorTempBar = createBarWithStyle(parent, 245, 2, 225, 40, 15, 70, greenInnerStyle, outerStyle);
+    upperManipulatorTempBar = createBarWithStyle(parent, 245, 63, 225, 40, 15, 70, greenInnerStyle, outerStyle);
+    leftIntakeTempBar = createBarWithStyle(parent, 245, 106, 225, 40, 15, 70, greenInnerStyle, outerStyle);
+    rightIntakeTempBar = createBarWithStyle(parent, 245, 149, 225, 40, 15, 70, greenInnerStyle, outerStyle);
 
-    lv_bar_set_value(frontLeftDriveTempBar, 40);
+    //lv_bar_set_value(frontLeftDriveTempBar, 40);
     lv_bar_set_value(frontRightDriveTempBar, 40);
     lv_bar_set_value(backLeftDriveTempBar, 40);
     lv_bar_set_value(backRightDriveTempBar, 40);
@@ -126,14 +126,15 @@ void createMotorTempTab(lv_obj_t *parent){
     lv_bar_set_value(leftIntakeTempBar, 40);
     lv_bar_set_value(rightIntakeTempBar, 40);
 
-    frontLeftDriveTempLabel = createLabel(parent, 20, 16, "#000000 Front Left Drive");
-    frontRightDriveTempLabel = createLabel(parent, 20, 61, "#000000 Front Right Drive");
-    backLeftDriveTempLabel = createLabel(parent, 20, 106, "#000000 Back Left Drive");
-    backRightDriveTempLabel = createLabel(parent, 20, 151, "#000000 Back Right Drive");
-    lowerManipulatorTempLabel = createLabel(parent, 255, 16, "#000000 Lower Manipulator");
-    upperManipulatorTempLabel = createLabel(parent, 255, 61, "#000000 Upper Manipulator");
-    leftIntakeTempLabel = createLabel(parent, 255, 106, "#000000 Left Intake");
-    rightIntakeTempLabel = createLabel(parent, 255, 151, "#000000 Right Intake");
+
+    frontRightDriveTempLabel = createLabel(parent, 20, 71, "#000000 Front Right Drive");
+    frontLeftDriveTempLabel = createLabel(parent, 20, 26, "#000000 Front Left Drive");
+    backLeftDriveTempLabel = createLabel(parent, 20, 116, "#000000 Back Left Drive");
+    backRightDriveTempLabel = createLabel(parent, 20, 161, "#000000 Back Right Drive");
+    lowerManipulatorTempLabel = createLabel(parent, 255, 26, "#000000 Lower Manipulator");
+    upperManipulatorTempLabel = createLabel(parent, 255, 71, "#000000 Upper Manipulator");
+    leftIntakeTempLabel = createLabel(parent, 255, 116, "#000000 Left Intake");
+    rightIntakeTempLabel = createLabel(parent, 255, 161, "#000000 Right Intake");
 
 }
 
