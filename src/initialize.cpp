@@ -39,6 +39,7 @@ lv_style_t *redInnerStyle;
 /********** UI Functions **********/
 
 void createAutonSelectorTab(lv_obj_t *parent){
+    /** DO NOT TOUCH, SPACING IS GOOD **/
     //create styles for red auton button
     lv_style_t *redReleasedStyle = (lv_style_t *)(malloc(sizeof(lv_style_t)));
     lv_style_t *redPressedStyle = (lv_style_t *)(malloc(sizeof(lv_style_t)));
@@ -50,7 +51,7 @@ void createAutonSelectorTab(lv_obj_t *parent){
     createButtonStyle(redTogglePressedStyle, 250, 20, 20, 255, 255, 255, 0, 2, 255, 255, 255);
 
     //create red auton button
-    btnAutonRed = createToggleButtonWithStyle(parent, 30, 10, 195, 50, redPressedStyle, redReleasedStyle, redTogglePressedStyle, redToggleReleasedStyle, "RED");
+    btnAutonRed = createToggleButtonWithStyle(parent, 30, 0, 195, 50, redPressedStyle, redReleasedStyle, redTogglePressedStyle, redToggleReleasedStyle, "RED");
     lv_btn_set_action(btnAutonRed, LV_BTN_ACTION_CLICK, setAutonRed);
 
     //create styles for blue auton button
@@ -64,7 +65,7 @@ void createAutonSelectorTab(lv_obj_t *parent){
     createButtonStyle(blueTogglePressedStyle, 20, 20, 250, 255, 255, 255, 0, 2, 255, 255, 255);
 
     //create blue auton button
-    btnAutonBlue = createToggleButtonWithStyle(parent, 255, 10, 195, 50, bluePressedStyle, blueReleasedStyle, blueTogglePressedStyle, blueToggleReleasedStyle, "BLUE");
+    btnAutonBlue = createToggleButtonWithStyle(parent, 255, 20, 195, 50, bluePressedStyle, blueReleasedStyle, blueTogglePressedStyle, blueToggleReleasedStyle, "BLUE");
     lv_btn_set_action(btnAutonBlue, LV_BTN_ACTION_CLICK, setAutonBlue);
 
     //create styles for selection buttons
