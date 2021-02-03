@@ -19,7 +19,7 @@
     //motor speeds
     const int driveSpeed = 200;
     const int intakeSpeed = 600;
-    const int manipulatorSpeed = 100;
+    const int manipulatorSpeed = 600;
 
     //set motor brake modes
     frontLeftDrive.setBrakeMode(AbstractMotor::brakeMode::coast);
@@ -72,6 +72,32 @@
         backRightDrive.moveVelocity(vels[3]);
 
         /**********Intake and manipulator**********/
+        int leftIntakeMotorVel = 0;
+        int rightIntakeMotorVel = 0;
+        int lowerManipulatorMotorVel = 0;
+        int upperManipulatorMotorVel = 0;
+
+        if(btnR1.isPressed()){
+            leftIntakeMotorVel = 100;
+            rightIntakeMotorVel = 100;
+            lowerManipulatorMotorVel = 100;
+            upperManipulatorMotorVel = 100;
+
+            if(btnL1.isPressed()){
+                upperManipulatorMotorVel = -100;
+            }
+        }else if(btnR2.isPressed()) {
+            lowerManipulatorMotorVel = 100;
+            upperManipulatorMotorVel = 100;
+        }else if(btnL2.isPressed()) {
+            leftIntakeMotorVel = 100;
+            rightIntakeMotorVel = 100;
+        }
+
+        leftIntake.moveVelocity(leftIntakeMotorVel*0.01*intakeSpeed);
+        rightIntake.moveVelocity(rightIntakeMotorVel*0.01*intakeSpeed);
+        lowerManipulator.moveVelocity(lowerManipulatorMotorVel*0.01*manipulatorSpeed);
+        upperManipulator.moveVelocity(upperManipulatorMotorVel*0.01*manipulatorSpeed);
 
 
 		pros::delay(10);  //wait to save resources (prevent brain from frying)
