@@ -4,14 +4,14 @@
 //lv_font_t lv_font_dejavu_30;
 
 //motor ports
-const int frontLeftDrivePort = 9;
-const int frontRightDrivePort = -2;
-const int backLeftDrivePort = 15;
-const int backRightDrivePort = -1;
-const int leftIntakePort = 8;
-const int rightIntakePort = 6;
-const int lowerManipulatorPort = 7;
-const int upperManipulatorPort = 8;
+const int frontLeftDrivePort = 11;
+const int frontRightDrivePort = 20;
+const int backLeftDrivePort = 12;
+const int backRightDrivePort = 19;
+const int leftIntakePort = 1;
+const int rightIntakePort = -10;
+const int lowerManipulatorPort = -2;
+const int upperManipulatorPort = 9;
 
 //declare controller and buttons
 Controller controller;

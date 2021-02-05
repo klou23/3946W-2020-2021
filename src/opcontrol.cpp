@@ -28,8 +28,8 @@
     backRightDrive.setBrakeMode(AbstractMotor::brakeMode::coast);
     leftIntake.setBrakeMode(AbstractMotor::brakeMode::brake);
     rightIntake.setBrakeMode(AbstractMotor::brakeMode::brake);
-    lowerManipulator.setBrakeMode(AbstractMotor::brakeMode::hold);
-    upperManipulator.setBrakeMode(AbstractMotor::brakeMode::hold);
+    lowerManipulator.setBrakeMode(AbstractMotor::brakeMode::brake);
+    upperManipulator.setBrakeMode(AbstractMotor::brakeMode::brake);
 
 	while (true) {
         //get controller values
