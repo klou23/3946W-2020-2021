@@ -48,10 +48,10 @@ int autonColor = 0;
 //declare chassis controller
 std::shared_ptr<OdomChassisController> drive = ChassisControllerBuilder()
     .withMotors(
-		    1,        //Front left
-            -2,       //Front right (reversed)
-            -3,       //Back right (reversed)
-            4         //Back left
+		    frontLeftDrivePort,        //Front left
+            FrontRightDrivePort,       //Front right (reversed)
+            backRightDrivePort,       //Back right (reversed)
+            backLeftDrivePort         //Back left
     )
     .withGains(
       {0.001, 0, 0.0001},     //distance controller gains (kp, ki, kd)
