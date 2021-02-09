@@ -44,7 +44,6 @@ const int BLUE = 1;
 int autonNum = 1;
 int autonColor = 0;
 
-
 //declare chassis controller
 std::shared_ptr<OdomChassisController> drive = ChassisControllerBuilder()
     .withMotors(
