@@ -59,6 +59,29 @@ extern lv_obj_t *btnAuton3;
 extern lv_obj_t *btnAuton4;
 extern lv_obj_t *autonDescription;
 
+extern lv_obj_t *frontLeftDriveTempBar;
+extern lv_obj_t *frontRightDriveTempBar;
+extern lv_obj_t *backLeftDriveTempBar;
+extern lv_obj_t *backRightDriveTempBar;
+extern lv_obj_t *lowerManipulatorTempBar;
+extern lv_obj_t *upperManipulatorTempBar;
+extern lv_obj_t *leftIntakeTempBar;
+extern lv_obj_t *rightIntakeTempBar;
+
+extern lv_obj_t *frontLeftDriveTempLabel;
+extern lv_obj_t *frontRightDriveTempLabel;
+extern lv_obj_t *backLeftDriveTempLabel;
+extern lv_obj_t *backRightDriveTempLabel;
+extern lv_obj_t *lowerManipulatorTempLabel;
+extern lv_obj_t *upperManipulatorTempLabel;
+extern lv_obj_t *leftIntakeTempLabel;
+extern lv_obj_t *rightIntakeTempLabel;
+
+extern lv_style_t *greenInnerStyle;
+extern lv_style_t *orangeInnerStyle;
+extern lv_style_t *yellowInnerStyle;
+extern lv_style_t *redInnerStyle;
+
 //extern lvgl ops
 extern lv_obj_t *createButton(lv_obj_t *parent, lv_coord_t x, lv_coord_t y, lv_coord_t width, lv_coord_t height);
 extern lv_obj_t *createButtonWithStyle(lv_obj_t *parent, lv_coord_t x, lv_coord_t y, lv_coord_t width, lv_coord_t height, lv_style_t *releasedStyle, lv_style_t *pressedStyle);

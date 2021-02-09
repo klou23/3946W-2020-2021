@@ -5,9 +5,9 @@
 
 //motor ports
 const int frontLeftDrivePort = 11;
-const int frontRightDrivePort = 20;
+const int frontRightDrivePort = -20;
 const int backLeftDrivePort = 12;
-const int backRightDrivePort = 19;
+const int backRightDrivePort = -19;
 const int leftIntakePort = 1;
 const int rightIntakePort = -10;
 const int lowerManipulatorPort = -2;

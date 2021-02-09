@@ -117,7 +117,7 @@ void createMotorTempTab(lv_obj_t *parent){
     leftIntakeTempBar = createBarWithStyle(parent, 245, 106, 225, 40, 15, 70, greenInnerStyle, outerStyle);
     rightIntakeTempBar = createBarWithStyle(parent, 245, 149, 225, 40, 15, 70, greenInnerStyle, outerStyle);
 
-    //lv_bar_set_value(frontLeftDriveTempBar, 40);
+    lv_bar_set_value(frontLeftDriveTempBar, 40);
     lv_bar_set_value(frontRightDriveTempBar, 40);
     lv_bar_set_value(backLeftDriveTempBar, 40);
     lv_bar_set_value(backRightDriveTempBar, 40);

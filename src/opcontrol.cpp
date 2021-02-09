@@ -14,7 +14,10 @@
  * operator control task will be stopped. Re-enabling the robot will restart the
  * task, not resume it from where it left off.
  */
-[[noreturn]] void opcontrol() {
+
+
+
+void opcontrol() {
 
     //motor speeds
     const int driveSpeed = 200;
@@ -30,6 +33,8 @@
     rightIntake.setBrakeMode(AbstractMotor::brakeMode::brake);
     lowerManipulator.setBrakeMode(AbstractMotor::brakeMode::brake);
     upperManipulator.setBrakeMode(AbstractMotor::brakeMode::brake);
+
+    int motorTempTimer = 0;
 
 	while (true) {
         //get controller values
@@ -92,6 +97,9 @@
         }else if(btnL2.isPressed()) {
             leftIntakeMotorVel = 100;
             rightIntakeMotorVel = 100;
+        }else if(btnL1.isPressed()) {
+            leftIntakeMotorVel = -100;
+            rightIntakeMotorVel = -100;
         }
 
         leftIntake.moveVelocity(leftIntakeMotorVel*0.01*intakeSpeed);
@@ -99,6 +107,12 @@
         lowerManipulator.moveVelocity(lowerManipulatorMotorVel*0.01*manipulatorSpeed);
         upperManipulator.moveVelocity(upperManipulatorMotorVel*0.01*manipulatorSpeed);
 
+        /**********Motor Temp**********/
+        motorTempTimer++;
+        if(motorTempTimer >= 10){
+            lv_bar_set_value(frontLeftDriveTempBar, frontLeftDrive.getTemperature());
+            motorTempTimer = 0;
+        }
 
 		pros::delay(10);  //wait to save resources (prevent brain from frying)
 	}
