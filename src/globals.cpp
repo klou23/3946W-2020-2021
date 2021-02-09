@@ -48,19 +48,12 @@ int autonColor = 0;
 //declare chassis controller
 std::shared_ptr<OdomChassisController> drive = ChassisControllerBuilder()
     .withMotors(
-		    1,        //Front left
-            -2,       //Front right (reversed)
-            -3,       //Back right (reversed)
-            4         //Back left
+            {frontLeftDrivePort, backLeftDrivePort},
+            {frontRightDrivePort, backRightDrivePort}
     )
     .withGains(
       {0.001, 0, 0.0001},     //distance controller gains (kp, ki, kd)
       {0.001, 0, 0.0001}      //turn controller gains (kp, ki, kd);
-    )
-    .withSensors(
-        ADIEncoder{'A', 'B'}, 		// left encoder in ADI ports A & B
-        ADIEncoder{'C', 'D', true}, // right encoder in ADI ports C & D (reversed)
-        ADIEncoder{'E', 'F'}  		// middle encoder in ADI ports E & F
     )
     .withDimensions(
         AbstractMotor::gearset::green,	//green gear cartridge
@@ -68,11 +61,5 @@ std::shared_ptr<OdomChassisController> drive = ChassisControllerBuilder()
 		11.5_in},						//11.5 inch wheelbase
 		imev5GreenTPR * (1.0 / 1.0)}	//1:1 external gear ratio
 	)
-    .withOdometry(
-		{{2.75_in,		//tracking wheels diameter is 2.75 in
-		7_in,			//tracking wheel base is 7 in
-		1_in,			//middle encoder distance is 1 in
-		2.75_in},		//middle tracking wheel diameter is 2.75 in
-		quadEncoderTPR}
-	)
+    .withOdometry()
     .buildOdometry();
