@@ -147,8 +147,15 @@ void initialize() {
     //set position to (0,0) and orientation to 0
     drive->setState({0_in, 0_in, 0_deg});
 
-    //create fonts
-
+    //set motor brake modes
+    frontLeftDrive.setBrakeMode(AbstractMotor::brakeMode::coast);
+    frontRightDrive.setBrakeMode(AbstractMotor::brakeMode::coast);
+    backLeftDrive.setBrakeMode(AbstractMotor::brakeMode::coast);
+    backRightDrive.setBrakeMode(AbstractMotor::brakeMode::coast);
+    leftIntake.setBrakeMode(AbstractMotor::brakeMode::brake);
+    rightIntake.setBrakeMode(AbstractMotor::brakeMode::brake);
+    lowerManipulator.setBrakeMode(AbstractMotor::brakeMode::brake);
+    upperManipulator.setBrakeMode(AbstractMotor::brakeMode::brake);
 
     //set UI theme
     lv_theme_t *theme = lv_theme_alien_init(200, NULL);

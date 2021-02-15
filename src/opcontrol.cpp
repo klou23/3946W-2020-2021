@@ -19,100 +19,82 @@
 
 void opcontrol() {
 
-    //motor speeds
-    const int driveSpeed = 200;
-    const int intakeSpeed = 600;
-    const int manipulatorSpeed = 600;
-
-    //set motor brake modes
-    frontLeftDrive.setBrakeMode(AbstractMotor::brakeMode::coast);
-    frontRightDrive.setBrakeMode(AbstractMotor::brakeMode::coast);
-    backLeftDrive.setBrakeMode(AbstractMotor::brakeMode::coast);
-    backRightDrive.setBrakeMode(AbstractMotor::brakeMode::coast);
-    leftIntake.setBrakeMode(AbstractMotor::brakeMode::brake);
-    rightIntake.setBrakeMode(AbstractMotor::brakeMode::brake);
-    lowerManipulator.setBrakeMode(AbstractMotor::brakeMode::brake);
-    upperManipulator.setBrakeMode(AbstractMotor::brakeMode::brake);
-
     int motorTempTimer = 0;
 
 	while (true) {
         //get controller values
-        double leftX = controller.getAnalog(ControllerAnalog::leftX);   //left right
-        double leftY = controller.getAnalog(ControllerAnalog::leftY);   //forward back
-        double rightX = controller.getAnalog(ControllerAnalog::rightX); //turning
-        double rightY = controller.getAnalog(ControllerAnalog::rightY); //useless?
+        double leftX = masterController.getAnalog(ControllerAnalog::leftX);   //left right
+        double leftY = masterController.getAnalog(ControllerAnalog::leftY);   //forward back
+        double rightX = masterController.getAnalog(ControllerAnalog::rightX); //turning
+
+        double partnerLeftY = partnerController.getAnalog(ControllerAnalog::leftY); //pooping joystick
+        partnerLeftY = (partnerLeftY >= 0) ? partnerLeftY : -partnerLeftY;
 
         /**********Drive**********/
-        double vels[] = {0,0,0,0}; // fl, fr, bl, br
+        double driveVels[] {0, 0, 0, 0}; // fl, fr, bl, br
         // forward and back
-        for(int i = 0; i < 4; i++) vels[i] += leftY;
+        for(int i = 0; i < 4; i++) driveVels[i] += leftY;
 
         //strafing
-        vels[0] += leftX;
-        vels[3] += leftX;
-        vels[1] -= leftX;
-        vels[2] -= leftX;
+        driveVels[0] += leftX;
+        driveVels[3] += leftX;
+        driveVels[1] -= leftX;
+        driveVels[2] -= leftX;
 
         //turning
-        vels[0] += rightX;
-        vels[2] += rightX;
-        vels[1] -= rightX;
-        vels[3] -= rightX;
+        driveVels[0] += rightX;
+        driveVels[2] += rightX;
+        driveVels[1] -= rightX;
+        driveVels[3] -= rightX;
 
-        int x = 0;
-        int y = 0;
-
-        //cap all vels at 1 and convert percentages to rpm
+        //cap all driveVels at 1 and convert percentages to rpm
+        //add quadratic control
         for(int i = 0; i < 4; i++){
-            if(vels[i] > 1) vels[i] = 1;
-            if(vels[i] < -1) vels[i] = -1;
-            vels[i] *= driveSpeed;
+            if(driveVels[i] > 1) driveVels[i] = 1;
+            if(driveVels[i] < -1) driveVels[i] = -1;
+            if(quadraticControl) {
+                if(driveVels[i] < 0) driveVels[i] *= -1;
+                driveVels[i] *= driveVels[i];
+            }
+            driveVels[i] *= driveSpeed;
         }
 
         //run motors
-        frontLeftDrive.moveVelocity(vels[0]);
-        frontRightDrive.moveVelocity(vels[1]);
-        backLeftDrive.moveVelocity(vels[2]);
-        backRightDrive.moveVelocity(vels[3]);
+        frontLeftDrive.moveVelocity(driveVels[0]);
+        frontRightDrive.moveVelocity(driveVels[1]);
+        backLeftDrive.moveVelocity(driveVels[2]);
+        backRightDrive.moveVelocity(driveVels[3]);
 
         /**********Intake and manipulator**********/
-        int leftIntakeMotorVel = 0;
-        int rightIntakeMotorVel = 0;
-        int lowerManipulatorMotorVel = 0;
-        int upperManipulatorMotorVel = 0;
+        //set vels
+        double rollerVels[] {0, 0, 0}; //intake, lower, upper
 
-        if(btnR1.isPressed()){
-            leftIntakeMotorVel = 100;
-            rightIntakeMotorVel = 100;
-            lowerManipulatorMotorVel = 100;
-            upperManipulatorMotorVel = 100;
-
-            if(btnL1.isPressed()){
-                upperManipulatorMotorVel = -100;
-            }
-        }else if(btnR2.isPressed()) {
-            lowerManipulatorMotorVel = 100;
-            upperManipulatorMotorVel = 100;
-        }else if(btnL2.isPressed()) {
-            leftIntakeMotorVel = 100;
-            rightIntakeMotorVel = 100;
-        }else if(btnL1.isPressed()) {
-            leftIntakeMotorVel = -100;
-            rightIntakeMotorVel = -100;
+        if(masterL1.isPressed()) rollerVels[0] = rollerVels[1] = rollerVels[2] = 1;         //1,1,1
+        else if(masterL2.isPressed()) rollerVels[0] = rollerVels[1] = 1;                    //1,1,0
+        else if(masterR1.isPressed()) rollerVels[1] = 1;                                    //0,1,0
+        else if(masterR2.isPressed()) rollerVels[1] = rollerVels[2] = 1;                    //0,1,1
+        else if(partnerL1.isPressed()) rollerVels[0] = rollerVels[1] = rollerVels[2] = -1;  //-1,-1,-1
+        else if(partnerL2.isPressed()) rollerVels[1] = rollerVels[2] = -1;                  //0,-1,-1
+        else if(partnerR1.isPressed()) rollerVels[0] = 1;                                   //1,0,0
+        else if(partnerR2.isPressed()) rollerVels[0] = -1;                                  //-1,0,0
+        else if(partnerLeftY > 0.05){
+            if(!partnerA.isPressed()) rollerVels[0] = 1;
+            rollerVels[1] = partnerLeftY;
+            rollerVels[2] = -partnerLeftY;
         }
 
-        leftIntake.moveVelocity(leftIntakeMotorVel*0.01*intakeSpeed);
-        rightIntake.moveVelocity(rightIntakeMotorVel*0.01*intakeSpeed);
-        lowerManipulator.moveVelocity(lowerManipulatorMotorVel*0.01*manipulatorSpeed);
-        upperManipulator.moveVelocity(upperManipulatorMotorVel*0.01*manipulatorSpeed);
+        //run motors
+        leftIntake.moveVelocity(driveVels[0] * intakeSpeed);
+        rightIntake.moveVelocity(driveVels[0] * intakeSpeed);
+        lowerManipulator.moveVelocity(driveVels[1] * manipulatorSpeed);
+        upperManipulator.moveVelocity(driveVels[2] * manipulatorSpeed);
 
         /**********Motor Temp**********/
-        motorTempTimer++;
-        if(motorTempTimer >= 10){
-            lv_bar_set_value(frontLeftDriveTempBar, frontLeftDrive.getTemperature());
-            motorTempTimer = 0;
-        }
+//        motorTempTimer++;
+//        if(motorTempTimer >= 10){
+//            lv_bar_set_value(frontLeftDriveTempBar, frontLeftDrive.getTemperature());
+//            motorTempTimer = 0;
+//        }
 
 		pros::delay(10);  //wait to save resources (prevent brain from frying)
 	}
