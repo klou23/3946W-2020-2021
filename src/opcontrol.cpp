@@ -83,18 +83,43 @@ void opcontrol() {
             rollerVels[2] = -partnerLeftY;
         }
 
+        for(int i = 0; i < 3; i++) driveVels[i] *= intakeSpeed;
+
         //run motors
-        leftIntake.moveVelocity(driveVels[0] * intakeSpeed);
-        rightIntake.moveVelocity(driveVels[0] * intakeSpeed);
-        lowerManipulator.moveVelocity(driveVels[1] * manipulatorSpeed);
-        upperManipulator.moveVelocity(driveVels[2] * manipulatorSpeed);
+        leftIntake.moveVelocity(driveVels[0]);
+        rightIntake.moveVelocity(driveVels[0]);
+        lowerManipulator.moveVelocity(driveVels[1]);
+        upperManipulator.moveVelocity(driveVels[2]);
 
         /**********Motor Temp**********/
-//        motorTempTimer++;
-//        if(motorTempTimer >= 10){
-//            lv_bar_set_value(frontLeftDriveTempBar, frontLeftDrive.getTemperature());
-//            motorTempTimer = 0;
-//        }
+        motorTempTimer++;
+        if(motorTempTimer >= 15){
+            std::string motorNames[] = {"FL Drive", "FR Drive", "BL Drive", "BR Drive", "L Inake", "R Intake", "L Roller", "U Roller"};
+            int motorTemps[8];
+
+            motorTemps[0] = frontLeftDrive.getTemperature();
+            motorTemps[1] = frontRightDrive.getTemperature();
+            motorTemps[2] = backLeftDrive.getTemperature();
+            motorTemps[3] = backRightDrive.getTemperature();
+            motorTemps[4] = leftIntake.getTemperature();
+            motorTemps[5] = rightIntake.getTemperature();
+            motorTemps[6] = lowerManipulator.getTemperature();
+            motorTemps[7] = upperManipulator.getTemperature();
+
+            int highestTemp = 0;
+            std::string hottestMotor = "";
+
+            for(int i = 0; i < 8; i++){
+                if(motorTemps[i] > highestTemp){
+                    highestTemp = motorTemps[i];
+                    hottestMotor = motorNames[i];
+                }
+            }
+
+            std::cout << hottestMotor << " - " << highestTemp << "C";
+
+            motorTempTimer = 0;
+        }
 
 		pros::delay(10);  //wait to save resources (prevent brain from frying)
 	}
