@@ -71,6 +71,7 @@ extern const int RED;
 extern const int BLUE;
 extern int autonColor;
 extern int autonNum;
+extern const QLength& rollerCenterDist;
 
 //extern UI components
 extern lv_obj_t *tabview;

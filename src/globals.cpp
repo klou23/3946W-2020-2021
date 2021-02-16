@@ -60,6 +60,7 @@ const int RED = 0;
 const int BLUE = 1;
 int autonNum = 1;
 int autonColor = 0;
+const QLength& rollerCenterDist = 5_in;
 
 //motor rpms
 const int driveSpeed = 200;
@@ -70,16 +71,16 @@ const int manipulatorSpeed = 600;
 std::shared_ptr<OdomChassisController> drive = ChassisControllerBuilder()
     .withMotors(
             {frontLeftDrivePort, backLeftDrivePort},
-            {frontRightDrivePort, backRightDrivePort}
+            {-frontRightDrivePort, -backRightDrivePort}
     )
-    .withGains(
-      {0.001, 0, 0.0001},     //distance controller gains (kp, ki, kd)
-      {0.001, 0, 0.0001}      //turn controller gains (kp, ki, kd);
+    .withGains(                  //TODO: tune PID
+      {0.001, 0.000, 0.000},     //distance controller gains (kp, ki, kd)
+      {0.003, 0.000, 0.000}      //turn controller gains (kp, ki, kd);
     )
-    .withDimensions(
+    .withDimensions(                    //TODO: measure wheelbase
         AbstractMotor::gearset::green,	//green gear cartridge
 		{{4_in,							//4 inch wheel diameter
-		11.5_in},						//11.5 inch wheelbase
+		10_in},						//11.5 inch wheelbase
 		imev5GreenTPR * (1.0 / 1.0)}	//1:1 external gear ratio
 	)
     .withOdometry()

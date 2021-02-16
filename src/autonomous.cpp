@@ -1,6 +1,8 @@
 #include "main.h"
 #include "globals.hpp"
 
+
+
 /**
  * Runs the user autonomous code. This function will be started in its own task
  * with the default priority and stack size whenever the robot is enabled via
@@ -46,8 +48,8 @@ void autonomous() {
     lowerManipulator.moveAbsolute(10, 200);
 }
 
-void onePoint(){
-
+void singleScore(){
+    drive->driveToPoint({6_in, 6_in}, false, rollerCenterDist);
 }
 
 void prog(){
