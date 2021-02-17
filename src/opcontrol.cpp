@@ -70,10 +70,10 @@ void opcontrol() {
         double rollerVels[] {0, 0, 0}; //intake, lower, upper
 
         if(masterA.isPressed()){
-            drive->setState({0_in, 0_in, 0_deg});
-            drive->driveToPoint({20_in, 0_in});
-            drive-> driveToPoint({0_in, 20_in});
-            drive->driveToPoint({20_in, 0_in});
+//            drive->setState({0_in, 0_in, 0_deg});
+//            drive->driveToPoint({24_in, 0_in});
+//            drive->setMoveThreshold(0.5_in);
+//            drive->moveDistance(24_in);
         }
 
         if(masterL1.isPressed()) rollerVels[0] = rollerVels[1] = rollerVels[2] = 1;         //1,1,1
@@ -90,13 +90,13 @@ void opcontrol() {
             rollerVels[2] = -partnerLeftY;
         }
 
-        for(int i = 0; i < 3; i++) driveVels[i] *= intakeSpeed;
+//        for(int i = 0; i < 3; i++) driveVels[i] *= intakeSpeed;
 
         //run motors
-        leftIntake.moveVelocity(rollerVels[0]);
-        rightIntake.moveVelocity(rollerVels[0]);
-        lowerManipulator.moveVelocity(rollerVels[1]);
-        upperManipulator.moveVelocity(rollerVels[2]);
+        leftIntake.moveVelocity(rollerVels[0] * intakeSpeed);
+        rightIntake.moveVelocity(rollerVels[0] * intakeSpeed);
+        lowerManipulator.moveVelocity(rollerVels[1] * intakeSpeed);
+        upperManipulator.moveVelocity(rollerVels[2] * intakeSpeed);
 
         /**********Motor Temp**********/
         motorTempTimer++;

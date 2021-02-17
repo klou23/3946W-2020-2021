@@ -6,15 +6,17 @@
 //driver control stuff
 const bool quadraticControl = true;
 
-//motor ports
+//ports
 const int frontLeftDrivePort = 11;
-const int frontRightDrivePort = 20;
+const int frontRightDrivePort = -20;
 const int backLeftDrivePort = 12;
-const int backRightDrivePort = 19;
+const int backRightDrivePort = -19;
 const int leftIntakePort = 1;
-const int rightIntakePort = 10;
-const int lowerManipulatorPort = 2;
+const int rightIntakePort = -10;
+const int lowerManipulatorPort = -2;
 const int upperManipulatorPort = 9;
+
+const int gyroPort = 3;
 
 //declare controller and buttons
 Controller masterController(ControllerId::master);
@@ -47,13 +49,16 @@ ControllerButton partnerA(ControllerId::partner, ControllerDigital::A);
 
 //declare motors
 Motor frontLeftDrive(frontLeftDrivePort, false, AbstractMotor::gearset::green, AbstractMotor::encoderUnits::degrees);
-Motor frontRightDrive(frontRightDrivePort, true, AbstractMotor::gearset::green, AbstractMotor::encoderUnits::degrees);
+Motor frontRightDrive(frontRightDrivePort, false, AbstractMotor::gearset::green, AbstractMotor::encoderUnits::degrees);
 Motor backLeftDrive(backLeftDrivePort, false, AbstractMotor::gearset::green, AbstractMotor::encoderUnits::degrees);
-Motor backRightDrive(backRightDrivePort, true, AbstractMotor::gearset::green, AbstractMotor::encoderUnits::degrees);
-Motor leftIntake(leftIntakePort, true, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
+Motor backRightDrive(backRightDrivePort, false, AbstractMotor::gearset::green, AbstractMotor::encoderUnits::degrees);
+Motor leftIntake(leftIntakePort, false, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
 Motor rightIntake(rightIntakePort, false, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
-Motor lowerManipulator(lowerManipulatorPort, true, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
+Motor lowerManipulator(lowerManipulatorPort, false, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
 Motor upperManipulator(upperManipulatorPort, false, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
+
+//declare gyroscope
+pros::Imu gyroscope(gyroPort);
 
 //auton variables
 const int RED = 0;
@@ -62,26 +67,34 @@ int autonNum = 1;
 int autonColor = 0;
 const QLength& rollerCenterDist = 5_in;
 
+const int linearKP = 0;
+const int linearKI = 0;
+const int linearKD = 0;
+
+const int rotationalKP = 0;
+const int rotationalKI = 0;
+const int rotationalKD = 0;
+
 //motor rpms
 const int driveSpeed = 200;
 const int intakeSpeed = 600;
 const int manipulatorSpeed = 600;
 
-//declare chassis controller
-std::shared_ptr<OdomChassisController> drive = ChassisControllerBuilder()
-    .withMotors(
-            {frontLeftDrivePort, backLeftDrivePort},
-            {-frontRightDrivePort, -backRightDrivePort}
-    )
-    .withGains(                  //TODO: tune PID
-      {0.001, 0.000, 0.000},     //distance controller gains (kp, ki, kd)
-      {0.003, 0.000, 0.000}      //turn controller gains (kp, ki, kd);
-    )
-    .withDimensions(                    //TODO: measure wheelbase
-        AbstractMotor::gearset::green,	//green gear cartridge
-		{{4_in,							//4 inch wheel diameter
-		10_in},						//11.5 inch wheelbase
-		imev5GreenTPR * (1.0 / 1.0)}	//1:1 external gear ratio
-	)
-    .withOdometry()
-    .buildOdometry();
+////declare chassis controller
+//std::shared_ptr<OdomChassisController> drive = ChassisControllerBuilder()
+//    .withMotors(
+//            {frontLeftDrivePort, backLeftDrivePort},
+//            {-frontRightDrivePort, -backRightDrivePort}
+//    )
+//    .withGains(                  //TODO: tune PID
+//      {0.001, 0.000, 0.000},     //distance controller gains (kp, ki, kd)
+//      {0.003, 0.000, 0.000}      //turn controller gains (kp, ki, kd);
+//    )
+//    .withDimensions(                    //TODO: measure wheelbase
+//        AbstractMotor::gearset::green,	//green gear cartridge
+//		{{4_in,							//4 inch wheel diameter
+//		10_in},						//11.5 inch wheelbase
+//		imev5GreenTPR * (1.0 / 1.0)}	//1:1 external gear ratio
+//	)
+//    .withOdometry()
+//    .buildOdometry();

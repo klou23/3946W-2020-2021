@@ -18,6 +18,8 @@ extern const int rightIntakePort;
 extern const int lowerManipulatorPort;
 extern const int upperManipulatorPort;
 
+extern const int gyroPort;
+
 //extern controller
 extern Controller masterController;
 extern ControllerButton masterL1;
@@ -58,13 +60,16 @@ extern Motor rightIntake;
 extern Motor lowerManipulator;
 extern Motor upperManipulator;
 
+//extern gyro
+extern pros::Imu gyroscope;
+
 //extern motor rpms
 extern const int driveSpeed;
 extern const int intakeSpeed;
 extern const int manipulatorSpeed;
 
 //extern chassis controller
-extern std::shared_ptr<OdomChassisController> drive;
+//extern std::shared_ptr<OdomChassisController> drive;
 
 //extern auton variables
 extern const int RED;
@@ -72,6 +77,14 @@ extern const int BLUE;
 extern int autonColor;
 extern int autonNum;
 extern const QLength& rollerCenterDist;
+
+extern const int linearKP;
+extern const int linearKI;
+extern const int linearKD;
+
+extern const int rotationalKP;
+extern const int rotationalKI;
+extern const int rotationalKD;
 
 //extern UI components
 extern lv_obj_t *tabview;

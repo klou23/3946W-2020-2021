@@ -146,7 +146,8 @@ void createPIDAdjusterTab(lv_obj_t *parent){
 void initialize() {
     //set position to (0,0) and orientation to 0
     //TODO: get proper starting state
-    drive->setState({0_in, 0_in, 0_deg});
+//    drive->setState({0_in, 0_in, 0_deg});
+    gyroscope.reset();
 
     //set motor brake modes
     frontLeftDrive.setBrakeMode(AbstractMotor::brakeMode::coast);

@@ -1,8 +1,6 @@
 #include "main.h"
 #include "globals.hpp"
 
-
-
 /**
  * Runs the user autonomous code. This function will be started in its own task
  * with the default priority and stack size whenever the robot is enabled via
@@ -14,29 +12,56 @@
  * will be stopped. Re-enabling the robot will restart the task, not resume it
  * from where it left off.
  */
+
+void driveForward(double dist, double maxSpeed, double threshold, double turnThreshold){
+    maxSpeed = std::min(maxSpeed, (double) driveSpeed);
+    double distTraveled = 0;
+    frontLeftDrive.tarePosition();
+    backLeftDrive.tarePosition();
+    frontRightDrive.tarePosition();
+    backRightDrive.tarePosition();
+
+    double prevError;
+    double error = dist;
+    double errorIntegral = dist;
+    double errorDerivative = 0;
+
+    double gyroInitial = gyroscope.getYaw();
+    double gyroPrevError = 0;
+    double gyroError = 0;
+    double gyroIntegral = 0;
+    double gyroDerivative = 0;
+
+    do{
+        //linear motion
+        prevError = error;
+        distTraveled += (frontLeftDrive.getPosition() + backLeftDrive.getPosition() + frontRightDrive.getPosition() +
+                         backRightDrive.getPosition()) / 4.0;
+        error = dist - distTraveled;
+        errorIntegral += error;
+        errorDerivative = error - prevError;
+        double rightVel = std::min((linearKP * error) + (linearKI * errorIntegral) + (linearKD * errorDerivative), maxSpeed);
+        double leftVel = rightVel;
+
+        //gyroscope adjustment
+        gyroPrevError = gyroError;
+        gyroError = gyroInitial - gyroscope.getYaw();
+        gyroErrorIntegral += gyroError;
+        gyroErrorDerivative = error - prevError;
+        if(gyroError > turnThreshold){
+            double change = std::min((rotationalKP * gyroError) + (rotationalKI * gyroErrorIntegral) + (rotationalKD * gyroErrorDerivative), maxSpeed/3.0);
+            leftVel += change;
+            rightVel -= change;
+        }
+        backLeftDrive.moveVelocity(leftVel);
+        frontLeftDrive.moveVelocity(leftVel);
+        backRightDrive.moveVelocity(rightVel);
+        frontRightDrive.moveVelocity(rightVel);
+        pros::delay(5);
+    }while(error > threshold);
+}
+
 void autonomous() {
-
-    //turn towards point (12_in, 12_in), then drive to point
-    //stop 0 in away from the point
-	drive->driveToPoint({12_in, 12_in}, false, 0_in);
-
-    //move forward 10_in
-    drive->moveDistance(10_in);
-
-    //turn 45_deg
-    drive->turnAngle(45_deg);
-
-    //turn to face point(20_in, 20_in)
-    drive->turnToPoint({20_in, 20_in});
-
-    //turn to angle 45_deg (absolute)
-    drive->turnToAngle(45_deg);
-
-    /**
-    * The functions driveToPoint, turnToPoint, and turnToAngle are preferred
-    * over moveDistance and turnAngle because they use absolute positioning
-    * instead of relative position, resulting in greater accuracy.
-    */
 
     //sets current motor position as 0
     lowerManipulator.tarePosition();
@@ -49,7 +74,6 @@ void autonomous() {
 }
 
 void singleScore(){
-    drive->driveToPoint({6_in, 6_in}, false, rollerCenterDist);
 }
 
 void prog(){
