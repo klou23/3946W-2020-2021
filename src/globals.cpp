@@ -8,15 +8,15 @@ const bool quadraticControl = true;
 
 //ports
 const int frontLeftDrivePort = 11;
-const int frontRightDrivePort = -20;
+const int frontRightDrivePort = 20;
 const int backLeftDrivePort = 12;
-const int backRightDrivePort = -19;
+const int backRightDrivePort = 19;
 const int leftIntakePort = 1;
-const int rightIntakePort = -10;
-const int lowerManipulatorPort = -2;
+const int rightIntakePort = 10;
+const int lowerManipulatorPort = 2;
 const int upperManipulatorPort = 9;
 
-const int gyroPort = 3;
+const int gyroPort = 5;
 
 //declare controller and buttons
 Controller masterController(ControllerId::master);
@@ -49,13 +49,13 @@ ControllerButton partnerA(ControllerId::partner, ControllerDigital::A);
 
 //declare motors
 Motor frontLeftDrive(frontLeftDrivePort, false, AbstractMotor::gearset::green, AbstractMotor::encoderUnits::degrees);
-Motor frontRightDrive(frontRightDrivePort, false, AbstractMotor::gearset::green, AbstractMotor::encoderUnits::degrees);
+Motor frontRightDrive(frontRightDrivePort, true, AbstractMotor::gearset::green, AbstractMotor::encoderUnits::degrees);
 Motor backLeftDrive(backLeftDrivePort, false, AbstractMotor::gearset::green, AbstractMotor::encoderUnits::degrees);
-Motor backRightDrive(backRightDrivePort, false, AbstractMotor::gearset::green, AbstractMotor::encoderUnits::degrees);
+Motor backRightDrive(backRightDrivePort, true, AbstractMotor::gearset::green, AbstractMotor::encoderUnits::degrees);
 Motor leftIntake(leftIntakePort, false, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
-Motor rightIntake(rightIntakePort, false, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
-Motor lowerManipulator(lowerManipulatorPort, false, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
-Motor upperManipulator(upperManipulatorPort, false, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
+Motor rightIntake(rightIntakePort, true, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
+Motor lowerManipulator(lowerManipulatorPort, true, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
+Motor upperManipulator(upperManipulatorPort, true, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
 
 //declare gyroscope
 pros::Imu gyroscope(gyroPort);
@@ -67,11 +67,11 @@ int autonNum = 1;
 int autonColor = 0;
 const QLength& rollerCenterDist = 5_in;
 
-const int linearKP = 0;
+const int linearKP = 0.5;
 const int linearKI = 0;
 const int linearKD = 0;
 
-const int rotationalKP = 0;
+const int rotationalKP = 0.5;
 const int rotationalKI = 0;
 const int rotationalKD = 0;
 

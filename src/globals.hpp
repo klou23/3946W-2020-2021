@@ -1,9 +1,14 @@
 #include "main.h"
 
 using namespace okapi;
+using namespace std;
 
 #ifndef GLOBALS
 #define GLOBALS
+
+//global constants
+const int LEFT = 0;
+const int RIGHT = 1;
 
 //driver control stuff
 extern const bool quadraticControl;
@@ -85,6 +90,9 @@ extern const int linearKD;
 extern const int rotationalKP;
 extern const int rotationalKI;
 extern const int rotationalKD;
+
+extern void turnAngle(double angle, int direction, int speed);
+extern void drive(double dist, int speed);
 
 //extern UI components
 extern lv_obj_t *tabview;

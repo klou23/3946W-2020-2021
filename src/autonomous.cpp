@@ -13,7 +13,7 @@
  * from where it left off.
  */
 
-void driveForward(double dist, double maxSpeed, double threshold, double turnThreshold){
+void PIDdriveForward(double dist, double maxSpeed, double threshold, double turnThreshold){
     maxSpeed = std::min(maxSpeed, (double) driveSpeed);
     double distTraveled = 0;
     frontLeftDrive.tarePosition();
@@ -26,7 +26,7 @@ void driveForward(double dist, double maxSpeed, double threshold, double turnThr
     double errorIntegral = dist;
     double errorDerivative = 0;
 
-    double gyroInitial = gyroscope.getYaw();
+    double gyroInitial = gyroscope.get_yaw();
     double gyroPrevError = 0;
     double gyroError = 0;
     double gyroIntegral = 0;
@@ -43,16 +43,16 @@ void driveForward(double dist, double maxSpeed, double threshold, double turnThr
         double rightVel = std::min((linearKP * error) + (linearKI * errorIntegral) + (linearKD * errorDerivative), maxSpeed);
         double leftVel = rightVel;
 
-        //gyroscope adjustment
-        gyroPrevError = gyroError;
-        gyroError = gyroInitial - gyroscope.getYaw();
-        gyroErrorIntegral += gyroError;
-        gyroErrorDerivative = error - prevError;
-        if(gyroError > turnThreshold){
-            double change = std::min((rotationalKP * gyroError) + (rotationalKI * gyroErrorIntegral) + (rotationalKD * gyroErrorDerivative), maxSpeed/3.0);
-            leftVel += change;
-            rightVel -= change;
-        }
+//        //gyroscope adjustment
+//        gyroPrevError = gyroError;
+//        gyroError = gyroInitial - gyroscope.get_yaw();
+//        gyroIntegral += gyroError;
+//        gyroDerivative = error - prevError;
+//        if(gyroError > turnThreshold){
+//            double change = std::min((rotationalKP * gyroError) + (rotationalKI * gyroIntegral) + (rotationalKD * gyroDerivative), maxSpeed/3.0);
+//            leftVel += change;
+//            rightVel -= change;
+//        }
         backLeftDrive.moveVelocity(leftVel);
         frontLeftDrive.moveVelocity(leftVel);
         backRightDrive.moveVelocity(rightVel);
@@ -61,16 +61,73 @@ void driveForward(double dist, double maxSpeed, double threshold, double turnThr
     }while(error > threshold);
 }
 
+void PIDturnAngle(double angle, double maxSpeed, double turnThreshold){
+    double initial = gyroscope.get_rotation();
+    double target = initial + angle;
+
+    double gyroPrevError;
+    double gyroError = target - initial;
+    double gyroIntegral = gyroError;
+    double gyroDerivative = 0;
+
+    do{
+        gyroPrevError = gyroError;
+        gyroError = target - gyroscope.get_rotation();
+        gyroIntegral + gyroError;
+        gyroDerivative = gyroError - gyroPrevError;
+
+        double change = std::min((rotationalKP * gyroError) + (rotationalKI * gyroIntegral) + (rotationalKD * gyroDerivative), maxSpeed);
+        double leftVel = change;
+        double rightVel = -change;
+
+        backLeftDrive.moveVelocity(leftVel);
+        frontLeftDrive.moveVelocity(leftVel);
+        backRightDrive.moveVelocity(rightVel);
+        frontRightDrive.moveVelocity(rightVel);
+
+        pros::delay(5);
+    }while(gyroError > turnThreshold);
+}
+
+void turnAngle(double angle, int direction, int speed){
+    const double scale = 5.5;
+    double motorTurn = angle * scale;
+    if(direction == LEFT){
+        frontRightDrive.moveRelative(motorTurn, speed);
+        backRightDrive.moveRelative(motorTurn, speed);
+        frontLeftDrive.moveRelative(-motorTurn, speed);
+        backLeftDrive.moveRelative(-motorTurn, speed);
+    }else if(direction == RIGHT){
+        frontRightDrive.moveRelative(-motorTurn, speed);
+        backRightDrive.moveRelative(-motorTurn, speed);
+        frontLeftDrive.moveRelative(motorTurn, speed);
+        backLeftDrive.moveRelative(motorTurn, speed);
+    }
+    while(abs(frontRightDrive.getTargetPosition() - frontRightDrive.getPosition() > 1) ||
+          abs(backRightDrive.getTargetPosition() - backRightDrive.getPosition() > 1) ||
+          abs(frontLeftDrive.getTargetPosition() - frontLeftDrive.getPosition() > 1) ||
+          abs(backLeftDrive.getTargetPosition() - backLeftDrive.getPosition() > 1)){
+        pros::delay(5);
+    }
+}
+
+void drive(double dist, int speed){
+    const double scale = 28.21;
+    double motorTurn = dist * scale;
+    frontRightDrive.moveRelative(motorTurn, speed);
+    backRightDrive.moveRelative(motorTurn, speed);
+    frontLeftDrive.moveRelative(motorTurn, speed);
+    backLeftDrive.moveRelative(motorTurn, speed);
+    while(abs(frontRightDrive.getTargetPosition() - frontRightDrive.getPosition() > 1) ||
+          abs(backRightDrive.getTargetPosition() - backRightDrive.getPosition() > 1) ||
+          abs(frontLeftDrive.getTargetPosition() - frontLeftDrive.getPosition() > 1) ||
+          abs(backLeftDrive.getTargetPosition() - backLeftDrive.getPosition() > 1)){
+        pros::delay(5);
+    }
+}
+
 void autonomous() {
-
-    //sets current motor position as 0
-    lowerManipulator.tarePosition();
-
-    //move 10 deg clockwise at 200 rpm
-    lowerManipulator.moveRelative(10, 200);
-
-    //move to 10 deg (absolute) at 200 rpm
-    lowerManipulator.moveAbsolute(10, 200);
+    turnAngle(90, LEFT, 50);
 }
 
 void singleScore(){

@@ -70,16 +70,11 @@ void opcontrol() {
         double rollerVels[] {0, 0, 0}; //intake, lower, upper
 
         if(masterA.isPressed()){
-//            drive->setState({0_in, 0_in, 0_deg});
-//            drive->driveToPoint({24_in, 0_in});
-//            drive->setMoveThreshold(0.5_in);
-//            drive->moveDistance(24_in);
+            drive(17.5, 50);
         }
 
-        if(masterL1.isPressed()) rollerVels[0] = rollerVels[1] = rollerVels[2] = 1;         //1,1,1
-        else if(masterL2.isPressed()) rollerVels[0] = rollerVels[1] = 1;                    //1,1,0
-        else if(masterR1.isPressed()) rollerVels[1] = 1;                                    //0,1,0
-        else if(masterR2.isPressed()) rollerVels[1] = rollerVels[2] = 1;                    //0,1,1
+        if(masterR1.isPressed()) rollerVels[0] = rollerVels[1] = rollerVels[2] = 1;         //1,1,1
+        else if(masterL1.isPressed()) rollerVels[1] = rollerVels[2] = 1;                    //0,1,0
         else if(partnerL1.isPressed()) rollerVels[0] = rollerVels[1] = rollerVels[2] = -1;  //-1,-1,-1
         else if(partnerL2.isPressed()) rollerVels[1] = rollerVels[2] = -1;                  //0,-1,-1
         else if(partnerR1.isPressed()) rollerVels[0] = 1;                                   //1,0,0
@@ -123,7 +118,7 @@ void opcontrol() {
                 }
             }
 
-            std::cout << hottestMotor << " - " << highestTemp << "C";
+//            cout << hottestMotor << " - " << highestTemp << "C" << endl;
 
             motorTempTimer = 0;
         }
