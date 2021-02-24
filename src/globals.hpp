@@ -93,6 +93,10 @@ extern const int rotationalKD;
 
 extern void turnAngle(double angle, int direction, int speed);
 extern void drive(double dist, int speed);
+extern void singleScore();
+extern void driveRev(double dist, int speed);
+
+extern void prog();
 
 //extern UI components
 extern lv_obj_t *tabview;

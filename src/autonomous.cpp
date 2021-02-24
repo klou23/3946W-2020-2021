@@ -112,7 +112,7 @@ void turnAngle(double angle, int direction, int speed){
 }
 
 void drive(double dist, int speed){
-    const double scale = 28.21;
+    const double scale = 28.215;
     double motorTurn = dist * scale;
     frontRightDrive.moveRelative(motorTurn, speed);
     backRightDrive.moveRelative(motorTurn, speed);
@@ -126,13 +126,88 @@ void drive(double dist, int speed){
     }
 }
 
+void driveRev(double dist, int speed){
+    frontRightDrive.setReversed(!frontRightDrive.isReversed());
+    frontLeftDrive.setReversed(!frontLeftDrive.isReversed());
+    backRightDrive.setReversed(!backRightDrive.isReversed());
+    backLeftDrive.setReversed(!backLeftDrive.isReversed());
+    drive(dist, speed);
+    frontRightDrive.setReversed(!frontRightDrive.isReversed());
+    frontLeftDrive.setReversed(!frontLeftDrive.isReversed());
+    backRightDrive.setReversed(!backRightDrive.isReversed());
+    backLeftDrive.setReversed(!backLeftDrive.isReversed());
+}
+
+void shoot(int vel){
+    lowerManipulator.moveVelocity(vel);
+    upperManipulator.moveVelocity(vel);
+}
+
+void rollers(int vel){
+    rightIntake.moveVelocity(vel);
+    leftIntake.moveVelocity(vel);
+}
+
+void poop(int vel){
+    rollers(vel);
+    lowerManipulator.moveVelocity(vel);
+    upperManipulator.moveVelocity(-vel);
+}
+
+void stop(){
+    shoot(0);
+    rollers(0);
+}
+
+void flipOutHood(){
+    upperManipulator.moveVelocity(-300);
+    pros::delay(500);
+    upperManipulator.moveVelocity(0);
+}
+
 void autonomous() {
-    turnAngle(90, LEFT, 50);
+    prog();
 }
 
 void singleScore(){
+    //hood flipout
+    flipOutHood();
+    //score first ball
+    shoot(600);
+    pros::delay(1500);
+    shoot(0);
+    driveRev(10, 50);
+    //flip out intake
+    rollers(-300);
+    pros::delay(500);
+    rollers(300);
+    pros::delay(500);
+    rollers(0);
+
 }
 
 void prog(){
-    
+    //hood flipout
+    flipOutHood();
+    //score first ball
+    shoot(600);
+    pros::delay(3000);
+    shoot(0);
+    driveRev(10, 50);
+    //flip out intake
+    rollers(-300);
+    pros::delay(500);
+    rollers(0);
+    //drive to goal D
+    poop (600);
+    turnAngle(190, LEFT, 50);
+    drive(105, 100);
+
+    //turn to goal
+    turnAngle(30, LEFT, 50);
+
+    //get the ball out of the goal
+    drive(8, 25);
+    pros::delay(500);
+    stop();
 }

@@ -20,6 +20,7 @@
 void opcontrol() {
 
     int motorTempTimer = 0;
+    int time = 0;
 
 	while (true) {
         //get controller values
@@ -69,11 +70,12 @@ void opcontrol() {
         //set vels
         double rollerVels[] {0, 0, 0}; //intake, lower, upper
 
-        if(masterA.isPressed()){
-            drive(17.5, 50);
-        }
+//        if(masterA.isPressed()){
+//            prog();
+//        }
 
-        if(masterR1.isPressed()) rollerVels[0] = rollerVels[1] = rollerVels[2] = 1;         //1,1,1
+        if(partnerA.isPressed()) rollerVels[2] = -0.75;
+        else if(masterR1.isPressed()) rollerVels[0] = rollerVels[1] = rollerVels[2] = 1;         //1,1,1
         else if(masterL1.isPressed()) rollerVels[1] = rollerVels[2] = 1;                    //0,1,0
         else if(partnerL1.isPressed()) rollerVels[0] = rollerVels[1] = rollerVels[2] = -1;  //-1,-1,-1
         else if(partnerL2.isPressed()) rollerVels[1] = rollerVels[2] = -1;                  //0,-1,-1
@@ -124,5 +126,10 @@ void opcontrol() {
         }
 
 		pros::delay(10);  //wait to save resources (prevent brain from frying)
+		time += 10;
+		if(time == 50000){
+		    masterController.rumble("---");
+		    partnerController.rumble("---");
+		}
 	}
 }
