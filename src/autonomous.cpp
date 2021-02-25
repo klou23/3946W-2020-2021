@@ -112,7 +112,7 @@ void turnAngle(double angle, int direction, int speed){
 }
 
 void drive(double dist, int speed){
-    const double scale = 28.215;
+    const double scale = 26.5;
     double motorTurn = dist * scale;
     frontRightDrive.moveRelative(motorTurn, speed);
     backRightDrive.moveRelative(motorTurn, speed);
