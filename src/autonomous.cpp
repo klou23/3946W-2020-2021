@@ -126,6 +126,26 @@ void drive(double dist, int speed){
     }
 }
 
+void drive(double dist, int speed, int maxWait){
+    const double scale = 26.5;
+    double motorTurn = dist * scale;
+    frontRightDrive.moveRelative(motorTurn, speed);
+    backRightDrive.moveRelative(motorTurn, speed);
+    frontLeftDrive.moveRelative(motorTurn, speed);
+    backLeftDrive.moveRelative(motorTurn, speed);
+
+    for(int i = maxWait; i >= 0; i-=5){
+        if(abs(frontRightDrive.getTargetPosition() - frontRightDrive.getPosition() > 1) ||
+           abs(backRightDrive.getTargetPosition() - backRightDrive.getPosition() > 1) ||
+           abs(frontLeftDrive.getTargetPosition() - frontLeftDrive.getPosition() > 1) ||
+           abs(backLeftDrive.getTargetPosition() - backLeftDrive.getPosition() > 1)){
+            pros::delay(5);
+        }else{
+            break;
+        }
+    }
+}
+
 void driveRev(double dist, int speed){
     frontRightDrive.setReversed(!frontRightDrive.isReversed());
     frontLeftDrive.setReversed(!frontLeftDrive.isReversed());
@@ -189,25 +209,38 @@ void singleScore(){
 void prog(){
     //hood flipout
     flipOutHood();
+    rollers(-300);
+    drive(8,50);
+    rollers(0);
+    turnAngle(140, RIGHT,100);
+    drive(9.5,40, 5000);
     //score first ball
     shoot(600);
     pros::delay(3000);
     shoot(0);
     driveRev(10, 50);
     //flip out intake
-    rollers(-300);
-    pros::delay(500);
-    rollers(0);
+
     //drive to goal D
     poop (600);
-    turnAngle(190, LEFT, 50);
+    turnAngle(195, LEFT, 40);
     drive(105, 100);
 
     //turn to goal
-    turnAngle(30, LEFT, 50);
+    turnAngle(28, LEFT, 50);
 
     //get the ball out of the goal
-    drive(8, 25);
+    drive(14.5, 25);
     pros::delay(500);
+    driveRev(8,25);
+    turnAngle(130,RIGHT,50);
+    drive(70,100);
+    turnAngle(33,LEFT,50);
+    drive(8,25);
+    pros::delay(1000);
+    driveRev(8,25);
+    poop (0);
+    turnAngle(180, LEFT, 70);
+
     stop();
 }
