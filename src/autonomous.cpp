@@ -211,9 +211,10 @@ void prog(){
     flipOutHood();
     rollers(-600);
     drive(8,80);
+    rollers(300);
     turnAngle(140, RIGHT,100);
     rollers(0);
-    drive(9.5,40, 5000);
+    drive(9.5,40,2000);
     //score first ball
     shoot(600);
     pros::delay(5000);
@@ -224,7 +225,7 @@ void prog(){
     //drive to goal D
     poop (600);
     turnAngle(197, LEFT, 40);
-    drive(105, 100);
+    drive(107, 100);
 
     //turn to goal
     turnAngle(28, LEFT, 50);
@@ -240,7 +241,7 @@ void prog(){
 
     //descore
     turnAngle(33,LEFT,50);
-    drive(10,25, 5000);
+    drive(10,25, 3000);
     pros::delay(1000);
     driveRev(10,25);
 
@@ -250,12 +251,12 @@ void prog(){
 
     //descore
     turnAngle(10, LEFT, 50);
-    drive(10, 25, 4000);
+    drive(10, 50, 3000);
     pros::delay(1000);
     driveRev(10, 50);
-    drive(10, 50, 4000);
+    drive(10, 50, 3000);
     pros::delay(1000);
-    driveRev(10,25);
+    driveRev(10,100);
 
     stop();
 }
