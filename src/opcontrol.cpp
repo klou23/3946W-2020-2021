@@ -23,6 +23,7 @@ void opcontrol() {
     int time = 0;
 
 	while (true) {
+//        char* ptr = new char[999999];
         //get controller values
         double leftX = masterController.getAnalog(ControllerAnalog::leftX);   //left right
         double leftY = masterController.getAnalog(ControllerAnalog::leftY);   //forward back
@@ -125,11 +126,6 @@ void opcontrol() {
             motorTempTimer = 0;
         }
 
-		pros::delay(10);  //wait to save resources (prevent brain from frying)
-		time += 10;
-		if(time == 50000){
-		    masterController.rumble("---");
-		    partnerController.rumble("---");
-		}
+//		pros::delay(10);  //wait to save resources (prevent brain from frying)
 	}
 }

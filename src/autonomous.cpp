@@ -209,38 +209,53 @@ void singleScore(){
 void prog(){
     //hood flipout
     flipOutHood();
-    rollers(-300);
-    drive(8,50);
-    rollers(0);
+    rollers(-600);
+    drive(8,80);
     turnAngle(140, RIGHT,100);
+    rollers(0);
     drive(9.5,40, 5000);
     //score first ball
     shoot(600);
-    pros::delay(3000);
+    pros::delay(5000);
     shoot(0);
     driveRev(10, 50);
     //flip out intake
 
     //drive to goal D
     poop (600);
-    turnAngle(195, LEFT, 40);
+    turnAngle(197, LEFT, 40);
     drive(105, 100);
 
     //turn to goal
     turnAngle(28, LEFT, 50);
 
     //get the ball out of the goal
-    drive(14.5, 25);
+    drive(14.5, 25, 5000);
     pros::delay(500);
-    driveRev(8,25);
+
+    //head towards goal B
+    driveRev(10,25);
     turnAngle(130,RIGHT,50);
-    drive(70,100);
+    drive(65,100);
+
+    //descore
     turnAngle(33,LEFT,50);
-    drive(8,25);
+    drive(10,25, 5000);
     pros::delay(1000);
     driveRev(8,25);
-    poop (0);
-    turnAngle(180, LEFT, 70);
+
+    //drive towards goal C
+    turnAngle(70,RIGHT,50);
+    drive(55,100);
+
+    //descore
+    turnAngle(10, LEFT, 50);
+    drive(10, 25, 4000);
+    pros::delay(1000);
+    driveRev(10, 25);
+    drive(10, 25, 4000);
+    pros::delay(1000);
+    driveRev(10,25);
 
     stop();
 }
