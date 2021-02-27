@@ -242,7 +242,7 @@ void prog(){
     turnAngle(33,LEFT,50);
     drive(10,25, 5000);
     pros::delay(1000);
-    driveRev(8,25);
+    driveRev(10,25);
 
     //drive towards goal C
     turnAngle(70,RIGHT,50);
@@ -252,8 +252,8 @@ void prog(){
     turnAngle(10, LEFT, 50);
     drive(10, 25, 4000);
     pros::delay(1000);
-    driveRev(10, 25);
-    drive(10, 25, 4000);
+    driveRev(10, 50);
+    drive(10, 50, 4000);
     pros::delay(1000);
     driveRev(10,25);
 
