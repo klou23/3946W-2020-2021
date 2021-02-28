@@ -125,7 +125,40 @@ void drive(double dist, int speed){
         pros::delay(5);
     }
 }
-
+void accurateDrive(double dist, int speed, int maxWait){
+    const double scale = 26.5;
+    frontLeftDrive.tarePosition();
+    backLeftDrive.tarePosition();
+    frontRightDrive.tarePosition();
+    backRightDrive.tarePosition();
+    int targetTicks = dist*scale;
+    int driveError = dist*scale;
+    int kP = .01;
+    //For the first 20% of the drive, the robot accelerates from 0 to the target speed in ~500ms.
+        for (int i = 1; i < 100; i++) {
+            frontLeftDrive.moveVelocity(speed * .01 * i);
+            backLeftDrive.moveVelocity(speed * .01 * i);
+            FrontRightDrive.moveVelocity(speed * .01 * i);
+            BackRightDrive.moveVelocity(speed * .01 * i);
+            pros::delay(5);
+            if(driveError>(targetTicks/15) break;
+        }
+    //For the next 70% of the drive, the drive travels at the target speed.
+    while(driveError>(targetTicks/10)){
+        frontLeftDrive.moveVelocity(speed);
+        backLeftDrive.moveVelocity(speed);
+        FrontRightDrive.moveVelocity(speed);
+        BackRightDrive.moveVelocity(speed);
+        driveError = targetTicks-((backLeftDrive.getPosition() + frontLeftDrive.getPosition() +  backRightDrive.getPosition() + frontRightDrive.getPosition())/4)
+    }
+    while(driveError < 1 || driveError > 1){
+        frontLeftDrive.moveVelocity(driveError*kP);
+        backLeftDrive.moveVelocity(driveError*kP);
+        FrontRightDrive.moveVelocity(driveError*kP);
+        BackRightDrive.moveVelocity(driveError*kP);
+        driveError = targetTicks-((backLeftDrive.getPosition() + frontLeftDrive.getPosition() +  backRightDrive.getPosition() + frontRightDrive.getPosition())/4)
+    }
+}
 void drive(double dist, int speed, int maxWait){
     const double scale = 26.5;
     double motorTurn = dist * scale;
