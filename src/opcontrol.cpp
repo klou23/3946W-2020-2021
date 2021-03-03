@@ -73,9 +73,9 @@ void opcontrol() {
         //set vels
         double rollerVels[] {0, 0, 0}; //intake, lower, upper
 
-       /* if(masterA.isPressed()){
+        if(masterA.isPressed()){
             turnAngle(3600, LEFT, 100);
-        }*/
+        }
 
         if(partnerA.isPressed()) rollerVels[2] = -0.75;
         else if(masterR1.isPressed()) rollerVels[0] = rollerVels[1] = rollerVels[2] = 1;         //1,1,1
