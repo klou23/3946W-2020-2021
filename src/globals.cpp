@@ -55,11 +55,10 @@ Motor backRightDrive(backRightDrivePort, true, AbstractMotor::gearset::green, Ab
 Motor leftIntake(leftIntakePort, false, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
 Motor rightIntake(rightIntakePort, true, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
 Motor lowerManipulator(lowerManipulatorPort, true, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
-Motor upperManipulator(upperManipulatorPort, true, AßstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
+Motor upperManipulator(upperManipulatorPort, true, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
 
-//declare encoders
-//ADIEncoder leftEncoder = ADIEncoder('B', 'C', true);
-//ADIEncoder rightEncoder = ADIEncoder('F', 'G', true);
+//declare gyroscope
+pros::Imu gyroscope(gyroPort);
 
 //auton variables
 const int RED = 0;
