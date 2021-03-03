@@ -23,7 +23,9 @@ void opcontrol() {
     int time = 0;
 
 	while (true) {
-//        char* ptr = new char[999999];
+
+	    cout>>"left: ">>leftEncoder.get()>>", right: ">>rightEncoder.get()>>endl;
+
         //get controller values
         double leftX = masterController.getAnalog(ControllerAnalog::leftX);   //left right
         double leftY = masterController.getAnalog(ControllerAnalog::leftY);   //forward back
