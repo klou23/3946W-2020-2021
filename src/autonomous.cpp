@@ -113,7 +113,7 @@ void PDDriveRev(double dist, double maxVoltage, double thresholdDist, double sla
     frontLeftDrive.setReversed(!frontLeftDrive.isReversed());
     backRightDrive.setReversed(!backRightDrive.isReversed());
     backLeftDrive.setReversed(!backLeftDrive.isReversed());
-    PDDrive(double dist, double maxVoltage, double thresholdDist, double slaveThresholdAngle, int maxWait);
+    PDDrive(dist, maxVoltage, thresholdDist, slaveThresholdAngle, maxWait);
     frontRightDrive.setReversed(!frontRightDrive.isReversed());
     frontLeftDrive.setReversed(!frontLeftDrive.isReversed());
     backRightDrive.setReversed(!backRightDrive.isReversed());
@@ -288,6 +288,14 @@ void rollers(int vel){
     rightIntake.moveVelocity(vel);
     leftIntake.moveVelocity(vel);
 }
+void revRollers(int vel){
+    rightIntake.setReversed(!rightIntake.isReversed());
+    leftIntake.setReversed(!leftIntake.isReversed());
+    rightIntake.moveVelocity(vel);
+    leftIntake.moveVelocity(vel);
+    rightIntake.setReversed(!rightIntake.isReversed());
+    leftIntake.setReversed(!leftIntake.isReversed());
+}
 void primeBalls (int vel){
     rightIntake.moveVelocity(vel);
     leftIntake.moveVelocity(vel);
@@ -305,7 +313,12 @@ void stop(){
     rollers(0);
 }
 
-void flipOutHood(){
+void flipOut(){
+    leftIntake.moveVelocity(-300);
+    rightIntake.moveVelocity(-300);
+    pros::delay(500);
+    leftIntake.moveVelocity(0);
+    rightIntake.moveVelocity(0);
     upperManipulator.moveVelocity(-300);
     pros::delay(500);
     upperManipulator.moveVelocity(0);
@@ -332,64 +345,65 @@ void singleScore(){
 
 }
 
-void prog(){
-    //hood flipout
-    flipOutHood();
-    rollers(-600);
-    drive(8,80);
-    rollers(300);
-    turnAngle(140, RIGHT,100);
-    rollers(0);
-    drive(9.5,40,2000);
-    //score first ball
-    shoot(600);
-    pros::delay(5000);
-    shoot(0);
-    driveRev(10, 50);
-    //flip out intake
-
-    //drive to goal D
-    poop (600);
-    turnAngle(197, LEFT, 40);
-    drive(107, 100);
-
-    //turn to goal
-    turnAngle(28, LEFT, 50);
-
-    //get the ball out of the goal
-    drive(14.5, 25, 5000);
-    pros::delay(500);
-
-    //head towards goal B
-    driveRev(10,25);
-    turnAngle(130,RIGHT,50);
-    drive(65,100);
-
-    //descore
-    turnAngle(33,LEFT,50);
-    drive(10,25, 3000);
-    pros::delay(1000);
-    driveRev(10,25);
-
-    //drive towards goal C
-    turnAngle(70,RIGHT,50);
-    drive(55,100);
-
-    //descore
-    turnAngle(10, LEFT, 50);
-    drive(10, 50, 3000);
-    pros::delay(1000);
-    driveRev(10, 50);
-    drive(10, 50, 3000);
-    pros::delay(1000);
-    driveRev(10,100);
-
-    stop();
-}
+//void prog(){
+//    //hood flipout
+//    flipOutHood();
+//    rollers(-600);
+//    drive(8,80);
+//    rollers(300);
+//    turnAngle(140, RIGHT,100);
+//    rollers(0);
+//    drive(9.5,40,2000);
+//    //score first ball
+//    shoot(600);
+//    pros::delay(5000);
+//    shoot(0);
+//    driveRev(10, 50);
+//    //flip out intake
+//
+//    //drive to goal D
+//    poop (600);
+//    turnAngle(197, LEFT, 40);
+//    drive(107, 100);
+//
+//    //turn to goal
+//    turnAngle(28, LEFT, 50);
+//
+//    //get the ball out of the goal
+//    drive(14.5, 25, 5000);
+//    pros::delay(500);
+//
+//    //head towards goal B
+//    driveRev(10,25);
+//    turnAngle(130,RIGHT,50);
+//    drive(65,100);
+//
+//    //descore
+//    turnAngle(33,LEFT,50);
+//    drive(10,25, 3000);
+//    pros::delay(1000);
+//    driveRev(10,25);
+//
+//    //drive towards goal C
+//    turnAngle(70,RIGHT,50);
+//    drive(55,100);
+//
+//    //descore
+//    turnAngle(10, LEFT, 50);
+//    drive(10, 50, 3000);
+//    pros::delay(1000);
+//    driveRev(10, 50);
+//    drive(10, 50, 3000);
+//    pros::delay(1000);
+//    driveRev(10,100);
+//
+//    stop();
+//}
 
 void prog2(){
     //first goal (I)
-    flipOutHood();
+
+    flipOut();
     primeBalls(100);
     PDDrive(12,8000,.3,1,2000);
     primeBalls(0);
@@ -400,10 +414,62 @@ void prog2(){
     shoot(0);
 
     //second goal (H)
-    PDDrive(-12, 800, 0.3, 1, 2000);
-    primeBalls(100);
+    driveRev(17,100);
+    primeBalls(150);
     turnAngle(120, RIGHT, 100);
     primeBalls(0);
+    PDDrive(30,12000,.3,1,4000);
+    turnAngle(90,LEFT,100);
+    PDDrive(12,8000,.3,1,2000);
+    shoot(600);
+    pros::delay(1000);
+
+    //Third Goal
+    driveRev(6,100);
+    revRollers(200);
+    driveRev(6,100);
+    turnAngle(90,RIGHT,100);
+    primeBalls(200);
+    PDDrive(30,12000,.3,1,4000);
+    turnAngle(45,LEFT,100);
+    PDDrive(12,8000,.3,1,2000);
+    shoot(600);
+    pros::delay(1000);
+    shoot(0);
+
+    //Fourth Goal
+    driveRev(6,100);
+    revRollers(200);
+    driveRev(6,100);
+    turnAngle(45,RIGHT,100);
+    strafeDist(30,RIGHT,100);
+    primeBalls(300);
+    PDDrive(8,12000,.3,1,2000);
+    driveRev(-10,100);
+    strafeDist(30,RIGHT,100);
+    primeBalls(0);
+    PDDrive(8,12000,.3,1,2000);
+    shoot(600);
+    pros::delay(1000);
+    shoot(0);
+
+    //Fifth Goal
+    driveRev(8,100);
+    strafeDist(30,RIGHT,100);
+    primeBalls(300);
+    PDDrive(8,12000,.3,1,2000);
+    driveRev(-10,100);
+
+
+
+
+
+
+
+
+
+
+
 
 
 }
