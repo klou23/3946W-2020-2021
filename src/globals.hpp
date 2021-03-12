@@ -65,8 +65,9 @@ extern Motor rightIntake;
 extern Motor lowerManipulator;
 extern Motor upperManipulator;
 
-//extern gyro
-extern pros::Imu gyroscope;
+//extern encoders
+extern pros::ADIEncoder leftEncoder;
+extern pros::ADIEncoder rightEncoder;
 
 //extern motor rpms
 extern const int driveSpeed;
@@ -97,6 +98,10 @@ extern void singleScore();
 extern void driveRev(double dist, int speed);
 
 extern void prog();
+extern void prog2();
+extern void PDDrive(double dist, double maxVoltage, double thresholdDist, double slaveThresholdAngle, int maxWait);
+extern void PDTurn(double angle, double maxVoltage, int direction, double thresholdAngle, int maxWait);
+extern void strafeDist(double dist, int direction, int speed);
 
 //extern UI components
 extern lv_obj_t *tabview;

@@ -14,7 +14,7 @@
  */
 
 void turnAngle(double angle, int direction, int speed){
-    const double scale = 5.5;
+    const double scale = 5.70;
     double motorTurn = angle * scale;
     if(direction == LEFT){
         frontRightDrive.moveRelative(motorTurn, speed);
@@ -26,6 +26,29 @@ void turnAngle(double angle, int direction, int speed){
         backRightDrive.moveRelative(-motorTurn, speed);
         frontLeftDrive.moveRelative(motorTurn, speed);
         backLeftDrive.moveRelative(motorTurn, speed);
+    }
+    while(abs(frontRightDrive.getTargetPosition() - frontRightDrive.getPosition() > 1) ||
+          abs(backRightDrive.getTargetPosition() - backRightDrive.getPosition() > 1) ||
+          abs(frontLeftDrive.getTargetPosition() - frontLeftDrive.getPosition() > 1) ||
+          abs(backLeftDrive.getTargetPosition() - backLeftDrive.getPosition() > 1)){
+        pros::delay(5);
+    }
+}
+
+void strafeDist(double dist, int direction, int speed){
+    const double scale = 30;
+    double motorTurn = dist * scale;
+
+    if(direction == LEFT){
+        frontRightDrive.moveRelative(motorTurn, speed);
+        backRightDrive.moveRelative(-motorTurn, speed);
+        frontLeftDrive.moveRelative(-motorTurn, speed);
+        backLeftDrive.moveRelative(motorTurn, speed);
+    }else if(direction == RIGHT){
+        frontRightDrive.moveRelative(-motorTurn, speed);
+        backRightDrive.moveRelative(motorTurn, speed);
+        frontLeftDrive.moveRelative(motorTurn, speed);
+        backLeftDrive.moveRelative(-motorTurn, speed);
     }
     while(abs(frontRightDrive.getTargetPosition() - frontRightDrive.getPosition() > 1) ||
           abs(backRightDrive.getTargetPosition() - backRightDrive.getPosition() > 1) ||
@@ -85,76 +108,144 @@ void drive(double dist, int speed){
 //    }
 //}
 
-//void PDDrive(double dist, double maxVoltage, double thresholdDist, double slaveThresholdAngle, int maxWait){
-//
-//    maxVoltage = std::min(maxVoltage, 11000.0);
-//
-//    //left drive is master
-//    //right drive is slave
-//    const double masterKp = 0.01;
-//    const double masterKd = 0.001;
-//    const double slaveKp = 0.005;
-//    const double slaveKd = 0.0005;
-//
-//    const double masterScale = 50;
-//    const double slaveScale = 10;
-//
-//    const double target = masterScale * dist;
-//    const double masterThreshold = masterScale * thresholdDist;
-//    const double slaveThreshold = slaveScale * slaveThresholdAngle;
-//
-//    leftEncoder.reset();
-//    rightEncoder.reset();
-//
-//    double leftPosition = leftEncoder.controllerGet();
-//    double rightPosition = rightEncoder.controllerGet();
-//
-//    double masterDerivative = 0;
-//    double slaveDerivative = 0;
-//
-//    double masterError = target - leftPosition;
-//    double slaveError = leftPosition - rightPosition;
-//
-//    int timer = 0;
-//
-//    while(masterError > masterThreshold || slaveError > slaveThreshold){
-//        if(timer > maxWait) break;
-//
-//        leftPosition = leftEncoder.controllerGet();
-//        rightPosition = rightEncoder.controllerGet();
-//
-//        double prevMasterError = masterError;
-//        double prevSlaveError = slaveError;
-//
-//        masterError = target - leftPosition;
-//        slaveError = leftPosition - rightPosition;
-//
-//        masterDerivative = masterError - prevMasterError;
-//        slaveDerivative = slaveError - prevSlaveError;
-//
-//        double leftVoltage = std::max(-maxVoltage, std::min(maxVoltage, (masterError * masterKp) + (masterDerivative * masterKd)));
-//        double rightVoltage = std::max(-12000, std::min(12000, leftVoltage + (slaveError * slaveKp) + (slaveDerivative * slaveKd)));
-//
-//        frontLeftDrive.moveVoltage(leftVoltage);
-//        backLeftDrive.moveVoltage(leftVoltage);
-//        frontRightDrive.moveVoltage(rightVoltage);
-//        backRightDrive.moveVoltage(rightVoltage);
-//
-//        pros::delay(5);
-//        timer += 5;
-//    }
-//
-//}
+void PDDriveRev(double dist, double maxVoltage, double thresholdDist, double slaveThresholdAngle, int maxWait){
+    frontRightDrive.setReversed(!frontRightDrive.isReversed());
+    frontLeftDrive.setReversed(!frontLeftDrive.isReversed());
+    backRightDrive.setReversed(!backRightDrive.isReversed());
+    backLeftDrive.setReversed(!backLeftDrive.isReversed());
+    PDDrive(double dist, double maxVoltage, double thresholdDist, double slaveThresholdAngle, int maxWait);
+    frontRightDrive.setReversed(!frontRightDrive.isReversed());
+    frontLeftDrive.setReversed(!frontLeftDrive.isReversed());
+    backRightDrive.setReversed(!backRightDrive.isReversed());
+    backLeftDrive.setReversed(!backLeftDrive.isReversed());
+}
 
-//void pdTurn(double angle, double maxVoltage, int direction, double thresholdAngle, int maxWait){
-//    maxVoltage = std::min(maxVoltage, 11000.0);
-//
-//    const double kp = 0.01;
-//    const double kd = 0.001;
-//
-//    const double scale = 5.5;
-//
-//}
+void PDDrive(double dist, double maxVoltage, double thresholdDist, double slaveThresholdAngle, int maxWait){
+
+    maxVoltage = std::min(maxVoltage, 11000.0);
+
+    //left drive is master
+    //right drive is slave
+    const double masterKp = 50;
+    const double masterKd = 0;
+    const double slaveKp = 10;
+    const double slaveKd = 10;
+
+    const double masterScale = 41.25;
+    const double slaveScale = 10;
+
+    const double target = masterScale * dist;
+    const double masterThreshold = masterScale * thresholdDist;
+    const double slaveThreshold = slaveScale * slaveThresholdAngle;
+
+    leftEncoder.reset();
+    rightEncoder.reset();
+
+    double leftPosition = leftEncoder.get_value();
+    double rightPosition = rightEncoder.get_value();
+
+    double masterDerivative = 0;
+    double slaveDerivative = 0;
+
+    double masterError = target - leftPosition;
+    double slaveError = leftPosition - rightPosition;
+
+    int timer = 0;
+
+    while(std::abs(masterError) > masterThreshold || std::abs(slaveError) > slaveThreshold){
+        if(timer > maxWait) break;
+
+        leftPosition = leftEncoder.get_value();
+        rightPosition = rightEncoder.get_value();
+
+        double prevMasterError = masterError;
+        double prevSlaveError = slaveError;
+
+        masterError = target - leftPosition;
+        slaveError = leftPosition - rightPosition;
+
+        masterDerivative = masterError - prevMasterError;
+        slaveDerivative = slaveError - prevSlaveError;
+
+        double leftVoltage = std::max(-maxVoltage, std::min(maxVoltage, (masterError * masterKp) + (masterDerivative * masterKd)));
+        double rightVoltage = std::max(-12000.0, std::min(12000.0, leftVoltage + (slaveError * slaveKp) + (slaveDerivative * slaveKd)));
+
+        cout<<"left:"<<leftVoltage<<", right:"<<rightVoltage<<endl;
+
+        frontLeftDrive.moveVoltage(leftVoltage);
+        backLeftDrive.moveVoltage(leftVoltage);
+        frontRightDrive.moveVoltage(rightVoltage);
+        backRightDrive.moveVoltage(rightVoltage);
+
+        pros::delay(5);
+        timer += 5;
+    }
+
+}
+
+void PDTurn(double angle, double maxVoltage, int direction, double thresholdAngle, int maxWait){
+    maxVoltage = std::min(maxVoltage, 11000.0);
+
+    const double kp = 150;
+    const double kd = 1500;
+
+    const double scale = 3.5;
+    const double thresholdScale = 10;
+
+    const double target = angle * scale;
+    const double threshold = thresholdAngle * thresholdScale;
+
+    double leftTarget = target;
+    double rightTarget = -target;
+    if(direction == LEFT){
+        leftTarget*=-1;
+        rightTarget*=-1;
+    }
+
+    leftEncoder.reset();
+    rightEncoder.reset();
+
+    cout << "leftTarget:" << leftTarget << ", rightTarget: " << rightTarget << endl;
+
+    double leftError = leftTarget;
+    double rightError = rightTarget;
+    double leftPrevError = leftTarget;
+    double rightPrevError = rightTarget;
+    double leftDerivative = 0;
+    double rightDerivative = 0;
+
+    int timer = 0;
+    while(std::abs(leftError) > threshold || std::abs(rightError) > threshold){
+
+        if(timer > maxWait) break;
+
+        double leftPos = leftEncoder.get_value();
+        double rightPos = rightEncoder.get_value();
+
+        leftPrevError = leftError;
+        rightPrevError = rightError;
+
+        leftError = leftTarget-leftPos;
+        rightError = rightTarget-rightPos;
+
+        leftDerivative = leftPrevError-leftError;
+        rightDerivative = rightPrevError-rightError;
+
+        double leftVoltage = std::max(-maxVoltage, std::min(maxVoltage, (leftError * kp) + (leftDerivative * kd)));
+        double rightVoltage = std::max(-maxVoltage, std::min(maxVoltage, (rightError * kp) + (rightDerivative * kd)));
+
+        cout<<"left:"<<leftVoltage<<", right:"<<rightVoltage<<endl;
+
+        frontLeftDrive.moveVoltage(leftVoltage);
+        backLeftDrive.moveVoltage(leftVoltage);
+        frontRightDrive.moveVoltage(rightVoltage);
+        backRightDrive.moveVoltage(rightVoltage);
+
+        pros::delay(5);
+        timer += 5;
+    }
+
+}
 
 void drive(double dist, int speed, int maxWait){
     const double scale = 26.5;
@@ -197,6 +288,11 @@ void rollers(int vel){
     rightIntake.moveVelocity(vel);
     leftIntake.moveVelocity(vel);
 }
+void primeBalls (int vel){
+    rightIntake.moveVelocity(vel);
+    leftIntake.moveVelocity(vel);
+    lowerManipulator.moveVelocity(vel);
+}
 
 void poop(int vel){
     rollers(vel);
@@ -216,7 +312,7 @@ void flipOutHood(){
 }
 
 void autonomous() {
-    prog();
+    prog2();
 }
 
 void singleScore(){
@@ -289,4 +385,25 @@ void prog(){
     driveRev(10,100);
 
     stop();
+}
+
+void prog2(){
+    //first goal (I)
+    flipOutHood();
+    primeBalls(100);
+    PDDrive(12,8000,.3,1,2000);
+    primeBalls(0);
+    turnAngle(115,RIGHT,100);
+    PDDrive(17,8000,.3,1,2000);
+    shoot(600);
+    pros::delay(1000);
+    shoot(0);
+
+    //second goal (H)
+    PDDrive(-12, 800, 0.3, 1, 2000);
+    primeBalls(100);
+    turnAngle(120, RIGHT, 100);
+    primeBalls(0);
+
+
 }
