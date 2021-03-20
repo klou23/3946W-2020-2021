@@ -14,7 +14,7 @@
  */
 
 void turnAngle(double angle, int direction, int speed){
-    const double scale = 5.70;
+    const double scale = 5.8;
     double motorTurn = angle * scale;
     if(direction == LEFT){
         frontRightDrive.moveRelative(motorTurn, speed);
@@ -328,22 +328,22 @@ void autonomous() {
     prog2();
 }
 
-void singleScore(){
-    //hood flipout
-    flipOutHood();
-    //score first ball
-    shoot(600);
-    pros::delay(1500);
-    shoot(0);
-    driveRev(10, 50);
-    //flip out intake
-    rollers(-300);
-    pros::delay(500);
-    rollers(300);
-    pros::delay(500);
-    rollers(0);
-
-}
+//void singleScore(){
+//    //hood flipout
+//    flipOutHood();
+//    //score first ball
+//    shoot(600);
+//    pros::delay(1500);
+//    shoot(0);
+//    driveRev(10, 50);
+//    //flip out intake
+//    rollers(-300);
+//    pros::delay(500);
+//    rollers(300);
+//    pros::delay(500);
+//    rollers(0);
+//
+//}
 
 //void prog(){
 //    //hood flipout
@@ -404,30 +404,30 @@ void prog2(){
     //first goal (I)
 
     flipOut();
-    primeBalls(100);
-    PDDrive(12,8000,.3,1,2000);
+    primeBalls(120);
+    PDDrive(12,8000,0.3,1,2000);
     primeBalls(0);
-    turnAngle(115,RIGHT,100);
-    PDDrive(17,8000,.3,1,2000);
+    turnAngle(125,RIGHT,100);
+    PDDrive(20,8000,0.3,1,2000);
     shoot(600);
     pros::delay(1000);
     shoot(0);
 
     //second goal (H)
-    driveRev(17,100);
-    primeBalls(150);
-    turnAngle(120, RIGHT, 100);
+    driveRev(22,100);
+    primeBalls(200);
+    turnAngle(156, RIGHT, 80);
+    PDDrive(31,10000,.6,1,2500);
     primeBalls(0);
-    PDDrive(30,12000,.3,1,4000);
     turnAngle(90,LEFT,100);
-    PDDrive(12,8000,.3,1,2000);
+    PDDrive(4,8000,.6,1,1000);
     shoot(600);
     pros::delay(1000);
+    primeBalls(0);
 
     //Third Goal
-    driveRev(6,100);
     revRollers(200);
-    driveRev(6,100);
+    driveRev(7,100);
     turnAngle(90,RIGHT,100);
     primeBalls(200);
     PDDrive(30,12000,.3,1,4000);

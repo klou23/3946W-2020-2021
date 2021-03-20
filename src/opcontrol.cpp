@@ -23,7 +23,6 @@ void opcontrol() {
     int time = 0;
 
 	while (true) {
-
 //	    masterController.rumble(".");
 
         //get controller values
@@ -71,18 +70,11 @@ void opcontrol() {
 
         /**********Intake and manipulator**********/
         //set vels
-//        double rollerVels[] {0, 0, 0}; //intake, lower, upper
-//
-//        if(masterA.isPressed()){
-////            std::cout << "Encoder Value: " << rightEncoder.get_value()<<endl;
-//
-//            PDDrive(240, 3000, 0, 0, 100000);
-//        }else if(masterB.isPressed()){
-////            PDTurn(360, 6000, RIGHT, 0.1, 100000);
-//            turnAngle(360, RIGHT, 100);
-//        }else if(masterX.isPressed()){
-//            strafeDist(48, LEFT, 100);
-//        }
+        double rollerVels[] {0, 0, 0}; //intake, lower, upper
+
+        if(masterA.isPressed()){
+            turnAngle(360, RIGHT, 100);
+        }
 
         if(partnerA.isPressed()) rollerVels[2] = -0.75;
         else if(masterR1.isPressed()) rollerVels[0] = rollerVels[1] = rollerVels[2] = 1;         //1,1,1
@@ -135,6 +127,6 @@ void opcontrol() {
             motorTempTimer = 0;
         }
 
-//		pros::delay(10);  //wait to save resources (prevent brain from frying)
+		pros::delay(10);  //wait to save ram
 	}
 }
