@@ -3,76 +3,99 @@
 
 //lv_font_t lv_font_dejavu_30;
 
-//motor ports
+//driver control stuff
+const bool quadraticControl = true;
+
+//ports
 const int frontLeftDrivePort = 11;
-const int frontRightDrivePort = -20;
+const int frontRightDrivePort = 20;
 const int backLeftDrivePort = 12;
-const int backRightDrivePort = -19;
+const int backRightDrivePort = 19;
 const int leftIntakePort = 1;
-const int rightIntakePort = -10;
-const int lowerManipulatorPort = -2;
+const int rightIntakePort = 10;
+const int lowerManipulatorPort = 2;
 const int upperManipulatorPort = 9;
 
+const int gyroPort = 5;
+
 //declare controller and buttons
-Controller controller;
-ControllerButton btnL1(ControllerDigital::L1);
-ControllerButton btnL2(ControllerDigital::L2);
-ControllerButton btnR1(ControllerDigital::R1);
-ControllerButton btnR2(ControllerDigital::R2);
-ControllerButton btnUp(ControllerDigital::up);
-ControllerButton btnDown(ControllerDigital::down);
-ControllerButton btnLeft(ControllerDigital::left);
-ControllerButton btnRight(ControllerDigital::right);
-ControllerButton btnX(ControllerDigital::X);
-ControllerButton btnB(ControllerDigital::B);
-ControllerButton btnY(ControllerDigital::Y);
-ControllerButton btnA(ControllerDigital::A);
+Controller masterController(ControllerId::master);
+ControllerButton masterL1(ControllerId::master, ControllerDigital::L1);
+ControllerButton masterL2(ControllerId::master, ControllerDigital::L2);
+ControllerButton masterR1(ControllerId::master, ControllerDigital::R1);
+ControllerButton masterR2(ControllerId::master, ControllerDigital::R2);
+ControllerButton masterUp(ControllerId::master, ControllerDigital::up);
+ControllerButton masterDown(ControllerId::master, ControllerDigital::down);
+ControllerButton masterLeft(ControllerId::master, ControllerDigital::left);
+ControllerButton masterRight(ControllerId::master, ControllerDigital::right);
+ControllerButton masterX(ControllerId::master, ControllerDigital::X);
+ControllerButton masterB(ControllerId::master, ControllerDigital::B);
+ControllerButton masterY(ControllerId::master, ControllerDigital::Y);
+ControllerButton masterA(ControllerId::master, ControllerDigital::A);
+
+Controller partnerController(ControllerId::partner);
+ControllerButton partnerL1(ControllerId::partner, ControllerDigital::L1);
+ControllerButton partnerL2(ControllerId::partner, ControllerDigital::L2);
+ControllerButton partnerR1(ControllerId::partner, ControllerDigital::R1);
+ControllerButton partnerR2(ControllerId::partner, ControllerDigital::R2);
+ControllerButton partnerUp(ControllerId::partner, ControllerDigital::up);
+ControllerButton partnerDown(ControllerId::partner, ControllerDigital::down);
+ControllerButton partnerLeft(ControllerId::partner, ControllerDigital::left);
+ControllerButton partnerRight(ControllerId::partner, ControllerDigital::right);
+ControllerButton partnerX(ControllerId::partner, ControllerDigital::X);
+ControllerButton partnerB(ControllerId::partner, ControllerDigital::B);
+ControllerButton partnerY(ControllerId::partner, ControllerDigital::Y);
+ControllerButton partnerA(ControllerId::partner, ControllerDigital::A);
 
 //declare motors
-Motor frontLeftDrive(frontLeftDrivePort);
-Motor frontRightDrive(frontRightDrivePort);
-Motor backLeftDrive(backLeftDrivePort);
-Motor backRightDrive(backRightDrivePort);
-Motor leftIntake(leftIntakePort);
-Motor rightIntake(rightIntakePort);
-Motor lowerManipulator(lowerManipulatorPort);
-Motor upperManipulator(upperManipulatorPort);
+Motor frontLeftDrive(frontLeftDrivePort, false, AbstractMotor::gearset::green, AbstractMotor::encoderUnits::degrees);
+Motor frontRightDrive(frontRightDrivePort, true, AbstractMotor::gearset::green, AbstractMotor::encoderUnits::degrees);
+Motor backLeftDrive(backLeftDrivePort, false, AbstractMotor::gearset::green, AbstractMotor::encoderUnits::degrees);
+Motor backRightDrive(backRightDrivePort, true, AbstractMotor::gearset::green, AbstractMotor::encoderUnits::degrees);
+Motor leftIntake(leftIntakePort, false, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
+Motor rightIntake(rightIntakePort, true, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
+Motor lowerManipulator(lowerManipulatorPort, true, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
+Motor upperManipulator(upperManipulatorPort, true, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
+
+//declare encoders
+pros::ADIEncoder leftEncoder ('C', 'D', true);
+pros::ADIEncoder rightEncoder ('E', 'F', false);
 
 //auton variables
 const int RED = 0;
 const int BLUE = 1;
 int autonNum = 1;
 int autonColor = 0;
+const QLength& rollerCenterDist = 5_in;
 
+const int linearKP = 0.5;
+const int linearKI = 0;
+const int linearKD = 0;
 
-//declare chassis controller
-std::shared_ptr<OdomChassisController> drive = ChassisControllerBuilder()
-    .withMotors(
-		    frontLeftDrivePort,        //Front left
-            FrontRightDrivePort,       //Front right (reversed)
-            backRightDrivePort,       //Back right (reversed)
-            backLeftDrivePort         //Back left
-    )
-    .withGains(
-      {0.001, 0, 0.0001},     //distance controller gains (kp, ki, kd)
-      {0.001, 0, 0.0001}      //turn controller gains (kp, ki, kd);
-    )
-    .withSensors(
-        ADIEncoder{'A', 'B'}, 		// left encoder in ADI ports A & B
-        ADIEncoder{'C', 'D', true}, // right encoder in ADI ports C & D (reversed)
-        ADIEncoder{'E', 'F'}  		// middle encoder in ADI ports E & F
-    )
-    .withDimensions(
-        AbstractMotor::gearset::green,	//green gear cartridge
-		{{4_in,							//4 inch tracking wheel diameter
-		11.5_in},						//11.5 inch wheelbase
-		imev5GreenTPR * (1.0 / 1.0)}	//1:1 external gear ratio
-	)
-    .withOdometry(
-		{{2.75_in,		//tracking wheels diameter is 2.75 in
-		7_in,			//tracking wheel base is 7 in
-		1_in,			//middle encoder distance is 1 in
-		2.75_in},		//middle tracking wheel diameter is 2.75 in
-		quadEncoderTPR}
-	)
-    .buildOdometry();
+const int rotationalKP = 0.5;
+const int rotationalKI = 0;
+const int rotationalKD = 0;
+
+//motor rpms
+const int driveSpeed = 200;
+const int intakeSpeed = 600;
+const int manipulatorSpeed = 600;
+
+////declare chassis controller
+//std::shared_ptr<OdomChassisController> drive = ChassisControllerBuilder()
+//    .withMotors(
+//            {frontLeftDrivePort, backLeftDrivePort},
+//            {-frontRightDrivePort, -backRightDrivePort}
+//    )
+//    .withGains(                  //TODO: tune PID
+//      {0.001, 0.000, 0.000},     //distance controller gains (kp, ki, kd)
+//      {0.003, 0.000, 0.000}      //turn controller gains (kp, ki, kd);
+//    )
+//    .withDimensions(                    //TODO: measure wheelbase
+//        AbstractMotor::gearset::green,	//green gear cartridge
+//		{{4_in,							//4 inch wheel diameter
+//		10_in},						//11.5 inch wheelbase
+//		imev5GreenTPR * (1.0 / 1.0)}	//1:1 external gear ratio
+//	)
+//    .withOdometry()
+//    .buildOdometry();

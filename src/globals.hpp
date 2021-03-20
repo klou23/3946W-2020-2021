@@ -1,9 +1,17 @@
 #include "main.h"
 
 using namespace okapi;
+using namespace std;
 
 #ifndef GLOBALS
 #define GLOBALS
+
+//global constants
+const int LEFT = 0;
+const int RIGHT = 1;
+
+//driver control stuff
+extern const bool quadraticControl;
 
 //extern ports
 extern const int frontLeftDrivePort;
@@ -15,20 +23,37 @@ extern const int rightIntakePort;
 extern const int lowerManipulatorPort;
 extern const int upperManipulatorPort;
 
+extern const int gyroPort;
+
 //extern controller
-extern Controller controller;
-extern ControllerButton btnL1;
-extern ControllerButton btnL2;
-extern ControllerButton btnR1;
-extern ControllerButton btnR2;
-extern ControllerButton btnUp;
-extern ControllerButton btnDown;
-extern ControllerButton btnLeft;
-extern ControllerButton btnRight;
-extern ControllerButton btnX;
-extern ControllerButton btnB;
-extern ControllerButton btnY;
-extern ControllerButton btnA;
+extern Controller masterController;
+extern ControllerButton masterL1;
+extern ControllerButton masterL2;
+extern ControllerButton masterR1;
+extern ControllerButton masterR2;
+extern ControllerButton masterUp;
+extern ControllerButton masterDown;
+extern ControllerButton masterLeft;
+extern ControllerButton masterRight;
+extern ControllerButton masterX;
+extern ControllerButton masterB;
+extern ControllerButton masterY;
+extern ControllerButton masterA;
+
+extern Controller partnerController;
+extern ControllerButton partnerL1;
+extern ControllerButton partnerL2;
+extern ControllerButton partnerR1;
+extern ControllerButton partnerR2;
+extern ControllerButton partnerUp;
+extern ControllerButton partnerDown;
+extern ControllerButton partnerLeft;
+extern ControllerButton partnerRight;
+extern ControllerButton partnerX;
+extern ControllerButton partnerB;
+extern ControllerButton partnerY;
+extern ControllerButton partnerA;
+
 
 //extern motors
 extern Motor frontLeftDrive;
@@ -40,14 +65,43 @@ extern Motor rightIntake;
 extern Motor lowerManipulator;
 extern Motor upperManipulator;
 
+//extern encoders
+extern pros::ADIEncoder leftEncoder;
+extern pros::ADIEncoder rightEncoder;
+
+//extern motor rpms
+extern const int driveSpeed;
+extern const int intakeSpeed;
+extern const int manipulatorSpeed;
+
 //extern chassis controller
-extern std::shared_ptr<OdomChassisController> drive;
+//extern std::shared_ptr<OdomChassisController> drive;
 
 //extern auton variables
 extern const int RED;
 extern const int BLUE;
 extern int autonColor;
 extern int autonNum;
+extern const QLength& rollerCenterDist;
+
+extern const int linearKP;
+extern const int linearKI;
+extern const int linearKD;
+
+extern const int rotationalKP;
+extern const int rotationalKI;
+extern const int rotationalKD;
+
+extern void turnAngle(double angle, int direction, int speed);
+extern void drive(double dist, int speed);
+extern void singleScore();
+extern void driveRev(double dist, int speed);
+
+extern void prog();
+extern void prog2();
+extern void PDDrive(double dist, double maxVoltage, double thresholdDist, double slaveThresholdAngle, int maxWait);
+extern void PDTurn(double angle, double maxVoltage, int direction, double thresholdAngle, int maxWait);
+extern void strafeDist(double dist, int direction, int speed);
 
 //extern UI components
 extern lv_obj_t *tabview;
