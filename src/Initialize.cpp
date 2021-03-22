@@ -1,6 +1,5 @@
 #include "main.h"
-#include "globals.hpp"
-#include <cstdlib>
+#include "Initialize.hpp"
 
 /********** Variables **********/
 lv_obj_t *tabview;
@@ -35,6 +34,10 @@ lv_style_t *greenInnerStyle;
 lv_style_t *orangeInnerStyle;
 lv_style_t *yellowInnerStyle;
 lv_style_t *redInnerStyle;
+//log screen
+lv_obj_t *logPage;
+lv_obj_t *logLabel;
+string logText = "";
 
 /********** UI Functions **********/
 
@@ -138,16 +141,15 @@ void createMotorTempTab(lv_obj_t *parent){
 
 }
 
-void createPIDAdjusterTab(lv_obj_t *parent){
-    //TODO: implement PID tab creator
+void createLogTab(lv_obj_t *parent){
+    logLabel = lv_label_create(parent, NULL);
+    lv_label_set_long_mode(logLabel, LV_LABEL_LONG_BREAK);
+    lv_obj_set_width(logLabel, lv_page_get_fit_width(parent) - 10);
+    lv_label_set_text(logLabel, logText.c_str());
 }
 
 /********** Tournament Template Functions **********/
 void initialize() {
-    //set position to (0,0) and orientation to 0
-    //TODO: get proper starting state
-//    drive->setState({0_in, 0_in, 0_deg});
-
     //set motor brake modes
     frontLeftDrive.setBrakeMode(AbstractMotor::brakeMode::coast);
     frontRightDrive.setBrakeMode(AbstractMotor::brakeMode::coast);
@@ -165,10 +167,9 @@ void initialize() {
     //create tabview with tabs
     tabview = lv_tabview_create(lv_scr_act(), NULL);
     createAutonSelectorTab(lv_tabview_add_tab(tabview, "Auton Selector"));
-    createMotorTempTab(lv_tabview_add_tab(tabview, "Motor Temps"));
-    lv_tabview_add_tab(tabview, "PID Tuner");
+    logPage = lv_tabview_add_tab(tabview, "Log");
+    createLogTab(logPage);
 }
-
 
 void disabled() {}
 

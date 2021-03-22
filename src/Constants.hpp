@@ -6,8 +6,6 @@
 #define PROS_OKAPI_CONSTANTS_HPP
 
 #include "main.h"
-#include "CustomController.hpp"
-
 
 //gear sets
 extern const motor_gearset_e_t RED_GEARSET = E_MOTOR_GEARSET_36;
@@ -31,5 +29,19 @@ extern const int BUTTON_R1 = 8;
 extern const int BUTTON_R2 = 9;
 extern const int BUTTON_L1 = 10;
 extern const int BUTTON_L2 = 11;
+
+//colors for printing to log
+extern const string COLOR_RED = "#FF0000";
+extern const string COLOR_MAROON = "#800000";
+extern const string COLOR_YELLOW = "#FFFF00";
+extern const string COLOR_OLIVE = "#808000";
+extern const string COLOR_LIME = "#00FF00";
+extern const string COLOR_GREEN = "#008000";
+extern const string COLOR_AQUA = "#00FFFF";
+extern const string COLOR_TEAL = "#008080";
+extern const string COLOR_BLUE = "#0000FF";
+extern const string COLOR_NAVY = "#000080";
+extern const string COLOR_FUCHSIA = "#FF00FF";
+extern const string COLOR_PURPLE = "#800080";
 
 #endif //PROS_OKAPI_CONSTANTS_HPP

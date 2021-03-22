@@ -75,8 +75,7 @@ void competition_initialize(void);
 #endif
 
 #ifdef __cplusplus
-
-
+#include <cstdlib>
 #endif
 
 #endif  // _PROS_MAIN_H_
