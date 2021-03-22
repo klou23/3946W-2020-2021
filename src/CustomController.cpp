@@ -3,6 +3,7 @@
 //
 
 #include "CustomController.hpp"
+#include "Constants.hpp"
 
 CustomController::CustomController(Controller c) : c(c) {
     this->c = c;

@@ -1,5 +1,5 @@
 #include "main.h"
-#include "globals.hpp"
+#include "LvglOps.hpp"
 
 //create button no label
 lv_obj_t * createButton(lv_obj_t * parent, lv_coord_t x, lv_coord_t y, lv_coord_t width, lv_coord_t height){
@@ -194,10 +194,10 @@ void createBarInsideStyle(lv_style_t *style, int radius, uint8_t r, uint8_t g, u
     style->body.main_color = LV_COLOR_MAKE(r, g, b);
     style->body.grad_color = LV_COLOR_MAKE(r, g, b);
     style->body.radius = radius;
-    style->body.border.width = 0;
-    style->body.padding.ver = 0;
-    style->body.padding.hor = 0;
-    style->body.padding.inner = 0;
+    style->body.border.width = padding;
+    style->body.padding.ver = padding;
+    style->body.padding.hor = padding;
+    style->body.padding.inner = padding;
 }
 
 //create bar

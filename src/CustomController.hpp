@@ -20,8 +20,6 @@ public:
      */
     CustomController(Controller controller);
 
-    CustomController(const Controller &c);
-
     /**
 	 * Checks if the controller is connected.
 	 *

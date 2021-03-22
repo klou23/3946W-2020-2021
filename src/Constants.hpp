@@ -6,28 +6,30 @@
 #define PROS_OKAPI_CONSTANTS_HPP
 
 #include "main.h"
+#include "CustomController.hpp"
+
 
 //gear sets
-extern const motor_gearset_e_t RED_GEARSET;
-extern const motor_gearset_e_t GREEN_GEARSET;
-extern const motor_gearset_e_t BLUE_GEARSET;
+extern const motor_gearset_e_t RED_GEARSET = E_MOTOR_GEARSET_36;
+extern const motor_gearset_e_t GREEN_GEARSET = E_MOTOR_GEARSET_18;
+extern const motor_gearset_e_t BLUE_GEARSET = E_MOTOR_GEARSET_06;
 
 //turning
-extern const int LEFT;
-extern const int RIGHT;
+extern const int LEFT = 0;
+extern const int RIGHT = 1;
 
 //controller buttons
-extern const int BUTTON_RIGHT;
-extern const int BUTTON_LEFT;
-extern const int BUTTON_UP;
-extern const int BUTTON_DOWN;
-extern const int BUTTON_A;
-extern const int BUTTON_B;
-extern const int BUTTON_X;
-extern const int BUTTON_Y;
-extern const int BUTTON_R1;
-extern const int BUTTON_R2;
-extern const int BUTTON_L1;
-extern const int BUTTON_L2;
+extern const int BUTTON_RIGHT = 0;
+extern const int BUTTON_LEFT = 1;
+extern const int BUTTON_UP = 2;
+extern const int BUTTON_DOWN = 3;
+extern const int BUTTON_A = 4;
+extern const int BUTTON_B = 5;
+extern const int BUTTON_X = 6;
+extern const int BUTTON_Y = 7;
+extern const int BUTTON_R1 = 8;
+extern const int BUTTON_R2 = 9;
+extern const int BUTTON_L1 = 10;
+extern const int BUTTON_L2 = 11;
 
 #endif //PROS_OKAPI_CONSTANTS_HPP
