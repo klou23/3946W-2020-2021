@@ -4,6 +4,9 @@
 
 #include "Globals.hpp"
 
+int autonColor = RED;
+int autonNum = 0;
+
 void print(string s){
     logText += s + "\n";
     lv_label_set_text(logLabel, logText.c_str());

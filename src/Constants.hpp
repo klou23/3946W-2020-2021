@@ -44,4 +44,8 @@ extern const string COLOR_NAVY = "#000080";
 extern const string COLOR_FUCHSIA = "#FF00FF";
 extern const string COLOR_PURPLE = "#800080";
 
+//auton colors
+extern const int AUTON_BLUE = 0;
+extern const int AUTON_RED = 0;
+
 #endif //PROS_OKAPI_CONSTANTS_HPP

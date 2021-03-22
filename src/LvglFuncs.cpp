@@ -2,8 +2,7 @@
 // Created by Kevin Lou on 12/28/20.
 //
 
-#include "main.h"
-#include "globals.hpp"
+#include "LvglFuncs.hpp"
 
 //Constants
 const char *auton1Description = "Auton 1 description";
@@ -20,7 +19,7 @@ lv_res_t setAutonRed(lv_obj_t *button){
     }
 
     //set auton color to red
-    autonColor = RED;
+    autonColor = AUTON_RED;
 
     //release blue button
     lv_btn_set_state(btnAutonBlue, LV_BTN_STATE_REL);
@@ -36,7 +35,7 @@ lv_res_t setAutonBlue(lv_obj_t *button){
     }
 
     //set auton color to blue
-    autonColor = BLUE;
+    autonColor = AUTON_BLUE;
 
     //release red button
     lv_btn_set_state(btnAutonRed, LV_BTN_STATE_REL);

@@ -5,6 +5,7 @@
 #ifndef PROS_OKAPI_GLOBALS_HPP
 #define PROS_OKAPI_GLOBALS_HPP
 
+#include "main.h"
 #include "Constants.hpp"
 #include "CustomController.hpp"
 #include "Initialize.hpp"
