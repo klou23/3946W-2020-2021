@@ -31,18 +31,18 @@ extern const int BUTTON_L1 = 10;
 extern const int BUTTON_L2 = 11;
 
 //colors for printing to log
-extern const string COLOR_RED = "#FF0000";
-extern const string COLOR_MAROON = "#800000";
-extern const string COLOR_YELLOW = "#FFFF00";
-extern const string COLOR_OLIVE = "#808000";
-extern const string COLOR_LIME = "#00FF00";
-extern const string COLOR_GREEN = "#008000";
-extern const string COLOR_AQUA = "#00FFFF";
-extern const string COLOR_TEAL = "#008080";
-extern const string COLOR_BLUE = "#0000FF";
-extern const string COLOR_NAVY = "#000080";
-extern const string COLOR_FUCHSIA = "#FF00FF";
-extern const string COLOR_PURPLE = "#800080";
+extern const string PRINT_RED = "#FF0000";
+extern const string PRINT_MAROON = "#800000";
+extern const string PRINT_YELLOW = "#FFFF00";
+extern const string PRINT_OLIVE = "#808000";
+extern const string PRINT_LIME = "#00FF00";
+extern const string PRINT_GREEN = "#008000";
+extern const string PRINT_AQUA = "#00FFFF";
+extern const string PRINT_TEAL = "#008080";
+extern const string PRINT_BLUE = "#0000FF";
+extern const string PRINT_NAVY = "#000080";
+extern const string PRINT_FUCHSIA = "#FF00FF";
+extern const string PRINT_PURPLE = "#800080";
 
 //auton colors
 extern const int AUTON_BLUE = 0;

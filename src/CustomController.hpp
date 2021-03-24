@@ -5,8 +5,7 @@
 #ifndef PROS_OKAPI_CUSTOMCONTROLLER_HPP
 #define PROS_OKAPI_CUSTOMCONTROLLER_HPP
 
-#include "Constants.hpp"
-#include "main.h"
+#include "Globals.hpp"
 
 class CustomController {
 public:
@@ -15,10 +14,10 @@ public:
     /**
      * Creates a custom controller object for the given pros::controller
      *
-     * @param controller
+     * @param c
      *      The pros::controller object used by the custom controller
      */
-    CustomController(Controller controller);
+    CustomController(Controller c);
 
     /**
 	 * Checks if the controller is connected.

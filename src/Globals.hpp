@@ -11,6 +11,10 @@
 #include "Initialize.hpp"
 #include "LvglOps.hpp"
 #include "RobotConfig.hpp"
+#include "LvglFuncs.hpp"
+
+extern int autonColor;
+extern int autonNum;
 
 /**
  * Print the given string to the log on the brain screen

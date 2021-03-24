@@ -2,6 +2,10 @@
 // Created by Kevin Lou on 3/21/21.
 //
 
+/**
+ * @file
+ */
+
 #ifndef PROS_OKAPI_LVGLFUNCS_HPP
 #define PROS_OKAPI_LVGLFUNCS_HPP
 

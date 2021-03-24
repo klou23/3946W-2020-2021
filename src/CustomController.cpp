@@ -5,9 +5,7 @@
 #include "CustomController.hpp"
 #include "Constants.hpp"
 
-CustomController::CustomController(Controller c) : c(c) {
-    this->c = c;
-}
+CustomController::CustomController(Controller c) : c(c) {}
 
 int32_t CustomController::is_connected(){
     return c.is_connected();

@@ -151,14 +151,14 @@ void createLogTab(lv_obj_t *parent){
 /********** Tournament Template Functions **********/
 void initialize() {
     //set motor brake modes
-    frontLeftDrive.setBrakeMode(AbstractMotor::brakeMode::coast);
-    frontRightDrive.setBrakeMode(AbstractMotor::brakeMode::coast);
-    backLeftDrive.setBrakeMode(AbstractMotor::brakeMode::coast);
-    backRightDrive.setBrakeMode(AbstractMotor::brakeMode::coast);
-    leftIntake.setBrakeMode(AbstractMotor::brakeMode::brake);
-    rightIntake.setBrakeMode(AbstractMotor::brakeMode::brake);
-    lowerManipulator.setBrakeMode(AbstractMotor::brakeMode::brake);
-    upperManipulator.setBrakeMode(AbstractMotor::brakeMode::brake);
+    frontLeftDrive.set_brake_mode(E_MOTOR_BRAKE_COAST);
+    frontRightDrive.set_brake_mode(E_MOTOR_BRAKE_COAST);
+    backLeftDrive.set_brake_mode(E_MOTOR_BRAKE_COAST);
+    backRightDrive.set_brake_mode(E_MOTOR_BRAKE_COAST);
+    leftIntake.set_brake_mode(E_MOTOR_BRAKE_BRAKE);
+    rightIntake.set_brake_mode(E_MOTOR_BRAKE_BRAKE);
+    lowerManipulator.set_brake_mode(E_MOTOR_BRAKE_BRAKE);
+    upperManipulator.set_brake_mode(E_MOTOR_BRAKE_BRAKE);
 
     //set UI theme
     lv_theme_t *theme = lv_theme_alien_init(200, NULL);

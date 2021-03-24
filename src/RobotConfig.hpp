@@ -5,8 +5,7 @@
 #ifndef PROS_OKAPI_ROBOTCONFIG_HPP
 #define PROS_OKAPI_ROBOTCONFIG_HPP
 
-#include "main.h"
-#include "Constants.hpp"
+#include "Globals.hpp"
 
 //controllers
 extern Controller prosMasterController;

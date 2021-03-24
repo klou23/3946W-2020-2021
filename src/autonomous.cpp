@@ -13,66 +13,6 @@
  * from where it left off.
  */
 
-void turnAngle(double angle, int direction, int speed){
-    const double scale = 5.8;
-    double motorTurn = angle * scale;
-    if(direction == LEFT){
-        frontRightDrive.moveRelative(motorTurn, speed);
-        backRightDrive.moveRelative(motorTurn, speed);
-        frontLeftDrive.moveRelative(-motorTurn, speed);
-        backLeftDrive.moveRelative(-motorTurn, speed);
-    }else if(direction == RIGHT){
-        frontRightDrive.moveRelative(-motorTurn, speed);
-        backRightDrive.moveRelative(-motorTurn, speed);
-        frontLeftDrive.moveRelative(motorTurn, speed);
-        backLeftDrive.moveRelative(motorTurn, speed);
-    }
-    while(abs(frontRightDrive.getTargetPosition() - frontRightDrive.getPosition() > 1) ||
-          abs(backRightDrive.getTargetPosition() - backRightDrive.getPosition() > 1) ||
-          abs(frontLeftDrive.getTargetPosition() - frontLeftDrive.getPosition() > 1) ||
-          abs(backLeftDrive.getTargetPosition() - backLeftDrive.getPosition() > 1)){
-        pros::delay(5);
-    }
-}
-
-void strafeDist(double dist, int direction, int speed){
-    const double scale = 30;
-    double motorTurn = dist * scale;
-
-    if(direction == LEFT){
-        frontRightDrive.moveRelative(motorTurn, speed);
-        backRightDrive.moveRelative(-motorTurn, speed);
-        frontLeftDrive.moveRelative(-motorTurn, speed);
-        backLeftDrive.moveRelative(motorTurn, speed);
-    }else if(direction == RIGHT){
-        frontRightDrive.moveRelative(-motorTurn, speed);
-        backRightDrive.moveRelative(motorTurn, speed);
-        frontLeftDrive.moveRelative(motorTurn, speed);
-        backLeftDrive.moveRelative(-motorTurn, speed);
-    }
-    while(abs(frontRightDrive.getTargetPosition() - frontRightDrive.getPosition() > 1) ||
-          abs(backRightDrive.getTargetPosition() - backRightDrive.getPosition() > 1) ||
-          abs(frontLeftDrive.getTargetPosition() - frontLeftDrive.getPosition() > 1) ||
-          abs(backLeftDrive.getTargetPosition() - backLeftDrive.getPosition() > 1)){
-        pros::delay(5);
-    }
-}
-
-void drive(double dist, int speed){
-    const double scale = 26.5;
-    double motorTurn = dist * scale;
-    frontRightDrive.moveRelative(motorTurn, speed);
-    backRightDrive.moveRelative(motorTurn, speed);
-    frontLeftDrive.moveRelative(motorTurn, speed);
-    backLeftDrive.moveRelative(motorTurn, speed);
-    while(abs(frontRightDrive.getTargetPosition() - frontRightDrive.getPosition() > 1) ||
-          abs(backRightDrive.getTargetPosition() - backRightDrive.getPosition() > 1) ||
-          abs(frontLeftDrive.getTargetPosition() - frontLeftDrive.getPosition() > 1) ||
-          abs(backLeftDrive.getTargetPosition() - backLeftDrive.getPosition() > 1)){
-        pros::delay(5);
-    }
-}
-
 //void accurateDrive(double dist, int speed, int maxWait){
 //    const double scale = 26.5;
 //    frontLeftDrive.tarePosition();
@@ -107,18 +47,6 @@ void drive(double dist, int speed){
 //        driveError = targetTicks-((backLeftDrive.getPosition() + frontLeftDrive.getPosition() +  backRightDrive.getPosition() + frontRightDrive.getPosition())/4)
 //    }
 //}
-
-void PDDriveRev(double dist, double maxVoltage, double thresholdDist, double slaveThresholdAngle, int maxWait){
-    frontRightDrive.setReversed(!frontRightDrive.isReversed());
-    frontLeftDrive.setReversed(!frontLeftDrive.isReversed());
-    backRightDrive.setReversed(!backRightDrive.isReversed());
-    backLeftDrive.setReversed(!backLeftDrive.isReversed());
-    PDDrive(dist, maxVoltage, thresholdDist, slaveThresholdAngle, maxWait);
-    frontRightDrive.setReversed(!frontRightDrive.isReversed());
-    frontLeftDrive.setReversed(!frontLeftDrive.isReversed());
-    backRightDrive.setReversed(!backRightDrive.isReversed());
-    backLeftDrive.setReversed(!backLeftDrive.isReversed());
-}
 
 void PDDrive(double dist, double maxVoltage, double thresholdDist, double slaveThresholdAngle, int maxWait){
 
@@ -245,38 +173,6 @@ void PDTurn(double angle, double maxVoltage, int direction, double thresholdAngl
         timer += 5;
     }
 
-}
-
-void drive(double dist, int speed, int maxWait){
-    const double scale = 26.5;
-    double motorTurn = dist * scale;
-    frontRightDrive.moveRelative(motorTurn, speed);
-    backRightDrive.moveRelative(motorTurn, speed);
-    frontLeftDrive.moveRelative(motorTurn, speed);
-    backLeftDrive.moveRelative(motorTurn, speed);
-
-    for(int i = maxWait; i >= 0; i-=5){
-        if(abs(frontRightDrive.getTargetPosition() - frontRightDrive.getPosition() > 1) ||
-           abs(backRightDrive.getTargetPosition() - backRightDrive.getPosition() > 1) ||
-           abs(frontLeftDrive.getTargetPosition() - frontLeftDrive.getPosition() > 1) ||
-           abs(backLeftDrive.getTargetPosition() - backLeftDrive.getPosition() > 1)){
-            pros::delay(5);
-        }else{
-            break;
-        }
-    }
-}
-
-void driveRev(double dist, int speed){
-    frontRightDrive.setReversed(!frontRightDrive.isReversed());
-    frontLeftDrive.setReversed(!frontLeftDrive.isReversed());
-    backRightDrive.setReversed(!backRightDrive.isReversed());
-    backLeftDrive.setReversed(!backLeftDrive.isReversed());
-    drive(dist, speed);
-    frontRightDrive.setReversed(!frontRightDrive.isReversed());
-    frontLeftDrive.setReversed(!frontLeftDrive.isReversed());
-    backRightDrive.setReversed(!backRightDrive.isReversed());
-    backLeftDrive.setReversed(!backLeftDrive.isReversed());
 }
 
 void shoot(int vel){

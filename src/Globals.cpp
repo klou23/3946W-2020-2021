@@ -4,7 +4,7 @@
 
 #include "Globals.hpp"
 
-int autonColor = RED;
+int autonColor = AUTON_RED;
 int autonNum = 0;
 
 void print(string s){
