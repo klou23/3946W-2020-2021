@@ -1,9 +1,12 @@
-//
-// Created by Kevin Lou on 3/21/21.
-//
+/**
+ * @file
+ * @brief Functions to be called by the UI
+ */
 
 #ifndef PROS_OKAPI_LVGLOPS_HPP
 #define PROS_OKAPI_LVGLOPS_HPP
+
+#include "Globals.hpp"
 
 /**
  * Creates a new lvgl button

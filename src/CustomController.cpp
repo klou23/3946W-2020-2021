@@ -1,7 +1,3 @@
-//
-// Created by Kevin Lou on 3/20/21.
-//
-
 #include "CustomController.hpp"
 #include "Constants.hpp"
 

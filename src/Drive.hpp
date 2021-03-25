@@ -1,6 +1,7 @@
-//
-// Created by Kevin Lou on 3/22/21.
-//
+/**
+ * @file
+ * @brief Drive class for all drive operations
+ */
 
 #ifndef PROS_OKAPI_DRIVE_HPP
 #define PROS_OKAPI_DRIVE_HPP

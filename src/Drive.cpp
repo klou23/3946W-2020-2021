@@ -1,7 +1,3 @@
-//
-// Created by Kevin Lou on 3/22/21.
-//
-
 #include "Drive.hpp"
 
 Drive::Drive(const Motor &frontLeft, const Motor &frontRight, const Motor &backLeft, const Motor &backRight,
@@ -202,6 +198,172 @@ void Drive::drive(double dist, double maxVoltage) {
     }
 }
 
+void Drive::drive(double dist, double maxVoltage, int maxWait) {
+    double target = dist * driveScale;
 
+    leftEncoder.reset();
+    rightEncoder.reset();
+
+    double masterIntegral = 0;
+    double masterDerivative = 0;
+
+    double slaveIntegral = 0;
+    double slaveDerivative = 0;
+
+    double leftPosition = leftEncoder.get_value();
+    double rightPosition = rightEncoder.get_value();
+
+    double masterError = target - leftPosition;
+    double slaveError = leftPosition - rightPosition;
+
+    int waitTime = 0;
+    while(abs(masterError) > masterThreshold){
+        leftPosition = leftEncoder.get_value();
+        rightPosition = rightEncoder.get_value();
+
+        double prevMasterError = masterError;
+        double prevSlaveError = slaveError;
+
+        masterError = target - leftPosition;
+        slaveError = leftPosition - rightPosition;
+
+        masterDerivative = masterError - prevMasterError;
+        slaveDerivative = slaveError - prevSlaveError;
+
+        masterIntegral += masterError;
+        slaveIntegral += slaveIntegral;
+
+        double leftVoltage = capVoltage(masterError * masterKp + masterIntegral * masterKi +
+                                        masterDerivative * masterKd, maxVoltage);
+        double rightVoltage = capVoltage(leftVoltage + slaveError * slaveKp +
+                                         slaveIntegral * slaveKi + slaveDerivative * slaveKd, 12000);
+
+        frontLeftDrive.move_voltage(leftVoltage);
+        backLeftDrive.move_voltage(leftVoltage);
+        frontRightDrive.move_voltage(rightVoltage);
+        backRightDrive.move_voltage(rightVoltage);
+
+        delay(5);
+        waitTime += 5;
+        if(waitTime > maxWait) break;
+    }
+}
+
+
+void Drive::turn(double angle, double maxVoltage, int direction) {
+    int target = angle * turnScale;
+    if(direction == LEFT) target *= -1;
+
+    leftEncoder.reset();
+    rightEncoder.reset();
+
+    double integral = 0;
+
+    double derivative = 0;
+
+    double position = leftEncoder.get_value();
+
+    double error = target - position;
+
+    while(abs(error) > turnThreshold){
+        position = leftEncoder.get_value();
+
+        double prevError = error;
+
+        error = target - position;
+
+        derivative = error - prevError;
+
+        integral += error;
+
+        double leftVoltage = capVoltage(error * turnKp + integral * turnKi + derivative * turnKd, 11000);
+        double rightVoltage = -leftVoltage;
+
+        frontLeftDrive.move_voltage(leftVoltage);
+        backLeftDrive.move_voltage(leftVoltage);
+        frontRightDrive.move_voltage(rightVoltage);
+        backRightDrive.move_voltage(rightVoltage);
+
+        delay(5);
+    }
+}
+
+void Drive::turn(double angle, double maxVoltage, int direction, int maxWait) {
+    int target = angle * turnScale;
+    if(direction == LEFT) target *= -1;
+
+    leftEncoder.reset();
+    rightEncoder.reset();
+
+    double integral = 0;
+
+    double derivative = 0;
+
+    double position = leftEncoder.get_value();
+
+    double error = target - position;
+
+    int waitTime = 0;
+    while(abs(error) > turnThreshold){
+        position = leftEncoder.get_value();
+
+        double prevError = error;
+
+        error = target - position;
+
+        derivative = error - prevError;
+
+        integral += error;
+
+        double leftVoltage = capVoltage(error * turnKp + integral * turnKi + derivative * turnKd, 11000);
+        double rightVoltage = -leftVoltage;
+
+        frontLeftDrive.move_voltage(leftVoltage);
+        backLeftDrive.move_voltage(leftVoltage);
+        frontRightDrive.move_voltage(rightVoltage);
+        backRightDrive.move_voltage(rightVoltage);
+
+        delay(5);
+        waitTime += 5;
+        if(waitTime > maxWait) break;
+    }
+
+
+}
+
+void Drive::driverControl(double leftX, double leftY, double rightX) {
+    double driveVels[] {0, 0, 0, 0};    // fl, fr, bl, br
+
+    //forward and back
+    for(int i = 0; i < 4; i++) driveVels[i] += leftY;
+
+    //strafing
+    driveVels[0] += leftX;
+    driveVels[3] += leftX;
+    driveVels[1] -= leftX;
+    driveVels[2] -= leftX;
+
+    //turning
+    driveVels[0] += rightX;
+    driveVels[2] += rightX;
+    driveVels[1] -= rightX;
+    driveVels[3] -= rightX;
+
+    for(int i = 0; i < 4; i++){
+        //cap at 1
+        if(driveVels[i] > 1) driveVels[i] = 1;
+        if(driveVels[i] < -1) driveVels[i] = -1;
+
+        //quadratic curve
+        if(driveVels[i] < 0) driveVels[i] *= -1 * driveVels[i];
+        else driveVels[i] *= driveVels[i];
+
+        //convert percentages to rpm
+        driveVels[i] *= 200;
+    }
+
+    //run motors
+
+}
 
 

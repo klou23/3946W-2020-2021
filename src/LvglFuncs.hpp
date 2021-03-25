@@ -1,15 +1,29 @@
-//
-// Created by Kevin Lou on 3/21/21.
-//
-
 /**
  * @file
+ * @brief Functions used to create LVGL UI components
  */
 
 #ifndef PROS_OKAPI_LVGLFUNCS_HPP
 #define PROS_OKAPI_LVGLFUNCS_HPP
 
 #include "Globals.hpp"
+
+/**
+ * Description for the first autonomous
+ */
+extern const char *auton1Description;
+/**
+ * Description for the second autonomous
+ */
+extern const char *auton2Description;
+/**
+ * Description for the third autonomous
+ */
+extern const char *auton3Description;
+/**
+ * Description for the fourth autonomous
+ */
+extern const char *auton4Description;
 
 /**
  * Sets the red autonomous selection button to selected and the blue

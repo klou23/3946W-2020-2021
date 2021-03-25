@@ -1,7 +1,3 @@
-//
-// Created by Kevin Lou on 12/28/20.
-//
-
 #include "LvglFuncs.hpp"
 
 //Constants

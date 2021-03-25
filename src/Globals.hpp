@@ -1,6 +1,7 @@
-//
-// Created by Kevin Lou on 3/21/21.
-//
+/**
+ * @file
+ * @brief Allows for global variables and functions
+ */
 
 #ifndef PROS_OKAPI_GLOBALS_HPP
 #define PROS_OKAPI_GLOBALS_HPP
@@ -8,12 +9,19 @@
 #include "main.h"
 #include "Constants.hpp"
 #include "CustomController.hpp"
+#include "Drive.hpp"
 #include "Initialize.hpp"
+#include "LvglFuncs.hpp"
 #include "LvglOps.hpp"
 #include "RobotConfig.hpp"
-#include "LvglFuncs.hpp"
 
+/**
+ * Stores the currently selected auton side.
+ */
 extern int autonColor;
+/**
+ * Stores the currently selected auton routine.
+ */
 extern int autonNum;
 
 /**

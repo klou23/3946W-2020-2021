@@ -1,6 +1,7 @@
-//
-// Created by Kevin Lou on 3/20/21.
-//
+/**
+ * @file
+ * @brief CustomController class with added controller functionality
+ */
 
 #ifndef PROS_OKAPI_CUSTOMCONTROLLER_HPP
 #define PROS_OKAPI_CUSTOMCONTROLLER_HPP
@@ -8,8 +9,13 @@
 #include "Globals.hpp"
 
 class CustomController {
-public:
+private:
+    /**
+     * Controller that is used for all of the operations
+     */
     Controller c;
+
+public:
 
     /**
      * Creates a custom controller object for the given pros::controller

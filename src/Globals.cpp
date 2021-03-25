@@ -1,7 +1,3 @@
-//
-// Created by Kevin Lou on 3/21/21.
-//
-
 #include "Globals.hpp"
 
 int autonColor = AUTON_RED;
