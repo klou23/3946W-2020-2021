@@ -1,5 +1,6 @@
 #include "main.h"
-#include "globals.hpp"
+#include "Globals.hpp"
+#include "RobotConfig.hpp"
 
 /**
  * Runs the operator control code. This function will be started in its own task
@@ -15,118 +16,70 @@
  * task, not resume it from where it left off.
  */
 
-
-
 void opcontrol() {
 
-    int motorTempTimer = 0;
-    int time = 0;
+    std::string motorNames[] = {"FL Drive", "FR Drive", "BL Drive", "BR Drive", "L Intake", "R Intake",
+                                "L Roller", "U Roller"};
 
-	while (true) {
-//	    masterController.rumble(".");
+    int motorWaitTimes[] = {0,0,0,0,0,0,0,0};
+    int manualMotorWaitTime = 0;
 
-        //get controller values
-        double leftX = masterController.getAnalog(ControllerAnalog::leftX);   //left right
-        double leftY = masterController.getAnalog(ControllerAnalog::leftY);   //forward back
-        double rightX = masterController.getAnalog(ControllerAnalog::rightX); //turning
+    while(true){
+        /***** Control *****/
+        drive.driverControl(masterController);
+        rollers.driverControl(masterController, partnerController);
 
-        double partnerLeftY = partnerController.getAnalog(ControllerAnalog::leftY); //pooping joystick
-        partnerLeftY = (partnerLeftY >= 0) ? partnerLeftY : -partnerLeftY;
+        /***** Motor Temp Monitoring *****/
+        int motorTemps[8];
 
-        /**********Drive**********/
-        double driveVels[] {0, 0, 0, 0}; // fl, fr, bl, br
-        // forward and back
-        for(int i = 0; i < 4; i++) driveVels[i] += leftY;
+        motorTemps[0] = frontLeftDrive.get_temperature();
+        motorTemps[1] = frontRightDrive.get_temperature();
+        motorTemps[2] = backLeftDrive.get_temperature();
+        motorTemps[3] = backRightDrive.get_temperature();
+        motorTemps[4] = leftIntake.get_temperature();
+        motorTemps[5] = rightIntake.get_temperature();
+        motorTemps[6] = lowerManipulator.get_temperature();
+        motorTemps[7] = upperManipulator.get_temperature();
 
-        //strafing
-        driveVels[0] += leftX;
-        driveVels[3] += leftX;
-        driveVels[1] -= leftX;
-        driveVels[2] -= leftX;
-
-        //turning
-        driveVels[0] += rightX;
-        driveVels[2] += rightX;
-        driveVels[1] -= rightX;
-        driveVels[3] -= rightX;
-
-        //cap all driveVels at 1 and convert percentages to rpm
-        //add quadratic control
-        for(int i = 0; i < 4; i++){
-            if(driveVels[i] > 1) driveVels[i] = 1;
-            if(driveVels[i] < -1) driveVels[i] = -1;
-            if(quadraticControl) {
-                if(driveVels[i] < 0) driveVels[i] *= -1 * driveVels[i];
-                else driveVels[i] *= driveVels[i];
-            }
-            driveVels[i] *= driveSpeed;
-        }
-
-        //run motors
-        frontLeftDrive.moveVelocity(driveVels[0]);
-        frontRightDrive.moveVelocity(driveVels[1]);
-        backLeftDrive.moveVelocity(driveVels[2]);
-        backRightDrive.moveVelocity(driveVels[3]);
-
-        /**********Intake and manipulator**********/
-        //set vels
-        double rollerVels[] {0, 0, 0}; //intake, lower, upper
-
-        if(masterA.isPressed()){
-            turnAngle(360, RIGHT, 100);
-        }
-
-        if(partnerA.isPressed()) rollerVels[2] = -0.75;
-        else if(masterR1.isPressed()) rollerVels[0] = rollerVels[1] = rollerVels[2] = 1;         //1,1,1
-        else if(masterL1.isPressed()) rollerVels[1] = rollerVels[2] = 1;                    //0,1,0
-        else if(partnerL1.isPressed()) rollerVels[0] = rollerVels[1] = rollerVels[2] = -1;  //-1,-1,-1
-        else if(partnerL2.isPressed()) rollerVels[1] = rollerVels[2] = -1;                  //0,-1,-1
-        else if(partnerR1.isPressed()) rollerVels[0] = 1;                                   //1,0,0
-        else if(partnerR2.isPressed()) rollerVels[0] = -1;                                  //-1,0,0
-        else if(partnerLeftY > 0.05){
-            if(!partnerA.isPressed()) rollerVels[0] = 1;
-            rollerVels[1] = partnerLeftY;
-            rollerVels[2] = -partnerLeftY;
-        }
-
-//        for(int i = 0; i < 3; i++) driveVels[i] *= intakeSpeed;
-
-        //run motors
-        leftIntake.moveVelocity(rollerVels[0] * intakeSpeed);
-        rightIntake.moveVelocity(rollerVels[0] * intakeSpeed);
-        lowerManipulator.moveVelocity(rollerVels[1] * intakeSpeed);
-        upperManipulator.moveVelocity(rollerVels[2] * intakeSpeed);
-
-        /**********Motor Temp**********/
-        motorTempTimer++;
-        if(motorTempTimer >= 15){
-            std::string motorNames[] = {"FL Drive", "FR Drive", "BL Drive", "BR Drive", "L Inake", "R Intake", "L Roller", "U Roller"};
-            int motorTemps[8];
-
-            motorTemps[0] = frontLeftDrive.getTemperature();
-            motorTemps[1] = frontRightDrive.getTemperature();
-            motorTemps[2] = backLeftDrive.getTemperature();
-            motorTemps[3] = backRightDrive.getTemperature();
-            motorTemps[4] = leftIntake.getTemperature();
-            motorTemps[5] = rightIntake.getTemperature();
-            motorTemps[6] = lowerManipulator.getTemperature();
-            motorTemps[7] = upperManipulator.getTemperature();
-
-            int highestTemp = 0;
-            std::string hottestMotor = "";
-
+        //manual poll motorTemps
+        if(manualMotorWaitTime == 0 && (masterController.pressed(BUTTON_X) || partnerController.pressed(BUTTON_X))){
             for(int i = 0; i < 8; i++){
-                if(motorTemps[i] > highestTemp){
-                    highestTemp = motorTemps[i];
-                    hottestMotor = motorNames[i];
+                if(motorTemps[i] >= 65){
+                    printSpecial(motorNames[i] + " - " + to_string(motorTemps[i]), PRINT_RED);
+                }else if(motorTemps[i] >= 55){
+                    printSpecial(motorNames[i] + " - " + to_string(motorTemps[i]), PRINT_ORANGE);
+                }else if(motorTemps[i] >= 50){
+                    printSpecial(motorNames[i] + " - " + to_string(motorTemps[i]), PRINT_YELLOW);
+                }else{
+                    printSpecial(motorNames[i] + " - " + to_string(motorTemps[i]), PRINT_GREEN);
                 }
+                motorWaitTimes[i] = 15000;
             }
-
-//            cout << hottestMotor << " - " << highestTemp << "C" << endl;
-
-            motorTempTimer = 0;
+            manualMotorWaitTime = 1000;
         }
 
-		pros::delay(10);  //wait to save ram
-	}
+        //auto motorTemp warnings
+        for(int i = 0; i < 8; i++){
+            if(motorWaitTimes[i] > 0) continue;
+
+            if(motorTemps[i] >= 65){
+                printSpecial(motorNames[i] + " - " + to_string(motorTemps[i]), PRINT_RED);
+            }else if(motorTemps[i] >= 55){
+                printSpecial(motorNames[i] + " - " + to_string(motorTemps[i]), PRINT_ORANGE);
+            }else if(motorTemps[i] >= 50){
+                printSpecial(motorNames[i] + " - " + to_string(motorTemps[i]), PRINT_YELLOW);
+            }
+            motorWaitTimes[i] = 15000;
+        }
+
+        //update wait times
+        for(int i = 0; i < *(&motorWaitTimes + 1) - motorWaitTimes; i++){
+            motorWaitTimes[i] = max(0, motorWaitTimes[i] - 5);
+        }
+        manualMotorWaitTime = max(0, manualMotorWaitTime - 5);
+
+        /***** Save RAM *****/
+        delay(5);
+    }
+
 }

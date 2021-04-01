@@ -1,5 +1,8 @@
-#include "main.h"
 #include "Initialize.hpp"
+#include "main.h"
+#include "LvglOps.hpp"
+#include "LvglFuncs.hpp"
+#include "RobotConfig.hpp"
 
 /********** Variables **********/
 lv_obj_t *tabview;
@@ -54,7 +57,7 @@ void createAutonSelectorTab(lv_obj_t *parent){
     createButtonStyle(redTogglePressedStyle, 250, 20, 20, 255, 255, 255, 0, 2, 255, 255, 255);
 
     //create red auton button
-    btnAutonRed = createToggleButtonWithStyle(parent, 30, 0, 195, 50, redPressedStyle, redReleasedStyle, redTogglePressedStyle, redToggleReleasedStyle, "RED");
+    btnAutonRed = createToggleButtonWithStyle(parent, 30, 0, 195, 50, redPressedStyle, redReleasedStyle, redTogglePressedStyle, redToggleReleasedStyle, "LEFT");
     lv_btn_set_action(btnAutonRed, LV_BTN_ACTION_CLICK, setAutonRed);
 
     //create styles for blue auton button
@@ -68,7 +71,7 @@ void createAutonSelectorTab(lv_obj_t *parent){
     createButtonStyle(blueTogglePressedStyle, 20, 20, 250, 255, 255, 255, 0, 2, 255, 255, 255);
 
     //create blue auton button
-    btnAutonBlue = createToggleButtonWithStyle(parent, 255, 20, 195, 50, bluePressedStyle, blueReleasedStyle, blueTogglePressedStyle, blueToggleReleasedStyle, "BLUE");
+    btnAutonBlue = createToggleButtonWithStyle(parent, 255, 20, 195, 50, bluePressedStyle, blueReleasedStyle, blueTogglePressedStyle, blueToggleReleasedStyle, "RIGHT");
     lv_btn_set_action(btnAutonBlue, LV_BTN_ACTION_CLICK, setAutonBlue);
 
     //create styles for selection buttons

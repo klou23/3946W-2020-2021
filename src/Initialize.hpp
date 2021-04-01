@@ -6,7 +6,7 @@
 #ifndef PROS_OKAPI_INITIALIZE_HPP
 #define PROS_OKAPI_INITIALIZE_HPP
 
-#include "Globals.hpp"
+#include "main.h"
 
 /**
  * Tabview that holds the UI.

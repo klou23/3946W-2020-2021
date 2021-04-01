@@ -6,7 +6,7 @@
 #ifndef PROS_OKAPI_LVGLOPS_HPP
 #define PROS_OKAPI_LVGLOPS_HPP
 
-#include "Globals.hpp"
+#include "main.h"
 
 /**
  * Creates a new lvgl button

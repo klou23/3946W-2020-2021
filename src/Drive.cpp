@@ -1,4 +1,6 @@
 #include "Drive.hpp"
+#include "main.h"
+#include "Constants.hpp"
 
 Drive::Drive(const Motor &frontLeft, const Motor &frontRight, const Motor &backLeft, const Motor &backRight,
              const ADIEncoder &leftEncoder, const ADIEncoder &rightEncoder) : frontLeft(frontLeft),
@@ -81,15 +83,15 @@ void Drive::oldTurn(double angle, double speed, int direction) {
     double motorTurn = angle * oldTurnScale;
 
     if(direction == LEFT){
-        frontRightDrive.move_relative(motorTurn, speed);
-        backRightDrive.move_relative(motorTurn, speed);
-        frontLeftDrive.move_relative(-motorTurn, speed);
-        backLeftDrive.move_relative(-motorTurn, speed);
+        frontRight.move_relative(motorTurn, speed);
+        backRight.move_relative(motorTurn, speed);
+        frontLeft.move_relative(-motorTurn, speed);
+        backLeft.move_relative(-motorTurn, speed);
     }else if(direction == RIGHT){
-        frontRightDrive.move_relative(-motorTurn, speed);
-        backRightDrive.move_relative(-motorTurn, speed);
-        frontLeftDrive.move_relative(motorTurn, speed);
-        backLeftDrive.move_relative(motorTurn, speed);
+        frontRight.move_relative(-motorTurn, speed);
+        backRight.move_relative(-motorTurn, speed);
+        frontLeft.move_relative(motorTurn, speed);
+        backLeft.move_relative(motorTurn, speed);
     }
 
     waitForMotors();
@@ -100,15 +102,15 @@ void Drive::oldTurn(double angle, double speed, int direction, int maxWait) {
     double motorTurn = angle * oldTurnScale;
 
     if(direction == LEFT){
-        frontRightDrive.move_relative(motorTurn, speed);
-        backRightDrive.move_relative(motorTurn, speed);
-        frontLeftDrive.move_relative(-motorTurn, speed);
-        backLeftDrive.move_relative(-motorTurn, speed);
+        frontRight.move_relative(motorTurn, speed);
+        backRight.move_relative(motorTurn, speed);
+        frontLeft.move_relative(-motorTurn, speed);
+        backLeft.move_relative(-motorTurn, speed);
     }else if(direction == RIGHT){
-        frontRightDrive.move_relative(-motorTurn, speed);
-        backRightDrive.move_relative(-motorTurn, speed);
-        frontLeftDrive.move_relative(motorTurn, speed);
-        backLeftDrive.move_relative(motorTurn, speed);
+        frontRight.move_relative(-motorTurn, speed);
+        backRight.move_relative(-motorTurn, speed);
+        frontLeft.move_relative(motorTurn, speed);
+        backLeft.move_relative(motorTurn, speed);
     }
 
     waitForMotors(maxWait);
@@ -118,15 +120,15 @@ void Drive::oldStrafe(double dist, double speed, int direction) {
     double motorTurn = dist * oldStrafeScale;
 
     if(direction == LEFT){
-        frontRightDrive.move_relative(motorTurn, speed);
-        backRightDrive.move_relative(-motorTurn, speed);
-        frontLeftDrive.move_relative(-motorTurn, speed);
-        backLeftDrive.move_relative(motorTurn, speed);
+        frontRight.move_relative(motorTurn, speed);
+        backRight.move_relative(-motorTurn, speed);
+        frontLeft.move_relative(-motorTurn, speed);
+        backLeft.move_relative(motorTurn, speed);
     }else if(direction == RIGHT){
-        frontRightDrive.move_relative(-motorTurn, speed);
-        backRightDrive.move_relative(motorTurn, speed);
-        frontLeftDrive.move_relative(motorTurn, speed);
-        backLeftDrive.move_relative(-motorTurn, speed);
+        frontRight.move_relative(-motorTurn, speed);
+        backRight.move_relative(motorTurn, speed);
+        frontLeft.move_relative(motorTurn, speed);
+        backLeft.move_relative(-motorTurn, speed);
     }
 
     waitForMotors();
@@ -136,15 +138,15 @@ void Drive::oldStrafe(double dist, double speed, int direction, int maxWait) {
     double motorTurn = dist * oldStrafeScale;
 
     if(direction == LEFT){
-        frontRightDrive.move_relative(motorTurn, speed);
-        backRightDrive.move_relative(-motorTurn, speed);
-        frontLeftDrive.move_relative(-motorTurn, speed);
-        backLeftDrive.move_relative(motorTurn, speed);
+        frontRight.move_relative(motorTurn, speed);
+        backRight.move_relative(-motorTurn, speed);
+        frontLeft.move_relative(-motorTurn, speed);
+        backLeft.move_relative(motorTurn, speed);
     }else if(direction == RIGHT){
-        frontRightDrive.move_relative(-motorTurn, speed);
-        backRightDrive.move_relative(motorTurn, speed);
-        frontLeftDrive.move_relative(motorTurn, speed);
-        backLeftDrive.move_relative(-motorTurn, speed);
+        frontRight.move_relative(-motorTurn, speed);
+        backRight.move_relative(motorTurn, speed);
+        frontLeft.move_relative(motorTurn, speed);
+        backLeft.move_relative(-motorTurn, speed);
     }
 
     waitForMotors(maxWait);
@@ -189,10 +191,10 @@ void Drive::drive(double dist, double maxVoltage) {
         double rightVoltage = capVoltage(leftVoltage + slaveError * slaveKp +
                                          slaveIntegral * slaveKi + slaveDerivative * slaveKd, 12000);
 
-        frontLeftDrive.move_voltage(leftVoltage);
-        backLeftDrive.move_voltage(leftVoltage);
-        frontRightDrive.move_voltage(rightVoltage);
-        backRightDrive.move_voltage(rightVoltage);
+        frontLeft.move_voltage(leftVoltage);
+        backLeft.move_voltage(leftVoltage);
+        frontRight.move_voltage(rightVoltage);
+        backRight.move_voltage(rightVoltage);
 
         delay(5);
     }
@@ -238,10 +240,10 @@ void Drive::drive(double dist, double maxVoltage, int maxWait) {
         double rightVoltage = capVoltage(leftVoltage + slaveError * slaveKp +
                                          slaveIntegral * slaveKi + slaveDerivative * slaveKd, 12000);
 
-        frontLeftDrive.move_voltage(leftVoltage);
-        backLeftDrive.move_voltage(leftVoltage);
-        frontRightDrive.move_voltage(rightVoltage);
-        backRightDrive.move_voltage(rightVoltage);
+        frontLeft.move_voltage(leftVoltage);
+        backLeft.move_voltage(leftVoltage);
+        frontRight.move_voltage(rightVoltage);
+        backRight.move_voltage(rightVoltage);
 
         delay(5);
         waitTime += 5;
@@ -279,10 +281,10 @@ void Drive::turn(double angle, double maxVoltage, int direction) {
         double leftVoltage = capVoltage(error * turnKp + integral * turnKi + derivative * turnKd, 11000);
         double rightVoltage = -leftVoltage;
 
-        frontLeftDrive.move_voltage(leftVoltage);
-        backLeftDrive.move_voltage(leftVoltage);
-        frontRightDrive.move_voltage(rightVoltage);
-        backRightDrive.move_voltage(rightVoltage);
+        frontLeft.move_voltage(leftVoltage);
+        backLeft.move_voltage(leftVoltage);
+        frontRight.move_voltage(rightVoltage);
+        backRight.move_voltage(rightVoltage);
 
         delay(5);
     }
@@ -318,10 +320,10 @@ void Drive::turn(double angle, double maxVoltage, int direction, int maxWait) {
         double leftVoltage = capVoltage(error * turnKp + integral * turnKi + derivative * turnKd, 11000);
         double rightVoltage = -leftVoltage;
 
-        frontLeftDrive.move_voltage(leftVoltage);
-        backLeftDrive.move_voltage(leftVoltage);
-        frontRightDrive.move_voltage(rightVoltage);
-        backRightDrive.move_voltage(rightVoltage);
+        frontLeft.move_voltage(leftVoltage);
+        backLeft.move_voltage(leftVoltage);
+        frontRight.move_voltage(rightVoltage);
+        backRight.move_voltage(rightVoltage);
 
         delay(5);
         waitTime += 5;
@@ -363,7 +365,18 @@ void Drive::driverControl(double leftX, double leftY, double rightX) {
     }
 
     //run motors
+    frontLeft.move_velocity(driveVels[0]);
+    frontRight.move_velocity(driveVels[1]);
+    backLeft.move_velocity(driveVels[2]);
+    backRight.move_velocity(driveVels[3]);
+}
 
+void Drive::driverControl(CustomController c) {
+    double leftX = c.getLeftX();
+    double leftY = c.getLeftY();
+    double rightX = c.getRightX();
+
+    driverControl(leftX, leftY, rightX);
 }
 
 

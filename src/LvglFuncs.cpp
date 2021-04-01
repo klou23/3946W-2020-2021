@@ -1,4 +1,8 @@
 #include "LvglFuncs.hpp"
+#include "main.h"
+#include "Globals.hpp"
+#include "Initialize.hpp"
+#include "Constants.hpp"
 
 //Constants
 const char *auton1Description = "Auton 1 description";

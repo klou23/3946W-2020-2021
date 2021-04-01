@@ -1,5 +1,7 @@
 #include "CustomController.hpp"
+#include "main.h"
 #include "Constants.hpp"
+#include "Globals.hpp"
 
 CustomController::CustomController(Controller c) : c(c) {}
 
@@ -49,43 +51,31 @@ double CustomController::getRightY(){
 
 bool CustomController::pressed(int button){
     int32_t returnVal = 0;
-    switch (button){
-        case BUTTON_LEFT:
-            returnVal = c.get_digital(E_CONTROLLER_DIGITAL_LEFT);
-            break;
-        case BUTTON_RIGHT:
-            returnVal = c.get_digital(E_CONTROLLER_DIGITAL_RIGHT);
-            break;
-        case BUTTON_UP:
-            returnVal = c.get_digital(E_CONTROLLER_DIGITAL_UP);
-            break;
-        case BUTTON_DOWN:
-            returnVal = c.get_digital(E_CONTROLLER_DIGITAL_DOWN);
-            break;
-        case BUTTON_A:
-            returnVal = c.get_digital(E_CONTROLLER_DIGITAL_A);
-            break;
-        case BUTTON_B:
-            returnVal = c.get_digital(E_CONTROLLER_DIGITAL_B);
-            break;
-        case BUTTON_X:
-            returnVal = c.get_digital(E_CONTROLLER_DIGITAL_X);
-            break;
-        case BUTTON_Y:
-            returnVal = c.get_digital(E_CONTROLLER_DIGITAL_Y);
-            break;
-        case BUTTON_R1:
-            returnVal = c.get_digital(E_CONTROLLER_DIGITAL_R1);
-            break;
-        case BUTTON_R2:
-            returnVal = c.get_digital(E_CONTROLLER_DIGITAL_R2);
-            break;
-        case BUTTON_L1:
-            returnVal = c.get_digital(E_CONTROLLER_DIGITAL_L1);
-            break;
-        case BUTTON_L2:
-            returnVal = c.get_digital(E_CONTROLLER_DIGITAL_L2);
-            break;
+    if(button == BUTTON_LEFT){
+        returnVal = c.get_digital(E_CONTROLLER_DIGITAL_LEFT);
+    }else if(button == BUTTON_RIGHT){
+        returnVal = c.get_digital(E_CONTROLLER_DIGITAL_RIGHT);
+    }else if(button == BUTTON_UP){
+        returnVal = c.get_digital(E_CONTROLLER_DIGITAL_UP);
+    }else if(button == BUTTON_DOWN){
+        returnVal = c.get_digital(E_CONTROLLER_DIGITAL_DOWN);
+    }else if(button == BUTTON_A){
+        returnVal = c.get_digital(E_CONTROLLER_DIGITAL_A);
+    }else if(button == BUTTON_B){
+        returnVal = c.get_digital(E_CONTROLLER_DIGITAL_B);
+    }else if(button == BUTTON_X){
+        returnVal = c.get_digital(E_CONTROLLER_DIGITAL_X);
+    }else if(button == BUTTON_Y){
+        returnVal = c.get_digital(E_CONTROLLER_DIGITAL_Y);
+    }else if(button == BUTTON_R1){
+        returnVal = c.get_digital(E_CONTROLLER_DIGITAL_R1);
+    }else if(button == BUTTON_R2){
+        returnVal = c.get_digital(E_CONTROLLER_DIGITAL_R2);
+    }else if(button == BUTTON_L1){
+        returnVal = c.get_digital(E_CONTROLLER_DIGITAL_L1);
+    }else if(button == BUTTON_L2){
+        returnVal = c.get_digital(E_CONTROLLER_DIGITAL_L2);
     }
+
     return returnVal == 1;
 }

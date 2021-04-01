@@ -6,7 +6,8 @@
 #ifndef PROS_OKAPI_DRIVE_HPP
 #define PROS_OKAPI_DRIVE_HPP
 
-#include "Globals.hpp"
+#include "main.h"
+#include "CustomController.hpp"
 
 class Drive {
     //TODO: future implementation of some sort of odometry
@@ -79,7 +80,7 @@ private:
     /**
      * Proportional constant for turning
      */
-    double turnK;
+    double turnKp;
 
     /**
      * Integral constant for turning
@@ -366,6 +367,15 @@ public:
      *          Should be in the range [-1,1]
      */
     void driverControl(double leftX, double leftY, double rightX);
+
+    /**
+     * Sets the motor velocities of the drive based on the joystick
+     * values from the controller for the driver control period
+     *
+     * @param c
+     *          The CustomController for getting the joystick values
+     */
+    void driverControl(CustomController c);
 };
 
 

@@ -6,7 +6,7 @@
 #ifndef PROS_OKAPI_CUSTOMCONTROLLER_HPP
 #define PROS_OKAPI_CUSTOMCONTROLLER_HPP
 
-#include "Globals.hpp"
+#include "main.h"
 
 class CustomController {
 private:

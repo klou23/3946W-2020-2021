@@ -6,7 +6,10 @@
 #ifndef PROS_OKAPI_ROBOTCONFIG_HPP
 #define PROS_OKAPI_ROBOTCONFIG_HPP
 
-#include "Globals.hpp"
+#include "main.h"
+#include "CustomController.hpp"
+#include "Rollers.hpp"
+#include "Drive.hpp"
 
 /**
  * The port the front left drive motor is plugged into
@@ -114,5 +117,17 @@ extern Motor lowerManipulator;
  * The upper manipulator motor
  */
 extern Motor upperManipulator;
+
+/**
+ * The robot drive including the drive motors and
+ * the tracking encoders
+ */
+extern Drive drive;
+
+/**
+ * The robot rollers including the intake rollers
+ * and the manipulator rollers
+ */
+extern Rollers rollers;
 
 #endif //PROS_OKAPI_ROBOTCONFIG_HPP

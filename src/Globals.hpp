@@ -7,13 +7,6 @@
 #define PROS_OKAPI_GLOBALS_HPP
 
 #include "main.h"
-#include "Constants.hpp"
-#include "CustomController.hpp"
-#include "Drive.hpp"
-#include "Initialize.hpp"
-#include "LvglFuncs.hpp"
-#include "LvglOps.hpp"
-#include "RobotConfig.hpp"
 
 /**
  * Stores the currently selected auton side.

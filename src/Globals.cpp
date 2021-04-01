@@ -1,4 +1,9 @@
 #include "Globals.hpp"
+#include "main.h"
+#include "Constants.hpp"
+#include "Initialize.hpp"
+#include "LvglOps.hpp"
+#include "LvglFuncs.hpp"
 
 int autonColor = AUTON_RED;
 int autonNum = 0;

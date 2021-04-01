@@ -1,4 +1,9 @@
 #include "RobotConfig.hpp"
+#include "main.h"
+#include "Rollers.hpp"
+#include "Drive.hpp"
+#include "Globals.hpp"
+#include "Constants.hpp"
 
 //motor ports
 const uint8_t frontLeftDrivePort = 11;
@@ -34,3 +39,7 @@ Motor leftIntake(leftIntakePort, intakeGearset, false, E_MOTOR_ENCODER_DEGREES);
 Motor rightIntake(rightIntakePort, intakeGearset, true, E_MOTOR_ENCODER_DEGREES);
 Motor lowerManipulator(lowerManipulatorPort, manipulatorGearset, true, E_MOTOR_ENCODER_DEGREES);
 Motor upperManipulator(upperManipulatorPort, manipulatorGearset, true, E_MOTOR_ENCODER_DEGREES);
+
+//drive
+Drive drive(frontLeftDrive, frontRightDrive, backLeftDrive, backRightDrive, leftEncoder, rightEncoder);
+Rollers rollers(leftIntake, rightIntake, lowerManipulator, upperManipulator);

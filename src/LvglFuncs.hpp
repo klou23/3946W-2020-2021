@@ -6,7 +6,7 @@
 #ifndef PROS_OKAPI_LVGLFUNCS_HPP
 #define PROS_OKAPI_LVGLFUNCS_HPP
 
-#include "Globals.hpp"
+#include "main.h"
 
 /**
  * Description for the first autonomous
