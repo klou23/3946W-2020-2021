@@ -305,7 +305,7 @@ void prog1() {
     //third goal
     drive.turn(130, 8000, RIGHT);
     drive.drive(65, 8000);
-    drive.turnAngle(33, 7000, LEFT);
+    drive.turn(33, 7000, LEFT);
     drive.drive(10, 5000, 2000);
     delay(1000);
     drive.drive(-10, 7000);
@@ -314,12 +314,12 @@ void prog1() {
     drive.turn(70, 8000, RIGHT);
     drive.drive(55, 8000);
     drive.turn(10, 7000, LEFT);
-    drive(10, 6000, 2000);
+    drive.drive(10, 6000, 2000);
     delay(1000);
-    drive(-10, 6000);
-    drive(10, 6000, 2000);
+    drive.drive(-10, 6000);
+    drive.drive(10, 6000, 2000);
     delay(1000);
-    drive(-10, 6000);
+    drive.drive(-10, 6000);
 }
 
 void prog2() {
