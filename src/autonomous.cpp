@@ -323,5 +323,52 @@ void prog1() {
 }
 
 void prog2() {
+    //first goal
+    rollers.flipOut();
+    rollers.primeBalls(120);
+    drive.drive(12, 8000);
+    rollers.stopAll();
+    drive.turn(125, 8000, LEFT);
+    drive.drive(20, 8000, 2000);
+    rollers.shoot(600, 1000, true);
+    drive.drive(-10, 8000);
 
+    //second goal
+    drive.turn(145, 8000, LEFT);
+    rollers.primeBalls(200, 1000, false);
+    drive.drive(30, 10000);
+    drive.turn(90, 6000, RIGHT);
+    drive.drive(5, 6000, 1000);
+    rollers.shoot(600, 1000, true);
+    drive.drive(-5, 8000);
+
+    //third goal
+    drive.turn(90, 8000, RIGHT);
+    rollers.intake(600);
+    drive.drive(36, 8000);
+    rollers.stopRollers();
+    drive.turn(45, 8000, LEFT);
+    drive.drive(40, 8000, 2500);
+    rollers.shoot(600, 1000, true);
+    drive.drive(-5, 8000);
+
+    //fourth goal
+    drive.turn(125, 8000, RIGHT);
+    rollers.intake(600);
+    drive.drive(50, 8000);
+    rollers.stopRollers();
+    drive.turn(90, 7000, LEFT);
+    drive.drive(5, 7000, 1000);
+    rollers.shoot(600, 1000, true);
+    drive.drive(-5, 8000);
+
+    //fifth goal
+    drive.turn(110, 8000, RIGHT);
+    rollers.intake(600);
+    drive.drive(55, 8000);
+    rollers.stopRollers();
+    drive.turn(60, 8000, LEFT);
+    drive.drive(45, 7000, 2000);
+    rollers.shoot(600, 1000, true);
+    drive.drive(-5, 8000);
 }

@@ -156,7 +156,32 @@ void prog1();
 /**
  * Runs the second programming routine
  *
- * Implementation to come
+ * Does the following:
+ * -# Flips out
+ * -# Drives forward and intakes the ball in front of the robot
+ * -# Turns right towards the goal
+ * -# Drives up to the goal
+ * -# Shoots the preload into the goal
+ * -# Drives backwards away from the goal
+ * -# Turns right to the next goal
+ * -# Drives up to the goal
+ * -# Scores a ball in the goal
+ * -# Drive backwards away from the goal
+ * -# Turns right to the next ball
+ * -# Drives up to and intakes the next ball
+ * -# Drives up to the third goal
+ * -# Scores that ball into the goal
+ * -# Drives backwards away from the goal
+ * -# Turns right to the next ball
+ * -# Drives up to and intakes the next ball
+ * -# Turns left to face the fourth goal
+ * -# Scores the ball into the goal
+ * -# Turns right to the next ball
+ * -# Drives up and intakes the ball
+ * -# Turns left towards the fifth gaol
+ * -# Drives up to the fifth goal
+ * -# Scores the ball into the goal
+ * -# Drive backwards away from the goal
  */
 void prog2();
 
