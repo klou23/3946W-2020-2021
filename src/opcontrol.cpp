@@ -29,6 +29,10 @@ void opcontrol() {
         drive.driverControl(masterController);
         rollers.driverControl(masterController, partnerController);
 
+        if(masterController.pressed(BUTTON_B)){
+            autonomous();
+        }
+
         /***** Motor Temp Monitoring *****/
         int motorTemps[8];
 

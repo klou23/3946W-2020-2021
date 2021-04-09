@@ -147,8 +147,10 @@ void createMotorTempTab(lv_obj_t *parent){
 void createLogTab(lv_obj_t *parent){
     logLabel = lv_label_create(parent, NULL);
     lv_label_set_long_mode(logLabel, LV_LABEL_LONG_BREAK);
+    lv_label_set_recolor(logLabel, true);
     lv_obj_set_width(logLabel, lv_page_get_fit_width(parent) - 10);
     lv_label_set_text(logLabel, logText.c_str());
+
 }
 
 /********** Tournament Template Functions **********/
@@ -171,6 +173,7 @@ void initialize() {
     tabview = lv_tabview_create(lv_scr_act(), NULL);
     createAutonSelectorTab(lv_tabview_add_tab(tabview, "Auton Selector"));
     logPage = lv_tabview_add_tab(tabview, "Log");
+
     createLogTab(logPage);
 }
 

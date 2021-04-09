@@ -15,7 +15,7 @@ void print(string s){
 }
 
 void printSpecial(string s, string color){
-    logText += color + s + "#\n";
+    logText += color + " " + s + "\n";
     lv_label_set_text(logLabel, logText.c_str());
     lv_page_scroll_ver(logPage, -10000);
 }

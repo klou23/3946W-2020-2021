@@ -5,10 +5,10 @@
 #include "Constants.hpp"
 
 //Constants
-const char *auton1Description = "Auton 1 description";
-const char *auton2Description = "Auton 2 description";
-const char *auton3Description = "Auton 3 description";
-const char *auton4Description = "Auton 4 description";
+const char *auton1Description = "1 ball";
+const char *auton2Description = "2 balls";
+const char *auton3Description = "3 balls";
+const char *auton4Description = "support E";
 
 //auton selection functions
 lv_res_t setAutonRed(lv_obj_t *button){

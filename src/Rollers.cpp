@@ -171,7 +171,7 @@ void Rollers::cycleRev(int vel, int time, bool blocking) {
 }
 
 void Rollers::flipOut() {
-    extake(-300);
+    extake(300);
     upperManipulator.move_velocity(-300);
     delay(500);
     stopAll();

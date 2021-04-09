@@ -27,7 +27,7 @@ CustomController masterController(prosMasterController);
 CustomController partnerController(prosPartnerController);
 
 //encoders
-ADIEncoder leftEncoder('C', 'D', true);
+ADIEncoder leftEncoder('C', 'D', false);
 ADIEncoder rightEncoder('E', 'F', false);
 
 //motors

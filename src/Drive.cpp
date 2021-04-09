@@ -1,6 +1,7 @@
 #include "Drive.hpp"
 #include "main.h"
 #include "Constants.hpp"
+#include "Globals.hpp"
 
 Drive::Drive(const Motor &frontLeft, const Motor &frontRight, const Motor &backLeft, const Motor &backRight,
              const ADIEncoder &leftEncoder, const ADIEncoder &rightEncoder) : frontLeft(frontLeft),
@@ -9,21 +10,21 @@ Drive::Drive(const Motor &frontLeft, const Motor &frontRight, const Motor &backL
                                                                               leftEncoder(leftEncoder),
                                                                               rightEncoder(rightEncoder) {
     masterKp = 50;
-    masterKi = 0;
-    masterKd = 0;
-    masterThreshold = 10;
+    masterKi = 0.0005;
+    masterKd = 500;
+    masterThreshold = 7;
 
-    slaveKp = 10;
+    slaveKp = 5;
     slaveKi = 0;
-    slaveKd = 10;
+    slaveKd = 0;
 
-    turnKp = 50;
-    turnKi = 0;
-    turnKd = 0;
-    turnThreshold = 10;
+    turnKp = 200;
+    turnKi = 0.0001;
+    turnKd = 1000;
+    turnThreshold = 5;
 
     driveScale = 41.25;
-    turnScale = 10;
+    turnScale = 3.62;
 
     oldDriveScale = 26.5;
     oldTurnScale = 5.8;
@@ -170,7 +171,13 @@ void Drive::drive(double dist, double maxVoltage) {
     double masterError = target - leftPosition;
     double slaveError = leftPosition - rightPosition;
 
+    print(to_string(target));
+
     while(abs(masterError) > masterThreshold){
+//    while(true){
+
+        print(to_string(masterError));
+
         leftPosition = leftEncoder.get_value();
         rightPosition = rightEncoder.get_value();
 
@@ -198,6 +205,10 @@ void Drive::drive(double dist, double maxVoltage) {
 
         delay(5);
     }
+    frontLeft.move_velocity(0);
+    frontRight.move_velocity(0);
+    backLeft.move_velocity(0);
+    backRight.move_velocity(0);
 }
 
 void Drive::drive(double dist, double maxVoltage, int maxWait) {
@@ -249,6 +260,10 @@ void Drive::drive(double dist, double maxVoltage, int maxWait) {
         waitTime += 5;
         if(waitTime > maxWait) break;
     }
+    frontLeft.move_velocity(0);
+    frontRight.move_velocity(0);
+    backLeft.move_velocity(0);
+    backRight.move_velocity(0);
 }
 
 
@@ -268,6 +283,8 @@ void Drive::turn(double angle, double maxVoltage, int direction) {
     double error = target - position;
 
     while(abs(error) > turnThreshold){
+        print(to_string(error));
+
         position = leftEncoder.get_value();
 
         double prevError = error;
