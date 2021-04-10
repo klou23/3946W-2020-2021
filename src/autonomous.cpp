@@ -55,26 +55,29 @@ void autonomous() {
 void right_auton1() {
     //first goal
     rollers.flipOut();
-    rollers.primeBalls(400, 700, false);
+    delay(500);
+    rollers.primeBalls(600, 800, false);
     drive.drive(13, 11000, 1000);
-    drive.turn(135, 8000, RIGHT, 1500);
+    delay(500);
+    drive.turn(132, 8000, RIGHT, 1500);
     rollers.primeBalls(200);
-    drive.drive(21, 8000, 1500);
+    drive.drive(22, 8000, 1500);
     rollers.stopAll();
     rollers.intake(400, 1500, false);
-    rollers.shoot(600, 700, true);
-    rollers.primeBalls(600,1200,false);
-    drive.drive(-28, 11000, 1400);
+    rollers.shoot(600, 400, true);
+    rollers.primeBalls(300,1200,false);
+    drive.drive(-35, 11000, 1400);
 
-    drive.turn(85, 8000, LEFT, 1500);
-    rollers.intake(600);
-    drive.drive(38, 8000, 3500);
+    delay(500);
+    drive.turn(75, 8000,LEFT, 1500);
     delay(1000);
-    rollers.intake(600, 800, false);
+    rollers.intake(600);
+
+    drive.drive(38, 8000, 3500);
+    rollers.intake(600, 1000, false);
     drive.drive(-5, 8000, 750);
-    drive.turn(10, 8000, RIGHT, 1000);
     drive.drive(5, 8000, 750);
-    rollers.shoot(600, 3000, true);
+    rollers.shoot(600, 1000, true);
     drive.drive(-5, 8000);
 }
 
@@ -152,12 +155,16 @@ void right_auton4() {
 void left_auton1() {
     //first goal
     rollers.flipOut();
-    drive.drive(12, 8000);
-    drive.turn(125, 8000, LEFT);
-    rollers.primeBalls(120);
-    drive.drive(20, 8000, 2000);
-    rollers.shoot(600, 1000, true);
-    drive.drive(-10, 8000);
+    rollers.primeBalls(400, 700, false);
+    drive.drive(13, 11000, 1000);
+    drive.turn(135, 8000, LEFT, 1500);
+    rollers.primeBalls(200);
+    drive.drive(21, 8000, 1500);
+    rollers.stopAll();
+    rollers.intake(400, 1500, false);
+    rollers.shoot(600, 700, true);
+    rollers.primeBalls(600,1200,false);
+    drive.drive(-28, 11000, 1400);
 }
 
 void left_auton2() {
