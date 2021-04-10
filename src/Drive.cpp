@@ -305,6 +305,11 @@ void Drive::turn(double angle, double maxVoltage, int direction) {
 
         delay(5);
     }
+
+    frontLeft.move_velocity(0);
+    frontRight.move_velocity(0);
+    backLeft.move_velocity(0);
+    backRight.move_velocity(0);
 }
 
 void Drive::turn(double angle, double maxVoltage, int direction, int maxWait) {
@@ -347,7 +352,10 @@ void Drive::turn(double angle, double maxVoltage, int direction, int maxWait) {
         if(waitTime > maxWait) break;
     }
 
-
+    frontLeft.move_velocity(0);
+    frontRight.move_velocity(0);
+    backLeft.move_velocity(0);
+    backRight.move_velocity(0);
 }
 
 void Drive::driverControl(double leftX, double leftY, double rightX) {
