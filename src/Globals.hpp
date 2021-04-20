@@ -26,6 +26,14 @@ extern int autonNum;
 void print(string s);
 
 /**
+ * Print the given int to the log on the brain screen
+ *
+ * @param s
+ *          The int that will be printed to the brain
+ */
+void print(int s);
+
+/**
  * Print the given string to the log on the brain screen with the specified color
  *
  * @param s

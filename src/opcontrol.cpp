@@ -63,24 +63,27 @@ void opcontrol() {
         }
 
         //auto motorTemp warnings
-        for(int i = 0; i < 8; i++){
-            if(motorWaitTimes[i] > 0) continue;
-
-            if(motorTemps[i] >= 65){
-                printSpecial(motorNames[i] + " - " + to_string(motorTemps[i]), PRINT_RED);
-            }else if(motorTemps[i] >= 55){
-                printSpecial(motorNames[i] + " - " + to_string(motorTemps[i]), PRINT_ORANGE);
-            }else if(motorTemps[i] >= 50){
-                printSpecial(motorNames[i] + " - " + to_string(motorTemps[i]), PRINT_YELLOW);
-            }
-            motorWaitTimes[i] = 15000;
-        }
+//        for(int i = 0; i < 8; i++){
+//            if(motorWaitTimes[i] > 0) continue;
+//
+//            if(motorTemps[i] >= 65){
+//                printSpecial(motorNames[i] + " - " + to_string(motorTemps[i]), PRINT_RED);
+//            }else if(motorTemps[i] >= 55){
+//                printSpecial(motorNames[i] + " - " + to_string(motorTemps[i]), PRINT_ORANGE);
+//            }else if(motorTemps[i] >= 50){
+//                printSpecial(motorNames[i] + " - " + to_string(motorTemps[i]), PRINT_YELLOW);
+//            }
+//            motorWaitTimes[i] = 15000;
+//        }
 
         //update wait times
         for(int i = 0; i < *(&motorWaitTimes + 1) - motorWaitTimes; i++){
             motorWaitTimes[i] = max(0, motorWaitTimes[i] - 5);
         }
         manualMotorWaitTime = max(0, manualMotorWaitTime - 5);
+
+        /** Rotation sensor **/
+        print(rotationSensor.get_position() * 1000);
 
         /***** Save RAM *****/
         delay(5);

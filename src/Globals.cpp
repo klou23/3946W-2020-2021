@@ -14,6 +14,10 @@ void print(string s){
     lv_page_scroll_ver(logPage, -10000);
 }
 
+void print(int s){
+    print(to_string(s));
+}
+
 void printSpecial(string s, string color){
     logText += color + " " + s + "\n";
     lv_label_set_text(logLabel, logText.c_str());

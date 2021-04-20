@@ -21,7 +21,7 @@
  */
 
 void autonomous() {
-    const bool selector = true;
+    const bool selector = false;
 
     if(!selector){
         right_auton1();
@@ -53,32 +53,38 @@ void autonomous() {
 }
 
 void right_auton1() {
+//    rollers.flipOut();
+//    delay(500);
+//    rollers.primeBalls(350, 1000, false);
+//    drive.drive(14, 8000, 1000);
+//    delay(500);
+//    drive.turn(127, 6000, RIGHT, 1500);
+//    rollers.primeBalls(200);
+//    drive.drive(20, 8000, 1000);
+//    rollers.stopAll();
+//    rollers.intake(400, 1500, false);
+//    rollers.shoot(600, 500, true);
+//    rollers.primeBalls(200, 750, false);
+//    drive.drive(-35, 11000, 1400);
+//
+//    delay(500);
+//    drive.turn(73, 8000,LEFT, 1500);
+//    delay(1000);
+//    rollers.intake(600);
+//
+//    drive.drive(41, 8000, 3500);
+//    rollers.intake(600, 1000, false);
+//    delay(500);
+//    drive.drive(-5, 8000, 750);
+//    drive.drive(5, 8000, 750);
+//    rollers.stopRollers();
+//    rollers.shoot(600, 1000, true);
+//    drive.drive(-5, 8000);
+
+    rollers.flipOutHood();
+    rollers.shoot(600, 3000, true);
+    drive.drive(-10, 8000);
     rollers.flipOut();
-    delay(500);
-    rollers.primeBalls(350, 1000, false);
-    drive.drive(14, 8000, 1000);
-    delay(500);
-    drive.turn(127, 6000, RIGHT, 1500);
-    rollers.primeBalls(200);
-    drive.drive(20, 8000, 1000);
-    rollers.stopAll();
-    rollers.intake(400, 1500, false);
-    rollers.shoot(600, 500, true);
-    drive.drive(-35, 11000, 1400);
-
-    delay(500);
-    drive.turn(71, 8000,LEFT, 1500);
-    delay(1000);
-    rollers.intake(600);
-
-    drive.drive(41, 8000, 3500);
-    rollers.intake(600, 1000, false);
-    delay(500);
-    drive.drive(-5, 8000, 750);
-    drive.drive(5, 8000, 750);
-    rollers.stopRollers();
-    rollers.shoot(600, 1000, true);
-    drive.drive(-5, 8000);
 }
 
 void right_auton2() {
@@ -99,7 +105,7 @@ void right_auton2() {
     //second goal
     delay(500);
     rollers.primeBalls(250, 1500, false);
-    drive.turn(135, 6000, RIGHT, 2000);
+    drive.turn(137, 6000, RIGHT, 2000);
     delay(500);
     rollers.primeBalls(250, 1000, false);
     drive.drive(33, 8000, 1500);
@@ -146,10 +152,10 @@ void right_auton3() {
 void right_auton4() {
     rollers.flipOut();
     rollers.primeBalls(400, 1000, false);
-    drive.drive(28, 8000, 2000);
-    drive.turn(44, 8000, RIGHT, 2500);
+    drive.drive(30, 8000, 2000);
+    drive.turn(39, 6000, RIGHT, 4000);
     rollers.intake(600);
-    drive.drive(29, 8000, 3500);
+    drive.drive(28, 8000, 3500);
     rollers.intake(600, 800, false);
     drive.drive(-5, 8000, 750);
     drive.drive(5, 8000, 750);
@@ -239,7 +245,7 @@ void prog1() {
     rollers.intake(600);
 
     //second goal
-    drive.turn(179.75, 2000, RIGHT);
+    drive.turn(179, 2000, RIGHT);
     rollers.poop(400);
     rollers.intake(600);
     drive.drive(100, 10000, 5000);

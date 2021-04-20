@@ -130,4 +130,9 @@ extern Drive drive;
  */
 extern Rollers rollers;
 
+/**
+ * Test v5 rotation sensor
+ */
+extern Rotation rotationSensor;
+
 #endif //PROS_OKAPI_ROBOTCONFIG_HPP

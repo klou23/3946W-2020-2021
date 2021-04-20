@@ -42,6 +42,7 @@
 #include "okapi/api.hpp"
 #include "pros/apix.h"
 #include "display/lvgl.h"
+#include "pros/rotation.hpp"
 //#include "pros/api_legacy.h"
 
 /**

@@ -244,6 +244,11 @@ public:
     void cycleRev(int vel, int time, bool blocking);
 
     /**
+     * Flips out only the hood
+     */
+    void flipOutHood();
+
+    /**
      * Flips out the rollers and the hood by running the intake
      * rollers and the upper manipulator backwards
      */

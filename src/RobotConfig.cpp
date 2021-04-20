@@ -43,3 +43,5 @@ Motor upperManipulator(upperManipulatorPort, manipulatorGearset, true, E_MOTOR_E
 //drive
 Drive drive(frontLeftDrive, frontRightDrive, backLeftDrive, backRightDrive, leftEncoder, rightEncoder);
 Rollers rollers(leftIntake, rightIntake, lowerManipulator, upperManipulator);
+
+Rotation rotationSensor(6);
