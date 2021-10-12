@@ -42,6 +42,7 @@
 #include "okapi/api.hpp"
 #include "pros/apix.h"
 #include "display/lvgl.h"
+#include "pros/rotation.hpp"
 //#include "pros/api_legacy.h"
 
 /**
@@ -52,9 +53,10 @@
  * concurrently! The okapi namespace will export all symbols inside the pros
  * namespace.
  */
-// using namespace pros;
+ using namespace pros;
+ using namespace std;
 // using namespace pros::literals;
-using namespace okapi;
+//using namespace okapi;
 
 /**
  * Prototypes for the competition control tasks are redefined here to ensure
@@ -74,10 +76,7 @@ void competition_initialize(void);
 #endif
 
 #ifdef __cplusplus
-/**
- * You can add C++-only headers here
- */
-//#include <iostream>
+#include <cstdlib>
 #endif
 
 #endif  // _PROS_MAIN_H_

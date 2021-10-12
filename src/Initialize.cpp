@@ -1,6 +1,8 @@
+#include "Initialize.hpp"
 #include "main.h"
-#include "globals.hpp"
-#include <cstdlib>
+#include "LvglOps.hpp"
+#include "LvglFuncs.hpp"
+#include "RobotConfig.hpp"
 
 /********** Variables **********/
 lv_obj_t *tabview;
@@ -35,6 +37,10 @@ lv_style_t *greenInnerStyle;
 lv_style_t *orangeInnerStyle;
 lv_style_t *yellowInnerStyle;
 lv_style_t *redInnerStyle;
+//log screen
+lv_obj_t *logPage;
+lv_obj_t *logLabel;
+string logText = "";
 
 /********** UI Functions **********/
 
@@ -51,7 +57,7 @@ void createAutonSelectorTab(lv_obj_t *parent){
     createButtonStyle(redTogglePressedStyle, 250, 20, 20, 255, 255, 255, 0, 2, 255, 255, 255);
 
     //create red auton button
-    btnAutonRed = createToggleButtonWithStyle(parent, 30, 0, 195, 50, redPressedStyle, redReleasedStyle, redTogglePressedStyle, redToggleReleasedStyle, "RED");
+    btnAutonRed = createToggleButtonWithStyle(parent, 30, 0, 195, 50, redPressedStyle, redReleasedStyle, redTogglePressedStyle, redToggleReleasedStyle, "LEFT");
     lv_btn_set_action(btnAutonRed, LV_BTN_ACTION_CLICK, setAutonRed);
 
     //create styles for blue auton button
@@ -65,7 +71,7 @@ void createAutonSelectorTab(lv_obj_t *parent){
     createButtonStyle(blueTogglePressedStyle, 20, 20, 250, 255, 255, 255, 0, 2, 255, 255, 255);
 
     //create blue auton button
-    btnAutonBlue = createToggleButtonWithStyle(parent, 255, 20, 195, 50, bluePressedStyle, blueReleasedStyle, blueTogglePressedStyle, blueToggleReleasedStyle, "BLUE");
+    btnAutonBlue = createToggleButtonWithStyle(parent, 255, 20, 195, 50, bluePressedStyle, blueReleasedStyle, blueTogglePressedStyle, blueToggleReleasedStyle, "RIGHT");
     lv_btn_set_action(btnAutonBlue, LV_BTN_ACTION_CLICK, setAutonBlue);
 
     //create styles for selection buttons
@@ -138,25 +144,26 @@ void createMotorTempTab(lv_obj_t *parent){
 
 }
 
-void createPIDAdjusterTab(lv_obj_t *parent){
-    //TODO: implement PID tab creator
+void createLogTab(lv_obj_t *parent){
+    logLabel = lv_label_create(parent, NULL);
+    lv_label_set_long_mode(logLabel, LV_LABEL_LONG_BREAK);
+    lv_label_set_recolor(logLabel, true);
+    lv_obj_set_width(logLabel, lv_page_get_fit_width(parent) - 10);
+    lv_label_set_text(logLabel, logText.c_str());
+
 }
 
 /********** Tournament Template Functions **********/
 void initialize() {
-    //set position to (0,0) and orientation to 0
-    //TODO: get proper starting state
-//    drive->setState({0_in, 0_in, 0_deg});
-
     //set motor brake modes
-    frontLeftDrive.setBrakeMode(AbstractMotor::brakeMode::coast);
-    frontRightDrive.setBrakeMode(AbstractMotor::brakeMode::coast);
-    backLeftDrive.setBrakeMode(AbstractMotor::brakeMode::coast);
-    backRightDrive.setBrakeMode(AbstractMotor::brakeMode::coast);
-    leftIntake.setBrakeMode(AbstractMotor::brakeMode::brake);
-    rightIntake.setBrakeMode(AbstractMotor::brakeMode::brake);
-    lowerManipulator.setBrakeMode(AbstractMotor::brakeMode::brake);
-    upperManipulator.setBrakeMode(AbstractMotor::brakeMode::brake);
+    frontLeftDrive.set_brake_mode(E_MOTOR_BRAKE_COAST);
+    frontRightDrive.set_brake_mode(E_MOTOR_BRAKE_COAST);
+    backLeftDrive.set_brake_mode(E_MOTOR_BRAKE_COAST);
+    backRightDrive.set_brake_mode(E_MOTOR_BRAKE_COAST);
+    leftIntake.set_brake_mode(E_MOTOR_BRAKE_BRAKE);
+    rightIntake.set_brake_mode(E_MOTOR_BRAKE_BRAKE);
+    lowerManipulator.set_brake_mode(E_MOTOR_BRAKE_BRAKE);
+    upperManipulator.set_brake_mode(E_MOTOR_BRAKE_BRAKE);
 
     //set UI theme
     lv_theme_t *theme = lv_theme_alien_init(200, NULL);
@@ -165,10 +172,10 @@ void initialize() {
     //create tabview with tabs
     tabview = lv_tabview_create(lv_scr_act(), NULL);
     createAutonSelectorTab(lv_tabview_add_tab(tabview, "Auton Selector"));
-    createMotorTempTab(lv_tabview_add_tab(tabview, "Motor Temps"));
-    lv_tabview_add_tab(tabview, "PID Tuner");
-}
+    logPage = lv_tabview_add_tab(tabview, "Log");
 
+    createLogTab(logPage);
+}
 
 void disabled() {}
 

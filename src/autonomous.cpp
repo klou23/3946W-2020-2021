@@ -1,5 +1,12 @@
+#include "autonomous.hpp"
 #include "main.h"
-#include "globals.hpp"
+#include "Constants.hpp"
+#include "Drive.hpp"
+#include "Globals.hpp"
+#include "Initialize.hpp"
+#include "RobotConfig.hpp"
+#include "Rollers.hpp"
+
 
 /**
  * Runs the user autonomous code. This function will be started in its own task
@@ -13,463 +20,309 @@
  * from where it left off.
  */
 
-void turnAngle(double angle, int direction, int speed){
-    const double scale = 5.8;
-    double motorTurn = angle * scale;
-    if(direction == LEFT){
-        frontRightDrive.moveRelative(motorTurn, speed);
-        backRightDrive.moveRelative(motorTurn, speed);
-        frontLeftDrive.moveRelative(-motorTurn, speed);
-        backLeftDrive.moveRelative(-motorTurn, speed);
-    }else if(direction == RIGHT){
-        frontRightDrive.moveRelative(-motorTurn, speed);
-        backRightDrive.moveRelative(-motorTurn, speed);
-        frontLeftDrive.moveRelative(motorTurn, speed);
-        backLeftDrive.moveRelative(motorTurn, speed);
-    }
-    while(abs(frontRightDrive.getTargetPosition() - frontRightDrive.getPosition() > 1) ||
-          abs(backRightDrive.getTargetPosition() - backRightDrive.getPosition() > 1) ||
-          abs(frontLeftDrive.getTargetPosition() - frontLeftDrive.getPosition() > 1) ||
-          abs(backLeftDrive.getTargetPosition() - backLeftDrive.getPosition() > 1)){
-        pros::delay(5);
-    }
-}
+void autonomous() {
+    const bool selector = false;
 
-void strafeDist(double dist, int direction, int speed){
-    const double scale = 30;
-    double motorTurn = dist * scale;
-
-    if(direction == LEFT){
-        frontRightDrive.moveRelative(motorTurn, speed);
-        backRightDrive.moveRelative(-motorTurn, speed);
-        frontLeftDrive.moveRelative(-motorTurn, speed);
-        backLeftDrive.moveRelative(motorTurn, speed);
-    }else if(direction == RIGHT){
-        frontRightDrive.moveRelative(-motorTurn, speed);
-        backRightDrive.moveRelative(motorTurn, speed);
-        frontLeftDrive.moveRelative(motorTurn, speed);
-        backLeftDrive.moveRelative(-motorTurn, speed);
-    }
-    while(abs(frontRightDrive.getTargetPosition() - frontRightDrive.getPosition() > 1) ||
-          abs(backRightDrive.getTargetPosition() - backRightDrive.getPosition() > 1) ||
-          abs(frontLeftDrive.getTargetPosition() - frontLeftDrive.getPosition() > 1) ||
-          abs(backLeftDrive.getTargetPosition() - backLeftDrive.getPosition() > 1)){
-        pros::delay(5);
-    }
-}
-
-void drive(double dist, int speed){
-    const double scale = 26.5;
-    double motorTurn = dist * scale;
-    frontRightDrive.moveRelative(motorTurn, speed);
-    backRightDrive.moveRelative(motorTurn, speed);
-    frontLeftDrive.moveRelative(motorTurn, speed);
-    backLeftDrive.moveRelative(motorTurn, speed);
-    while(abs(frontRightDrive.getTargetPosition() - frontRightDrive.getPosition() > 1) ||
-          abs(backRightDrive.getTargetPosition() - backRightDrive.getPosition() > 1) ||
-          abs(frontLeftDrive.getTargetPosition() - frontLeftDrive.getPosition() > 1) ||
-          abs(backLeftDrive.getTargetPosition() - backLeftDrive.getPosition() > 1)){
-        pros::delay(5);
-    }
-}
-
-//void accurateDrive(double dist, int speed, int maxWait){
-//    const double scale = 26.5;
-//    frontLeftDrive.tarePosition();
-//    backLeftDrive.tarePosition();
-//    frontRightDrive.tarePosition();
-//    backRightDrive.tarePosition();
-//    int targetTicks = dist*scale;
-//    int driveError = dist*scale;
-//    int kP = .01;
-//    //For the first 20% of the drive, the robot accelerates from 0 to the target speed in ~500ms.
-//        for (int i = 1; i < 100; i++) {
-//            frontLeftDrive.moveVelocity(speed * .01 * i);
-//            backLeftDrive.moveVelocity(speed * .01 * i);
-//            FrontRightDrive.moveVelocity(speed * .01 * i);
-//            BackRightDrive.moveVelocity(speed * .01 * i);
-//            pros::delay(5);
-//            if(driveError>(targetTicks/15) break;
-//        }
-//    //For the next 70% of the drive, the drive travels at the target speed.
-//    while(driveError>(targetTicks/10)){
-//        frontLeftDrive.moveVelocity(speed);
-//        backLeftDrive.moveVelocity(speed);
-//        FrontRightDrive.moveVelocity(speed);
-//        BackRightDrive.moveVelocity(speed);
-//        driveError = targetTicks-((backLeftDrive.getPosition() + frontLeftDrive.getPosition() +  backRightDrive.getPosition() + frontRightDrive.getPosition())/4)
-//    }
-//    while(driveError < 1 || driveError > 1){
-//        frontLeftDrive.moveVelocity(driveError*kP);
-//        backLeftDrive.moveVelocity(driveError*kP);
-//        FrontRightDrive.moveVelocity(driveError*kP);
-//        BackRightDrive.moveVelocity(driveError*kP);
-//        driveError = targetTicks-((backLeftDrive.getPosition() + frontLeftDrive.getPosition() +  backRightDrive.getPosition() + frontRightDrive.getPosition())/4)
-//    }
-//}
-
-void PDDriveRev(double dist, double maxVoltage, double thresholdDist, double slaveThresholdAngle, int maxWait){
-    frontRightDrive.setReversed(!frontRightDrive.isReversed());
-    frontLeftDrive.setReversed(!frontLeftDrive.isReversed());
-    backRightDrive.setReversed(!backRightDrive.isReversed());
-    backLeftDrive.setReversed(!backLeftDrive.isReversed());
-    PDDrive(dist, maxVoltage, thresholdDist, slaveThresholdAngle, maxWait);
-    frontRightDrive.setReversed(!frontRightDrive.isReversed());
-    frontLeftDrive.setReversed(!frontLeftDrive.isReversed());
-    backRightDrive.setReversed(!backRightDrive.isReversed());
-    backLeftDrive.setReversed(!backLeftDrive.isReversed());
-}
-
-void PDDrive(double dist, double maxVoltage, double thresholdDist, double slaveThresholdAngle, int maxWait){
-
-    maxVoltage = std::min(maxVoltage, 11000.0);
-
-    //left drive is master
-    //right drive is slave
-    const double masterKp = 50;
-    const double masterKd = 0;
-    const double slaveKp = 10;
-    const double slaveKd = 10;
-
-    const double masterScale = 41.25;
-    const double slaveScale = 10;
-
-    const double target = masterScale * dist;
-    const double masterThreshold = masterScale * thresholdDist;
-    const double slaveThreshold = slaveScale * slaveThresholdAngle;
-
-    leftEncoder.reset();
-    rightEncoder.reset();
-
-    double leftPosition = leftEncoder.get_value();
-    double rightPosition = rightEncoder.get_value();
-
-    double masterDerivative = 0;
-    double slaveDerivative = 0;
-
-    double masterError = target - leftPosition;
-    double slaveError = leftPosition - rightPosition;
-
-    int timer = 0;
-
-    while(std::abs(masterError) > masterThreshold || std::abs(slaveError) > slaveThreshold){
-        if(timer > maxWait) break;
-
-        leftPosition = leftEncoder.get_value();
-        rightPosition = rightEncoder.get_value();
-
-        double prevMasterError = masterError;
-        double prevSlaveError = slaveError;
-
-        masterError = target - leftPosition;
-        slaveError = leftPosition - rightPosition;
-
-        masterDerivative = masterError - prevMasterError;
-        slaveDerivative = slaveError - prevSlaveError;
-
-        double leftVoltage = std::max(-maxVoltage, std::min(maxVoltage, (masterError * masterKp) + (masterDerivative * masterKd)));
-        double rightVoltage = std::max(-12000.0, std::min(12000.0, leftVoltage + (slaveError * slaveKp) + (slaveDerivative * slaveKd)));
-
-        cout<<"left:"<<leftVoltage<<", right:"<<rightVoltage<<endl;
-
-        frontLeftDrive.moveVoltage(leftVoltage);
-        backLeftDrive.moveVoltage(leftVoltage);
-        frontRightDrive.moveVoltage(rightVoltage);
-        backRightDrive.moveVoltage(rightVoltage);
-
-        pros::delay(5);
-        timer += 5;
+    if(!selector){
+        right_auton1();
     }
 
-}
-
-void PDTurn(double angle, double maxVoltage, int direction, double thresholdAngle, int maxWait){
-    maxVoltage = std::min(maxVoltage, 11000.0);
-
-    const double kp = 150;
-    const double kd = 1500;
-
-    const double scale = 3.5;
-    const double thresholdScale = 10;
-
-    const double target = angle * scale;
-    const double threshold = thresholdAngle * thresholdScale;
-
-    double leftTarget = target;
-    double rightTarget = -target;
-    if(direction == LEFT){
-        leftTarget*=-1;
-        rightTarget*=-1;
-    }
-
-    leftEncoder.reset();
-    rightEncoder.reset();
-
-    cout << "leftTarget:" << leftTarget << ", rightTarget: " << rightTarget << endl;
-
-    double leftError = leftTarget;
-    double rightError = rightTarget;
-    double leftPrevError = leftTarget;
-    double rightPrevError = rightTarget;
-    double leftDerivative = 0;
-    double rightDerivative = 0;
-
-    int timer = 0;
-    while(std::abs(leftError) > threshold || std::abs(rightError) > threshold){
-
-        if(timer > maxWait) break;
-
-        double leftPos = leftEncoder.get_value();
-        double rightPos = rightEncoder.get_value();
-
-        leftPrevError = leftError;
-        rightPrevError = rightError;
-
-        leftError = leftTarget-leftPos;
-        rightError = rightTarget-rightPos;
-
-        leftDerivative = leftPrevError-leftError;
-        rightDerivative = rightPrevError-rightError;
-
-        double leftVoltage = std::max(-maxVoltage, std::min(maxVoltage, (leftError * kp) + (leftDerivative * kd)));
-        double rightVoltage = std::max(-maxVoltage, std::min(maxVoltage, (rightError * kp) + (rightDerivative * kd)));
-
-        cout<<"left:"<<leftVoltage<<", right:"<<rightVoltage<<endl;
-
-        frontLeftDrive.moveVoltage(leftVoltage);
-        backLeftDrive.moveVoltage(leftVoltage);
-        frontRightDrive.moveVoltage(rightVoltage);
-        backRightDrive.moveVoltage(rightVoltage);
-
-        pros::delay(5);
-        timer += 5;
-    }
-
-}
-
-void drive(double dist, int speed, int maxWait){
-    const double scale = 26.5;
-    double motorTurn = dist * scale;
-    frontRightDrive.moveRelative(motorTurn, speed);
-    backRightDrive.moveRelative(motorTurn, speed);
-    frontLeftDrive.moveRelative(motorTurn, speed);
-    backLeftDrive.moveRelative(motorTurn, speed);
-
-    for(int i = maxWait; i >= 0; i-=5){
-        if(abs(frontRightDrive.getTargetPosition() - frontRightDrive.getPosition() > 1) ||
-           abs(backRightDrive.getTargetPosition() - backRightDrive.getPosition() > 1) ||
-           abs(frontLeftDrive.getTargetPosition() - frontLeftDrive.getPosition() > 1) ||
-           abs(backLeftDrive.getTargetPosition() - backLeftDrive.getPosition() > 1)){
-            pros::delay(5);
-        }else{
-            break;
+    if(autonColor == AUTON_RED){
+        //left
+        if(autonNum == 1){
+            left_auton1();
+        }else if(autonNum == 2){
+            left_auton2();
+        }else if(autonNum == 3){
+            left_auton3();
+        }else if(autonNum == 4){
+            left_auton4();
+        }
+    }else if(autonColor == AUTON_BLUE){
+        //right
+        if(autonNum == 1){
+            right_auton1();
+        }else if(autonNum == 2){
+            right_auton2();
+        }else if(autonNum == 3){
+            right_auton3();
+        }else if(autonNum == 4){
+            right_auton4();
         }
     }
 }
 
-void driveRev(double dist, int speed){
-    frontRightDrive.setReversed(!frontRightDrive.isReversed());
-    frontLeftDrive.setReversed(!frontLeftDrive.isReversed());
-    backRightDrive.setReversed(!backRightDrive.isReversed());
-    backLeftDrive.setReversed(!backLeftDrive.isReversed());
-    drive(dist, speed);
-    frontRightDrive.setReversed(!frontRightDrive.isReversed());
-    frontLeftDrive.setReversed(!frontLeftDrive.isReversed());
-    backRightDrive.setReversed(!backRightDrive.isReversed());
-    backLeftDrive.setReversed(!backLeftDrive.isReversed());
+void right_auton1() {
+//    rollers.flipOut();
+//    delay(500);
+//    rollers.primeBalls(350, 1000, false);
+//    drive.drive(14, 8000, 1000);
+//    delay(500);
+//    drive.turn(127, 6000, RIGHT, 1500);
+//    rollers.primeBalls(200);
+//    drive.drive(20, 8000, 1000);
+//    rollers.stopAll();
+//    rollers.intake(400, 1500, false);
+//    rollers.shoot(600, 500, true);
+//    rollers.primeBalls(200, 750, false);
+//    drive.drive(-35, 11000, 1400);
+//
+//    delay(500);
+//    drive.turn(73, 8000,LEFT, 1500);
+//    delay(1000);
+//    rollers.intake(600);
+//
+//    drive.drive(41, 8000, 3500);
+//    rollers.intake(600, 1000, false);
+//    delay(500);
+//    drive.drive(-5, 8000, 750);
+//    drive.drive(5, 8000, 750);
+//    rollers.stopRollers();
+//    rollers.shoot(600, 1000, true);
+//    drive.drive(-5, 8000);
+
+    rollers.flipOutHood();
+    rollers.shoot(600, 3000, true);
+    drive.drive(-10, 8000);
+    rollers.flipOut();
 }
 
-void shoot(int vel){
-    lowerManipulator.moveVelocity(vel);
-    upperManipulator.moveVelocity(vel);
+void right_auton2() {
+    //first goal
+    rollers.flipOut();
+    delay(500);
+    rollers.primeBalls(350, 1000, false);
+    drive.drive(13, 6000, 1000);
+    delay(500);
+    drive.turn(127, 8000, RIGHT, 1500);
+    rollers.primeBalls(200);
+    drive.drive(20, 8000, 1000);
+    rollers.stopAll();
+    rollers.intake(400, 1500, false);
+    rollers.shoot(600, 500, true);
+    drive.drive(-25, 8000, 1400);
+
+    //second goal
+    delay(500);
+    rollers.primeBalls(250, 1500, false);
+    drive.turn(137, 6000, RIGHT, 2000);
+    delay(500);
+    rollers.primeBalls(250, 1000, false);
+    drive.drive(33, 8000, 1500);
+    delay(500);
+    drive.turn(85, 8000, LEFT,2000);
+    drive.drive(8, 8000, 1000);
+    rollers.shoot(600, 1000, true);
+    drive.drive(-8, 11000, 750);
 }
 
-void rollers(int vel){
-    rightIntake.moveVelocity(vel);
-    leftIntake.moveVelocity(vel);
-}
-void revRollers(int vel){
-    rightIntake.setReversed(!rightIntake.isReversed());
-    leftIntake.setReversed(!leftIntake.isReversed());
-    rightIntake.moveVelocity(vel);
-    leftIntake.moveVelocity(vel);
-    rightIntake.setReversed(!rightIntake.isReversed());
-    leftIntake.setReversed(!leftIntake.isReversed());
-}
-void primeBalls (int vel){
-    rightIntake.moveVelocity(vel);
-    leftIntake.moveVelocity(vel);
-    lowerManipulator.moveVelocity(vel);
-}
+void right_auton3() {
+    //first goal
+    rollers.flipOut();
+    rollers.primeBalls(300, 700, false);
+    drive.drive(12, 11000, 1000);
+    drive.turn(125, 8000, RIGHT);
+    rollers.primeBalls(200);
+    drive.drive(21, 8000, 1500);
+    rollers.stopAll();
+    rollers.intake(400, 1500, false);
+    rollers.shoot(600, 750, true);
+    drive.drive(-25, 11000, 1400);
 
-void poop(int vel){
-    rollers(vel);
-    lowerManipulator.moveVelocity(vel);
-    upperManipulator.moveVelocity(-vel);
-}
+    //second goal
+    rollers.primeBalls(400, 1500, false);
+    drive.turn(157, 9000, RIGHT);
+    drive.drive(32, 11000, 1500);
+    drive.turn(90, 8000, LEFT);
+    drive.drive(5, 8000, 1000);
+    rollers.shoot(600, 1000, true);
+    drive.drive(-8, 11000, 750);
 
-void stop(){
-    shoot(0);
-    rollers(0);
-}
-
-void flipOut(){
-    leftIntake.moveVelocity(-300);
-    rightIntake.moveVelocity(-300);
-    pros::delay(500);
-    leftIntake.moveVelocity(0);
-    rightIntake.moveVelocity(0);
-    upperManipulator.moveVelocity(-300);
-    pros::delay(500);
-    upperManipulator.moveVelocity(0);
+    //third goal
+    drive.turn(90, 11000, RIGHT);
+    drive.drive(43, 11000, 2000);
+    drive.turn(40, 8000, LEFT);
+    rollers.intake(600);
+    rollers.shoot(600);
+    drive.drive(42, 8000, 2500);
+    rollers.shoot(600, 1000, true);
+    drive.drive(-5, 8000);
 }
 
-void autonomous() {
-    prog2();
+void right_auton4() {
+    rollers.flipOut();
+    rollers.primeBalls(400, 1000, false);
+    drive.drive(30, 8000, 2000);
+    drive.turn(39, 6000, RIGHT, 4000);
+    rollers.intake(600);
+    drive.drive(28, 8000, 3500);
+    rollers.intake(600, 800, false);
+    drive.drive(-5, 8000, 750);
+    drive.drive(5, 8000, 750);
+    rollers.shoot(600, 3000, true);
+    drive.drive(-5, 8000);
 }
 
-//void singleScore(){
-//    //hood flipout
-//    flipOutHood();
-//    //score first ball
-//    shoot(600);
-//    pros::delay(1500);
-//    shoot(0);
-//    driveRev(10, 50);
-//    //flip out intake
-//    rollers(-300);
-//    pros::delay(500);
-//    rollers(300);
-//    pros::delay(500);
-//    rollers(0);
-//
-//}
+void left_auton1() {
+    //first goal
+    rollers.flipOut();
+    rollers.primeBalls(400, 700, false);
+    drive.drive(13, 11000, 1000);
+    drive.turn(135, 8000, LEFT, 1500);
+    rollers.primeBalls(200);
+    drive.drive(21, 8000, 1500);
+    rollers.stopAll();
+    rollers.intake(400, 1500, false);
+    rollers.shoot(600, 700, true);
+    rollers.primeBalls(600,1200,false);
+    drive.drive(-28, 11000, 1400);
+}
 
-//void prog(){
-//    //hood flipout
-//    flipOutHood();
-//    rollers(-600);
-//    drive(8,80);
-//    rollers(300);
-//    turnAngle(140, RIGHT,100);
-//    rollers(0);
-//    drive(9.5,40,2000);
-//    //score first ball
-//    shoot(600);
-//    pros::delay(5000);
-//    shoot(0);
-//    driveRev(10, 50);
-//    //flip out intake
-//
-//    //drive to goal D
-//    poop (600);
-//    turnAngle(197, LEFT, 40);
-//    drive(107, 100);
-//
-//    //turn to goal
-//    turnAngle(28, LEFT, 50);
-//
-//    //get the ball out of the goal
-//    drive(14.5, 25, 5000);
-//    pros::delay(500);
-//
-//    //head towards goal B
-//    driveRev(10,25);
-//    turnAngle(130,RIGHT,50);
-//    drive(65,100);
-//
-//    //descore
-//    turnAngle(33,LEFT,50);
-//    drive(10,25, 3000);
-//    pros::delay(1000);
-//    driveRev(10,25);
-//
-//    //drive towards goal C
-//    turnAngle(70,RIGHT,50);
-//    drive(55,100);
-//
-//    //descore
-//    turnAngle(10, LEFT, 50);
-//    drive(10, 50, 3000);
-//    pros::delay(1000);
-//    driveRev(10, 50);
-//    drive(10, 50, 3000);
-//    pros::delay(1000);
-//    driveRev(10,100);
-//
-//    stop();
-//}
+void left_auton2() {
+    //first goal
+    rollers.flipOut();
+    drive.drive(12, 8000);
+    drive.turn(125, 8000, LEFT);
+    rollers.primeBalls(120);
+    drive.drive(20, 8000, 2000);
+    rollers.shoot(600, 1000, true);
+    drive.drive(-10, 8000);
 
-void prog2(){
-    //first goal (I)
+    //second goal
+    drive.turn(145, 8000, LEFT);
+    rollers.primeBalls(200, 1000, false);
+    drive.drive(30, 10000);
+    drive.turn(90, 6000, RIGHT);
+    drive.drive(3, 6000, 1000);
+    rollers.shoot(600, 1000, true);
+    drive.drive(-5, 8000);
+}
 
-    flipOut();
-    primeBalls(120);
-    PDDrive(12,8000,0.3,1,2000);
-    primeBalls(0);
-    turnAngle(125,RIGHT,100);
-    PDDrive(20,8000,0.3,1,2000);
-    shoot(600);
-    pros::delay(1000);
-    shoot(0);
+void left_auton3() {
+    //first goal
+    rollers.flipOut();
+    drive.drive(12, 8000);
+    drive.turn(125, 8000, LEFT);
+    rollers.primeBalls(120);
+    drive.drive(20, 8000, 2000);
+    rollers.shoot(600, 1000, true);
+    drive.drive(-10, 8000);
 
-    //second goal (H)
-    driveRev(22,100);
-    primeBalls(200);
-    turnAngle(156, RIGHT, 80);
-    PDDrive(31,10000,.6,1,2500);
-    primeBalls(0);
-    turnAngle(90,LEFT,100);
-    PDDrive(4,8000,.6,1,1000);
-    shoot(600);
-    pros::delay(1000);
-    primeBalls(0);
+    //second goal
+    drive.turn(145, 8000, LEFT);
+    rollers.primeBalls(200, 1000, false);
+    drive.drive(30, 10000);
+    drive.turn(90, 6000, RIGHT);
+    drive.drive(3, 6000, 1000);
+    rollers.shoot(600, 1000, true);
+    drive.drive(-5, 8000);
 
-    //Third Goal
-    revRollers(200);
-    driveRev(7,100);
-    turnAngle(90,RIGHT,100);
-    primeBalls(200);
-    PDDrive(30,12000,.3,1,4000);
-    turnAngle(45,LEFT,100);
-    PDDrive(12,8000,.3,1,2000);
-    shoot(600);
-    pros::delay(1000);
-    shoot(0);
+    //third goal
+    drive.turn(80, 8000, LEFT);
+    rollers.primeBalls(100);
+    drive.drive(35, 8000, 3000);
+    rollers.shoot(600, 1000, true);
+    drive.drive(-5, 8000);
+}
 
-    //Fourth Goal
-    driveRev(6,100);
-    revRollers(200);
-    driveRev(6,100);
-    turnAngle(45,RIGHT,100);
-    strafeDist(30,RIGHT,100);
-    primeBalls(300);
-    PDDrive(8,12000,.3,1,2000);
-    driveRev(-10,100);
-    strafeDist(30,RIGHT,100);
-    primeBalls(0);
-    PDDrive(8,12000,.3,1,2000);
-    shoot(600);
-    pros::delay(1000);
-    shoot(0);
+void left_auton4() {
 
-    //Fifth Goal
-    driveRev(8,100);
-    strafeDist(30,RIGHT,100);
-    primeBalls(300);
-    PDDrive(8,12000,.3,1,2000);
-    driveRev(-10,100);
+}
 
+void prog1() {
+    //first goal
+    rollers.flipOut();
+    delay(500);
+    rollers.primeBalls(400, 1200, false);
+    drive.drive(13, 8000, 1000);
+    delay(500);
+    drive.turn(127, 8000, RIGHT, 1500);
+    drive.drive(20, 8000, 3000);
+    rollers.stopAll();
+    rollers.shoot(600, 1500, true);
+    drive.drive(-10, 8000, 1400);
+    rollers.poop(600);
+    rollers.intake(600);
 
+    //second goal
+    drive.turn(179, 2000, RIGHT);
+    rollers.poop(400);
+    rollers.intake(600);
+    drive.drive(100, 10000, 5000);
+    drive.turn(20, 7000, LEFT);
+    drive.drive(20, 5000, 2000);
+    delay(500);
+    drive.drive(-10, 8000, 1000);
 
+    //third goal
+    drive.turn(110, 8000, RIGHT);
+    drive.drive(65, 8000, 3000);
+    drive.turn(33, 7000, LEFT);
+    drive.drive(10, 5000, 2000);
+    delay(1000);
+    drive.drive(-10, 7000);
 
+    //fourth goal
+    drive.turn(70, 8000, RIGHT);
+    drive.drive(55, 8000, 5000);
+    drive.turn(10, 7000, LEFT);
+    drive.drive(10, 6000, 2000);
+    delay(1000);
+    drive.drive(-10, 6000);
+    drive.drive(10, 6000, 2000);
+    delay(1000);
+    drive.drive(-10, 6000);
+}
 
+void prog2() {
+    //first goal
+    rollers.flipOut();
+    rollers.primeBalls(120);
+    drive.drive(12, 8000, 1000);
+    rollers.stopAll();
+    drive.turn(125, 8000, RIGHT);
+    drive.drive(25, 8000, 1500);
+    rollers.stopAll();
+    rollers.shoot(600, 1000, true);
+    drive.drive(-25, 8000, 2000);
 
+    //second goal
+    rollers.primeBalls(500, 1000, false);
+    drive.turn(150, 10000, RIGHT);
+    drive.drive(31, 10000, 1500);
+    drive.turn(90, 6000, LEFT);
+    drive.drive(8, 6000, 1000);
+    rollers.shoot(600, 1000, true);
+    rollers.extake(200, 500, false);
+    drive.drive(-8, 8000, 750);
 
+    //third goal
+    drive.turn(88, 8000, RIGHT);
+    rollers.primeBalls(600);
+    drive.drive(43, 8000, 2000);
+    rollers.stopAll();
+    drive.turn(45, 8000, LEFT);
+    drive.drive(42, 8000, 2500);
+    rollers.shoot(600, 1000, true);
+    drive.drive(-5, 8000);
 
+    //fourth goal
+    drive.turn(125, 8000, RIGHT);
+    rollers.intake(600);
+    drive.drive(50, 8000);
+    rollers.stopRollers();
+    drive.turn(90, 7000, LEFT);
+    drive.drive(5, 7000, 1000);
+    rollers.shoot(600, 1000, true);
+    drive.drive(-5, 8000);
 
-
-
-
-
+//    //fifth goal
+//    drive.turn(110, 8000, RIGHT);
+//    rollers.intake(600);
+//    drive.drive(55, 8000);
+//    rollers.stopRollers();
+//    drive.turn(60, 8000, LEFT);
+//    drive.drive(45, 7000, 2000);
+//    rollers.shoot(600, 1000, true);
+//    drive.drive(-5, 8000);
 }
