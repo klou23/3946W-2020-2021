@@ -1,149 +1,26 @@
 /**
- * @file
- * @brief CustomController class with added controller functionality
+ * @brief Represents a vex controller
+ * @details This class extends off of the pros::Controller class and has some
+ * added methods to make coding easier. This class has additional methods
+ * for getting the values of the joysticks and checking if the buttons are
+ * pressed.
+ * @author Kevin Lou
+ * @date 4/19/21
  */
 
-#ifndef PROS_OKAPI_CUSTOMCONTROLLER_HPP
-#define PROS_OKAPI_CUSTOMCONTROLLER_HPP
+#ifndef ODOM_CUSTOMCONTROLLER_HPP
+#define ODOM_CUSTOMCONTROLLER_HPP
 
 #include "main.h"
 
-class CustomController {
-private:
-    /**
-     * Controller that is used for all of the operations
-     */
-    Controller c;
-
-public:
-
-    /**
-     * Creates a custom controller object for the given pros::controller
-     *
-     * @param c
-     *      The pros::controller object used by the custom controller
-     */
-    CustomController(Controller c);
-
-    /**
-	 * Checks if the controller is connected.
-	 *
-	 * This function uses the following values of errno when an error state is
-	 * reached:
-	 * EACCES - Another resource is currently trying to access the controller
-	 * port.
-	 *
-	 * @return 1 if the controller is connected, 0 otherwise
-	 */
-    int32_t is_connected();
-
-    /**
-	 * Gets the battery capacity of the controller.
-	 *
-	 * This function uses the following values of errno when an error state is
-	 * reached:
-	 * EACCES - Another resource is currently trying to access the controller
-	 * port.
-	 *
-	 * @return The controller's battery capacity
-	 */
-    int32_t get_battery_capacity();
-
-    /**
-	 * Gets the battery level of the controller.
-	 *
-	 * This function uses the following values of errno when an error state is
-	 * reached:
-	 * EACCES - Another resource is currently trying to access the controller
-	 * port.
-	 *
-	 * @return The controller's battery level
-	 */
-    int32_t get_battery_level(void);
-
-    /**
-	 * Sets text to the controller LCD screen.
-	 *
-	 * @note Controller text setting is currently in beta, so continuous, fast
-	 * updates will not work well.
-	 *
-	 * This function uses the following values of errno when an error state is
-	 * reached:
-	 * EACCES - Another resource is currently trying to access the controller
-	 * port.
-	 *
-	 * @param line
-	 *        The line number at which the text will be displayed [0-2]
-	 * @param col
-	 *        The column number at which the text will be displayed [0-14]
-	 * @param str
-	 *        The pre-formatted string to print to the controller
-	 *
-	 * \return 1 if the operation was successful or PROS_ERR if the operation
-	 * failed, setting errno.
-	 */
-    int32_t set_text(std::uint8_t line, std::uint8_t col, const char* str);
-
-    /**
-	 * Clears an individual line of the controller screen.
-	 *
-	 * @note Controller text setting is currently in beta, so continuous, fast
-	 * updates will not work well.
-	 *
-	 * This function uses the following values of errno when an error state is
-	 * reached:
-	 * EACCES - Another resource is currently trying to access the controller
-	 * port.
-	 *
-	 * @param line
-	 *        The line number to clear [0-2]
-	 *
-	 * @return 1 if the operation was successful or PROS_ERR if the operation
-	 * failed, setting errno.
-	 */
-    int32_t clear_line(std::uint8_t line);
-
-    /**
-	 * Rumble the controller.
-	 *
-	 * @note Controller rumble activation is currently in beta, so continuous, fast
-	 * updates will not work well.
-	 *
-	 * This function uses the following values of errno when an error state is
-	 * reached:
-	 * EACCES - Another resource is currently trying to access the controller
-	 * port.
-	 *
-	 * @param rumble_pattern
-	 *				A string consisting of the characters '.', '-', and ' ', where dots
-	 *				are short rumbles, dashes are long rumbles, and spaces are pauses.
-	 *				Maximum supported length is 8 characters.
-	 *
-	 * @return 1 if the operation was successful or PROS_ERR if the operation
-	 * failed, setting errno.
-	 */
-    int32_t rumble(const char* rumble_pattern);
-
-    /**
-	 * Clears all of the lines on the controller screen.
-	 *
-	 * This function uses the following values of errno when an error state is
-	 * reached:
-	 * EACCES - Another resource is currently trying to access the controller
-	 * port.
-	 *
-	 * @return 1 if the operation was successful or PROS_ERR if the operation
-	 * failed, setting errno.
-	 */
-    int32_t clear(void);
-
+class CustomController : public Controller {
     /**
      * Returns the analog value for the x axis of the left joystick
      *
      * @return The current reading of the analog channel with range [-1,1].
      * If the controller was not connected, then 0 is returned
      */
-     double getLeftX();
+    double getLeftX();
 
     /**
     * Returns the analog value for the y axis of the left joystick
@@ -170,16 +47,89 @@ public:
     double getRightY();
 
     /**
-     * Returns if the button is currentely pressed
+     * Checks if the left button is pressed
      *
-     * @param button
-     *          An integer representing the button with the range [0,11]
-     *
-     * @return if the buttons on the controller is pressed.
-     * If the controller was not connected, false is returned.
+     * @return true if pressed, false if not
      */
-     bool pressed(int button);
+    bool leftPressed();
+
+    /**
+     * Checks if the right button is pressed
+     *
+     * @return true if pressed, false if not
+     */
+    bool rightPressed();
+
+    /**
+     * Checks if the up button is pressed
+     *
+     * @return true if pressed, false if not
+     */
+    bool upPressed();
+
+    /**
+     * Checks if the down button is pressed
+     *
+     * @return true if pressed, false if not
+     */
+    bool downPressed();
+
+    /**
+     * Checks if the A button is pressed
+     *
+     * @return true if pressed, false if not
+     */
+    bool aPressed();
+
+    /**
+     * Checks if the B button is pressed
+     *
+     * @return true if pressed, false if not
+     */
+    bool bPressed();
+
+    /**
+     * Checks if the X button is pressed
+     *
+     * @return true if pressed, false if not
+     */
+    bool xPressed();
+
+    /**
+     * Checks if the Y button is pressed
+     *
+     * @return true if pressed, false if not
+     */
+    bool yPressed();
+
+    /**
+     * Checks if the R1 button is pressed
+     *
+     * @return true if pressed, false if not
+     */
+    bool r1Pressed();
+
+    /**
+     * Checks if the R2 button is pressed
+     *
+     * @return true if pressed, false if not
+     */
+    bool r2Pressed();
+
+    /**
+     * Checks if the L1 button is pressed
+     *
+     * @return true if pressed, false if not
+     */
+    bool l1Pressed();
+
+    /**
+     * Checks if the L2 button is pressed
+     *
+     * @return true if pressed, false if not
+     */
+    bool l2Pressed();
 };
 
 
-#endif //PROS_OKAPI_CUSTOMCONTROLLER_HPP
+#endif //ODOM_CUSTOMCONTROLLER_HPP
